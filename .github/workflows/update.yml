@@ -1,0 +1,33 @@
+name: Update ReadyCatholic
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install feedparser
+
+      - name: Run aggregator
+        run: python catholic_news_aggregator.py
+
+      - name: Commit updated HTML
+        run: |
+          git config --global user.name "ReadyCatholic Bot"
+          git config --global user.email "bot@readycatholic.com"
+          git add index.html
+          git commit -m "Auto update headlines" || echo "No changes"
+          git push
