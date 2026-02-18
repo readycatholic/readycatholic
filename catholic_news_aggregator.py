@@ -6,6 +6,7 @@ Fetches headlines from a comprehensive list of Catholic news sources.
 
 import feedparser
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from html import escape
 import os
 
@@ -25,7 +26,7 @@ CATHOLIC_NEWS_SOURCES = {
     'Catholic Stand': 'https://catholicstand.com/feed/',
     'Catholic Education': 'https://www.catholiceducation.org/en/component/obrss/catholic-education-resource-center.feed',
     'ChurchPOP': 'https://www.churchpop.com/feed/',
-    'New Advent': 'https://www.newadvent.org/index.html', # Note: New Advent is often scraped, but we'll try to find a feed or handle gracefully
+    'New Advent': 'https://www.newadvent.org/index.html', 
     'OSV News': 'https://www.osvnews.com/feed/',
     'Spirit Daily': 'https://spiritdaily.com/feed/',
     'TFP.org': 'https://www.tfp.org/feed/',
@@ -54,7 +55,6 @@ def fetch_headlines(max_per_source=3):
     for source_name, feed_url in CATHOLIC_NEWS_SOURCES.items():
         try:
             print(f"  Fetching from {source_name}...")
-            # Special handling for New Advent if needed, but we'll try standard parsing first
             feed = feedparser.parse(feed_url)
             
             if not feed.entries:
@@ -70,7 +70,6 @@ def fetch_headlines(max_per_source=3):
                 
                 title_lower = entry.get('title', '').lower()
                 
-                # Simple categorization logic
                 if i == 0 and source_name in ['Vatican News', 'The Pillar', 'OSV News']:
                     headlines['breaking'].append(headline)
                 elif 'pope' in title_lower or 'vatican' in title_lower or source_name == 'Vatican News':
@@ -91,9 +90,7 @@ def fetch_headlines(max_per_source=3):
         except Exception as e:
             print(f"  Error fetching from {source_name}: {str(e)}")
     
-    # Shuffle or limit categories to keep the layout clean
     for category in headlines:
-        # Keep more for main sections, fewer for breaking
         limit = 15 if category != 'breaking' else 5
         headlines[category] = headlines[category][:limit]
     
@@ -103,8 +100,9 @@ def generate_html(headlines):
     """
     Generate the HTML file with branded ReadyCatholic content.
     """
-    now = datetime.now()
-    
+    # 1. SET TIMEZONE TO EST AND FORMAT DATE
+    now_est = datetime.now(ZoneInfo("America/New_York"))
+    date_string = now_est.strftime('%A, %B %d, %Y')
     
     def format_items(items):
         html = ""
@@ -141,7 +139,7 @@ def generate_html(headlines):
         .header {{ text-align: center; border-bottom: 3px solid #000; padding-bottom: 10px; margin-bottom: 15px; }}
         .header h1 {{ font-size: 38px; font-weight: bold; font-style: italic; letter-spacing: -1px; margin-bottom: 5px; text-transform: uppercase; }}
         .header .tagline {{ font-size: 12px; font-weight: bold; color: #000; margin-bottom: 5px; }}
-        .header .timestamp {{ font-size: 11px; color: #666; }}
+        .header .timestamp {{ font-size: 12px; color: #444; font-weight: bold; text-transform: uppercase; margin-top: 5px; }}
         .main-content {{ display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }}
         .column {{ display: flex; flex-direction: column; gap: 15px; }}
         .news-item {{ border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 8px; }}
@@ -164,6 +162,8 @@ def generate_html(headlines):
         <div class="header">
             <h1>READY CATHOLIC</h1>
             <div class="tagline">DAILY CATHOLIC NEWS & UPDATES</div>
+            <div class="timestamp">{date_string}</div>
+        </div>
 
         <div class="featured-section">
             <h2>⚡ TOP STORIES</h2>
