@@ -104,7 +104,7 @@ def generate_html(headlines):
     Generate the HTML file with branded ReadyCatholic content.
     """
     now = datetime.now()
-    timestamp = now.strftime('%A, %B %d, %Y at %I:%M %p')
+    
     
     def format_items(items):
         html = ""
@@ -202,7 +202,7 @@ def generate_html(headlines):
 
         <div class="footer">
             <p><strong>READY CATHOLIC</strong></p>
-            <p>The premier Catholic news aggregator. Updated automatically every 6 hours.</p>
+            <p>Catholic news aggregator.</p>
             <p>© 2026 Ready Catholic. All rights reserved.</p>
         </div>
     </div>
