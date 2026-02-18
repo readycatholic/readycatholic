@@ -164,8 +164,6 @@ def generate_html(headlines):
         <div class="header">
             <h1>READY CATHOLIC</h1>
             <div class="tagline">DAILY CATHOLIC NEWS & UPDATES</div>
-            <div class="timestamp">{timestamp}</div>
-        </div>
 
         <div class="featured-section">
             <h2>⚡ TOP STORIES</h2>
