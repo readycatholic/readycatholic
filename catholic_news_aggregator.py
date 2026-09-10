@@ -137,6 +137,9 @@ def generate_html(headlines):
         body {{ font-family: 'Courier New', monospace; background-color: #f5f5f5; color: #333; line-height: 1.4; font-size: 13px; }}
         .container {{ max-width: 1200px; margin: 0 auto; background-color: #ffffff; padding: 15px; border: 1px solid #ddd; }}
         .header {{ text-align: center; border-bottom: 3px solid #000; padding-bottom: 10px; margin-bottom: 15px; }}
+        .top-ad {{ text-align: center; padding: 0 0 15px; }}
+        .top-ad img {{ display: block; width: min(100%, 728px); height: auto; margin: 0 auto; }}
+        .top-ad a {{ display: inline-block; line-height: 0; }}
         .header h1 {{ font-size: 38px; font-weight: bold; font-style: italic; letter-spacing: -1px; margin-bottom: 5px; text-transform: uppercase; }}
         .header .tagline {{ font-size: 12px; font-weight: bold; color: #000; margin-bottom: 5px; }}
         .header .timestamp {{ font-size: 12px; color: #444; font-weight: bold; text-transform: uppercase; margin-top: 5px; }}
@@ -159,6 +162,11 @@ def generate_html(headlines):
 </head>
 <body>
     <div class="container">
+        <div class="top-ad">
+            <a href="https://getmyannuitycom-22173203.hubspotpagebuilder.com/readycatholic-helping-catholic-families-be-ready" target="_blank" rel="noopener noreferrer" aria-label="Learn more from Catholic Order of Foresters">
+                <img src="COF728X90.png" alt="Catholic Order of Foresters — Insurance shaped by Catholic values. Learn More.">
+            </a>
+        </div>
         <div class="header">
             <h1>READY CATHOLIC</h1>
             <div class="tagline">DAILY CATHOLIC NEWS & UPDATES</div>
