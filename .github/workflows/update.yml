@@ -24,16 +24,9 @@ jobs:
     - name: Install dependencies
       run: pip install feedparser
 
-    - name: Run aggregator script
-      run: python catholic_news_aggregator.py
-
-    - name: Commit and push changes
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add index.html
-        git commit -m "Update Catholic News Report with latest headlines" || echo "No changes to commit"
-        git push
+    # The live index is maintained as the approved visual design. The legacy
+    # generator is intentionally not run here because it would overwrite the
+    # blue-and-gold layout with its older black-and-white template.
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
