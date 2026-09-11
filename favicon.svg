@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Ready Catholic favicon</title>
+  <desc id="desc">Navy and gold intertwined R and C monogram.</desc>
+  <rect width="64" height="64" rx="14" fill="#fffdf6"/>
+  <circle cx="32" cy="32" r="27" fill="#123b70" stroke="#c79a2b" stroke-width="3"/>
+  <text x="27" y="46" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="39" font-weight="700" fill="#fffdf6">R</text>
+  <text x="40" y="38" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="31" font-weight="700" fill="#f1df9a">C</text>
+</svg>
