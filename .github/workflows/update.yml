@@ -22,11 +22,18 @@ jobs:
         python-version: '3.x'
 
     - name: Install dependencies
-      run: pip install feedparser
+      run: pip install feedparser beautifulsoup4
 
-    # The live index is maintained as the approved visual design. The legacy
-    # generator is intentionally not run here because it would overwrite the
-    # blue-and-gold layout with its older black-and-white template.
+    - name: Refresh headlines while preserving the approved design
+      run: python update_headlines.py
+
+    - name: Commit and push headline changes
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add index.html
+        git commit -m "Update Ready Catholic headlines" || echo "No changes to commit"
+        git push
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
