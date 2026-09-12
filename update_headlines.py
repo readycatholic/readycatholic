@@ -52,7 +52,15 @@ def collect():
         else:
             categories["world"].append(item)
 
-    categories["breaking"] = (categories["breaking"] + all_items)[:3]
+    unique_breaking = []
+    seen_links = set()
+    for item in categories["breaking"] + all_items:
+        if item["link"] not in seen_links:
+            unique_breaking.append(item)
+            seen_links.add(item["link"])
+        if len(unique_breaking) == 3:
+            break
+    categories["breaking"] = unique_breaking
     for key in categories:
         categories[key] = categories[key][:15]
     return categories
