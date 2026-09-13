@@ -48,13 +48,28 @@ def collect():
         for entry in feed.entries[:5]:
             title = entry.get("title", "").strip()
             link = entry.get("link", "#")
+            image = ""
+            media = entry.get("media_content") or entry.get("media_thumbnail") or []
+            if media and isinstance(media, list):
+                image = media[0].get("url", "")
+            if not image and entry.get("enclosures"):
+                image = entry.enclosures[0].get("href", "")
             if title and link:
-                all_items.append({"title": title, "link": link, "source": source})
+                all_items.append({"title": title, "link": link, "source": source, "image": image})
 
-    categories = {"breaking": [], "vatican": [], "america": [], "faith": [], "culture": [], "world": []}
+    categories = {"breaking": [], "vatican": [], "america": [], "faith": [], "culture": [], "world": [], "prolife": [], "media": [], "local": []}
+    prolife_sources = {"Catholic League", "Crisis Magazine", "LifeSiteNews", "OSV News", "Catholic Exchange"}
+    media_sources = {"Hollywood Catholic", "ChurchPOP", "The Pillar"}
+    local_sources = {"Catholic News", "Catholic News Ireland", "The Catholic Weekly", "Cal Catholic", "U.S. Catholic"}
     for item in all_items:
         text = item["title"].lower()
         source = item["source"]
+        if source in prolife_sources or any(x in text for x in ("abortion", "pro-life", "assisted suicide", "human dignity")):
+            categories["prolife"].append(item)
+        if source in media_sources or any(x in text for x in ("podcast", "radio", "film", "video", "concert", "music")):
+            categories["media"].append(item)
+        if source in local_sources:
+            categories["local"].append(item)
         if source in {"Vatican News", "The Pillar", "OSV News"} and not categories["breaking"]:
             categories["breaking"].append(item)
         if source == "Vatican News" or "pope" in text or "vatican" in text:
@@ -85,6 +100,20 @@ def collect():
 def item_node(soup, item, featured=False):
     cls = "featured-item" if featured else "news-item"
     div = soup.new_tag("div", attrs={"class": cls})
+    a = soup.new_tag("a", href=item["link"], target="_blank", rel="noopener noreferrer")
+    a.string = item["title"]
+    div.append(a)
+    src = soup.new_tag("div", attrs={"class": "source"})
+    src.string = item["source"]
+    div.append(src)
+    return div
+
+
+def specialty_node(soup, item, media=False):
+    div = soup.new_tag("div", attrs={"class": "specialty-item"})
+    if media and item.get("image"):
+        img = soup.new_tag("img", src=item["image"], alt="", attrs={"class": "media-thumb", "loading": "lazy"})
+        div.append(img)
     a = soup.new_tag("a", href=item["link"], target="_blank", rel="noopener noreferrer")
     a.string = item["title"]
     div.append(a)
@@ -130,6 +159,14 @@ def main():
         if not key:
             continue
         replace_between(header.parent, header, ["section-header", "category-ad"], [item_node(soup, x) for x in categories[key]])
+
+    for panel in soup.select(".specialty-panel"):
+        key = panel.get("data-specialty")
+        target = panel.select_one(".specialty-items")
+        if target and key in categories:
+            target.clear()
+            for item in categories[key][:4]:
+                target.append(specialty_node(soup, item, media=(key == "media")))
 
     timestamp = soup.select_one(".timestamp")
     if timestamp:
