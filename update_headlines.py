@@ -13,12 +13,28 @@ INDEX = ROOT / "index.html"
 
 SOURCES = {
     "Vatican News": "https://www.vaticannews.va/en.rss.xml",
+    "Catholic News Agency": "https://catholicnewsagency.com/rss/",
+    "America Magazine": "https://americamagazine.org/feed/",
     "Catholic World Report": "https://www.catholicworldreport.com/feed/",
+    "Crux": "https://cruxnow.com/feed/",
+    "First Things": "https://firstthings.com/feed/",
+    "Fides News Agency": "https://fides.org/rss.xml",
+    "Catholic Exchange": "https://catholicexchange.com/feed",
+    "Catholic News Ireland": "https://catholicnews.ie/rss.xml",
+    "The Catholic Weekly": "https://catholicweekly.com.au/feed/",
+    "U.S. Catholic": "https://uscatholic.org/feed/",
+    "Cal Catholic": "https://cal-catholic.com/feed/",
+    "Catholic News": "https://catholicnews.com/feed/",
+    "Catholic League": "https://catholicleague.org/feed/",
+    "Crisis Magazine": "https://crisismagazine.com/feed/",
+    "The Catholic Thing": "https://thecatholicthing.org/feed/",
+    "InfoVaticana": "https://infovaticana.com/feed/",
+    "Hollywood Catholic": "https://hollywoodcatholic.com/feed/",
+    "The Catholic Crusade": "https://thecatholiccrusade.com/feed/",
     "Aleteia": "https://aleteia.org/feed/",
     "OSV News": "https://www.osvnews.com/feed/",
     "The Pillar": "https://www.pillarcatholic.com/feed",
     "Zenit": "https://zenit.org/feed/",
-    "Crux": "https://cruxnow.com/feed/",
     "LifeSiteNews": "https://www.lifesitenews.com/rss/global",
     "ChurchPOP": "https://www.churchpop.com/feed/",
     "Catholic Daily Reflections": "https://catholic-daily-reflections.com/feed/",
@@ -53,11 +69,11 @@ def collect():
             categories["world"].append(item)
 
     unique_breaking = []
-    seen_links = set()
+    seen_sources = set()
     for item in categories["breaking"] + all_items:
-        if item["link"] not in seen_links:
+        if item["source"] not in seen_sources:
             unique_breaking.append(item)
-            seen_links.add(item["link"])
+            seen_sources.add(item["source"])
         if len(unique_breaking) == 3:
             break
     categories["breaking"] = unique_breaking
