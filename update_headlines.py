@@ -63,7 +63,7 @@ def collect():
             if title and link:
                 all_items.append({"title": title, "link": link, "source": source, "image": image})
 
-    categories = {"breaking": [], "vatican": [], "america": [], "faith": [], "culture": [], "world": [], "prolife": [], "media": [], "local": []}
+    categories = {"breaking": [], "vatican": [], "america": [], "faith": [], "culture_life": [], "culture": [], "world": [], "prolife": [], "media": [], "local": []}
     prolife_sources = {"Catholic League", "Crisis Magazine", "LifeSiteNews", "OSV News", "Catholic Exchange"}
     media_sources = {"Hollywood Catholic", "ChurchPOP", "The Pillar"}
     local_sources = {"Catholic News", "Catholic News Ireland", "The Catholic Weekly", "Cal Catholic", "U.S. Catholic"}
@@ -85,7 +85,7 @@ def collect():
         elif source in {"Aleteia", "Catholic Daily Reflections"} or "faith" in text or "spiritual" in text:
             categories["faith"].append(item)
         elif source in {"LifeSiteNews", "ChurchPOP"} or any(x in text for x in ("life", "culture", "family")):
-            categories["culture"].append(item)
+            categories["culture_life"].append(item)
         else:
             categories["world"].append(item)
 
@@ -99,7 +99,7 @@ def collect():
             break
     categories["breaking"] = unique_breaking
     used = {story_key(item) for item in categories["breaking"]}
-    for key in ("vatican", "america", "faith", "culture", "world", "prolife", "media", "local"):
+    for key in ("vatican", "america", "faith", "culture_life", "culture", "world", "prolife", "media", "local"):
         filtered = []
         for item in categories[key]:
             item_key = story_key(item)
@@ -111,6 +111,28 @@ def collect():
         categories[key] = filtered
     for key in categories:
         categories[key] = categories[key][:8]
+    main_keys = {story_key(item) for key in ("breaking", "vatican", "america", "faith", "culture_life", "world") for item in categories[key]}
+    specialty_rules = {
+        "prolife": lambda item: item["source"] in {"Catholic League", "Crisis Magazine", "LifeSiteNews", "OSV News", "Catholic Exchange"} or any(x in item["title"].lower() for x in ("abortion", "pro-life", "assisted suicide", "human dignity")),
+        "culture": lambda item: item["source"] in {"America Magazine", "First Things", "The Catholic Thing", "U.S. Catholic", "The Catholic Weekly", "Hollywood Catholic"} or any(x in item["title"].lower() for x in ("culture", "book", "film", "music", "art", "literature", "monastery")),
+        "media": lambda item: item["source"] in {"Vatican News", "Catholic News Agency", "Hollywood Catholic", "The Pillar", "ChurchPOP"} and (item.get("image") or any(x in item["title"].lower() for x in ("podcast", "radio", "video", "film", "concert", "music"))),
+        "local": lambda item: item["source"] in {"Catholic News", "Catholic News Ireland", "The Catholic Weekly", "Cal Catholic", "U.S. Catholic"},
+    }
+    for key, rule in specialty_rules.items():
+        selected = []
+        seen = {story_key(item) for item in categories["breaking"]} if key == "culture" else set(main_keys)
+        for item in all_items:
+            item_key = story_key(item)
+            if rule(item) and item_key not in seen:
+                selected.append(item)
+                seen.add(item_key)
+            if len(selected) == 8:
+                break
+        categories[key] = selected
+        if key == "culture":
+            reserved = {story_key(item) for item in selected}
+            for main_key in ("vatican", "america", "faith", "culture_life", "world"):
+                categories[main_key] = [item for item in categories[main_key] if story_key(item) not in reserved]
     return categories
 
 
@@ -127,7 +149,7 @@ def item_node(soup, item, featured=False):
 
 
 def specialty_node(soup, item, media=False):
-    div = soup.new_tag("div", attrs={"class": "specialty-item"})
+    div = soup.new_tag("div", attrs={"class": "category-item"})
     if media and item.get("image"):
         img = soup.new_tag("img", src=item["image"], alt="", attrs={"class": "media-thumb", "loading": "lazy"})
         div.append(img)
@@ -167,7 +189,7 @@ def main():
         "VATICAN & POPE": "vatican",
         "CHURCH IN AMERICA": "america",
         "FAITH & SPIRITUALITY": "faith",
-        "CULTURE & LIFE": "culture",
+        "CULTURE & LIFE": "culture_life",
         "WORLD CHURCH": "world",
     }
     headers = soup.select(".section-header")
@@ -179,17 +201,19 @@ def main():
 
     displayed_main = {
         story_key(item)
-        for key in ("vatican", "america", "faith", "culture", "world")
+        for key in ("vatican", "america", "faith", "culture_life", "world")
         for item in categories[key]
     }
-    for panel in soup.select(".specialty-panel"):
+    displayed_specialty = set(displayed_main)
+    for panel in soup.select(".category-panel"):
         key = panel.get("data-specialty")
-        target = panel.select_one(".specialty-items")
+        target = panel.select_one(".category-items")
         if target and key in categories:
             target.clear()
-            specialty_items = [item for item in categories[key] if story_key(item) not in displayed_main]
+            specialty_items = [item for item in categories[key] if story_key(item) not in displayed_specialty]
             for item in specialty_items[:4]:
                 target.append(specialty_node(soup, item, media=(key == "media")))
+                displayed_specialty.add(story_key(item))
 
     timestamp = soup.select_one(".timestamp")
     if timestamp:
