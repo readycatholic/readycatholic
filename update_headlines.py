@@ -11,6 +11,12 @@ from bs4 import BeautifulSoup, NavigableString
 ROOT = Path(__file__).resolve().parent
 INDEX = ROOT / "index.html"
 
+
+def story_key(item):
+    title = "".join(ch.lower() for ch in item["title"] if ch.isalnum())
+    link = item["link"].split("?", 1)[0].rstrip("/").lower()
+    return title, link
+
 SOURCES = {
     "Vatican News": "https://www.vaticannews.va/en.rss.xml",
     "Catholic News Agency": "https://catholicnewsagency.com/rss/",
@@ -92,6 +98,17 @@ def collect():
         if len(unique_breaking) == 3:
             break
     categories["breaking"] = unique_breaking
+    used = {story_key(item) for item in categories["breaking"]}
+    for key in ("vatican", "america", "faith", "culture", "world", "prolife", "media", "local"):
+        filtered = []
+        for item in categories[key]:
+            item_key = story_key(item)
+            title_key = item_key[0]
+            if item_key in used or any(title_key and title_key == existing[0] for existing in used):
+                continue
+            used.add(item_key)
+            filtered.append(item)
+        categories[key] = filtered
     for key in categories:
         categories[key] = categories[key][:8]
     return categories
@@ -160,12 +177,18 @@ def main():
             continue
         replace_between(header.parent, header, ["section-header", "category-ad"], [item_node(soup, x) for x in categories[key]])
 
+    displayed_main = {
+        story_key(item)
+        for key in ("vatican", "america", "faith", "culture", "world")
+        for item in categories[key]
+    }
     for panel in soup.select(".specialty-panel"):
         key = panel.get("data-specialty")
         target = panel.select_one(".specialty-items")
         if target and key in categories:
             target.clear()
-            for item in categories[key][:4]:
+            specialty_items = [item for item in categories[key] if story_key(item) not in displayed_main]
+            for item in specialty_items[:4]:
                 target.append(specialty_node(soup, item, media=(key == "media")))
 
     timestamp = soup.select_one(".timestamp")
