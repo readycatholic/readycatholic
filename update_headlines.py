@@ -93,7 +93,7 @@ def collect():
             break
     categories["breaking"] = unique_breaking
     for key in categories:
-        categories[key] = categories[key][:15]
+        categories[key] = categories[key][:8]
     return categories
 
 
