@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
   schedule:
-    # Run every 6 hours
-    - cron: '0 */6 * * *'
+    # Run every 6 hours, offset from the top of the hour to reduce GitHub Actions congestion.
+    - cron: '17 */6 * * *'
 
 jobs:
   build-and-deploy:
