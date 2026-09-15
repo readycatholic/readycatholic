@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Refresh Ready Catholic headlines without replacing the approved visual design."""
-from datetime import datetime
-from html import escape
+from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -16,6 +15,18 @@ def story_key(item):
     title = "".join(ch.lower() for ch in item["title"] if ch.isalnum())
     link = item["link"].split("?", 1)[0].rstrip("/").lower()
     return title, link
+
+
+def published_at(entry):
+    """Return the RSS publication/update time as an aware UTC datetime."""
+    parsed = entry.get("published_parsed") or entry.get("updated_parsed")
+    if parsed:
+        try:
+            return datetime(*parsed[:6], tzinfo=timezone.utc)
+        except (TypeError, ValueError):
+            pass
+    return None
+
 
 SOURCES = {
     "Vatican News": "https://www.vaticannews.va/en.rss.xml",
@@ -49,11 +60,19 @@ SOURCES = {
 
 def collect():
     all_items = []
+    now = datetime.now(timezone.utc)
+    # Read more than the old five-entry limit so that a busy feed cannot hide
+    # today's stories behind older items. Prefer the newest 36 hours, while
+    # retaining older items as a fallback when a source has not published recently.
+    recent_cutoff = now.timestamp() - (36 * 60 * 60)
+
     for source, url in SOURCES.items():
         feed = feedparser.parse(url)
-        for entry in feed.entries[:5]:
+        source_items = []
+        for entry in feed.entries[:15]:
             title = entry.get("title", "").strip()
             link = entry.get("link", "#")
+            published = published_at(entry)
             image = ""
             media = entry.get("media_content") or entry.get("media_thumbnail") or []
             if media and isinstance(media, list):
@@ -61,7 +80,28 @@ def collect():
             if not image and entry.get("enclosures"):
                 image = entry.enclosures[0].get("href", "")
             if title and link:
-                all_items.append({"title": title, "link": link, "source": source, "image": image})
+                source_items.append({
+                    "title": title,
+                    "link": link,
+                    "source": source,
+                    "image": image,
+                    "published": published,
+                })
+
+        # Keep recent stories first. If a feed supplies no usable dates, keep
+        # its feed order as a fallback. Older stories remain available only
+        # when needed to avoid leaving a category empty.
+        dated = [item for item in source_items if item["published"] is not None]
+        recent = [item for item in dated if item["published"].timestamp() >= recent_cutoff]
+        fallback = [item for item in source_items if item not in recent]
+        if recent:
+            source_items = sorted(recent, key=lambda x: x["published"], reverse=True) + fallback
+        else:
+            source_items = sorted(dated, key=lambda x: x["published"], reverse=True) + [item for item in source_items if item not in dated]
+        all_items.extend(source_items)
+
+    # Across all publishers, newest stories should be considered first.
+    all_items.sort(key=lambda x: x["published"] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
 
     categories = {"breaking": [], "vatican": [], "america": [], "faith": [], "culture_life": [], "culture": [], "world": [], "prolife": [], "media": [], "local": []}
     prolife_sources = {"Catholic League", "Crisis Magazine", "LifeSiteNews", "OSV News", "Catholic Exchange"}
