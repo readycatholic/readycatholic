@@ -13,6 +13,10 @@ INDEX = ROOT / "index.html"
 
 _LIFESITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.\d{2}$", re.I)
 
+# Max stories shown per main column (keeps layout even)
+MAIN_LIMIT = 5
+SPECIALTY_LIMIT = 4
+
 
 def story_key(item):
     title = "".join(ch.lower() for ch in item["title"] if ch.isalnum())
@@ -99,12 +103,10 @@ AMERICA_SOURCES = {
     "Orange County Catholic", "The Catholic Telegraph", "Cal Catholic",
     "Catholic League", "U.S. Catholic", "B.C. Catholic",
 }
-# Formation / commentary (not pure prayer)
 FAITH_SOURCES = {
     "Aleteia", "Word on Fire", "Catholic Exchange", "New Liturgical Movement",
     "The Jesuit Post", "Catholic Stand", "Spirit Daily",
 }
-# Saints, readings, rosary, novenas, daily prayer
 PRAYER_SOURCES = {
     "uCatholic", "Catholic Daily Reflections", "The Catholic Crusade", "Catholic Online",
 }
@@ -199,7 +201,6 @@ def collect():
         if source in BREAKING_SOURCES and len(categories["breaking"]) < 6:
             categories["breaking"].append(item)
 
-        # Main columns — first match wins
         if source in VATICAN_SOURCES or any(
             x in text for x in ("pope leo", "pope francis", "holy see", "vatican", "pontiff")
         ):
@@ -253,8 +254,11 @@ def collect():
             filtered.append(item)
         categories[key] = filtered
 
-    for key in categories:
-        categories[key] = categories[key][:8]
+    # Cap main columns at MAIN_LIMIT for even layout
+    for key in ("vatican", "america", "faith", "prayer", "culture_life", "world"):
+        categories[key] = categories[key][:MAIN_LIMIT]
+    for key in ("prolife", "media", "local", "culture"):
+        categories[key] = categories[key][:SPECIALTY_LIMIT]
 
     main_keys = {
         story_key(item)
@@ -285,7 +289,7 @@ def collect():
             if rule(item) and item_key not in seen:
                 selected.append(item)
                 seen.add(item_key)
-            if len(selected) == 8:
+            if len(selected) == SPECIALTY_LIMIT:
                 break
         categories[key] = selected
         if key == "culture":
@@ -293,7 +297,7 @@ def collect():
             for main_key in ("vatican", "america", "faith", "prayer", "culture_life", "world"):
                 categories[main_key] = [
                     item for item in categories[main_key] if story_key(item) not in reserved
-                ]
+                ][:MAIN_LIMIT]
     return categories
 
 
@@ -378,7 +382,7 @@ def main():
             specialty_items = [
                 item for item in categories[key] if story_key(item) not in displayed_specialty
             ]
-            for item in specialty_items[:4]:
+            for item in specialty_items[:SPECIALTY_LIMIT]:
                 target.append(specialty_node(soup, item, media=(key == "media")))
                 displayed_specialty.add(story_key(item))
 
