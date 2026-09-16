@@ -11,7 +11,6 @@ from bs4 import BeautifulSoup, NavigableString
 ROOT = Path(__file__).resolve().parent
 INDEX = ROOT / "index.html"
 
-# LifeSiteNews email digests look like "World 09.16.26" and link under /email/
 _LIFESITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.\d{2}$", re.I)
 
 
@@ -22,7 +21,6 @@ def story_key(item):
 
 
 def published_at(entry):
-    """Return the RSS publication/update time as an aware UTC datetime."""
     parsed = entry.get("published_parsed") or entry.get("updated_parsed")
     if parsed:
         try:
@@ -33,7 +31,6 @@ def published_at(entry):
 
 
 def is_lifesite_digest(title, link):
-    """Skip LifeSite newsletter placeholders that are not real articles."""
     if "/email/" in (link or "").lower():
         return True
     if title and _LIFESITE_DIGEST.match(title.strip()):
@@ -65,10 +62,9 @@ SOURCES = {
     "OSV News": "https://www.osvnews.com/feed/",
     "The Pillar": "https://www.pillarcatholic.com/feed",
     "Zenit": "https://zenit.org/feed/",
-    "LifeSiteNews": "https://www.lifesitenews.com/feed/",  # main feed only
+    "LifeSiteNews": "https://www.lifesitenews.com/feed/",
     "ChurchPOP": "https://www.churchpop.com/feed/",
     "Catholic Daily Reflections": "https://catholic-daily-reflections.com/feed/",
-    # Newly added sources
     "National Catholic Register": "https://www.ncregister.com/feeds/general-news.xml",
     "Catholic Culture": "https://feeds.feedburner.com/CatholicWorldNewsFeatureStories",
     "The Catholic Herald": "https://thecatholicherald.com/feed/",
@@ -83,20 +79,16 @@ SOURCES = {
     "Spirit Daily": "https://spiritdaily.com/feed/",
     "Big Pulpit": "https://bigpulpit.com/feed/",
     "Catholic Stand": "https://catholicstand.com/feed/",
-    # Verified additional sources (Sep 2026)
     "Orange County Catholic": "https://www.occatholic.com/feed/",
     "The Catholic Telegraph": "https://thecatholictelegraph.com/feed/",
     "GCatholic Appointments": "https://gcatholic.org/rss/recent.rss",
     "The Jesuit Post": "https://thejesuitpost.org/feed/",
-    # Batch: NCR, Word on Fire, Rome Reports
     "National Catholic Reporter": "https://ncronline.org/rss.xml",
     "Word on Fire": "https://www.wordonfire.org/articles/feed/",
     "Rome Reports": "https://www.romereports.com/en/feed/",
-    # Devotional / saints / daily readings
     "uCatholic": "https://ucatholic.com/feed/",
 }
 
-# --- Category source groups (cleaned Sep 2026) ---
 VATICAN_SOURCES = {
     "Vatican News", "Rome Reports", "Zenit", "InfoVaticana",
     "GCatholic Appointments", "Fides News Agency",
@@ -107,19 +99,18 @@ AMERICA_SOURCES = {
     "Orange County Catholic", "The Catholic Telegraph", "Cal Catholic",
     "Catholic League", "U.S. Catholic", "B.C. Catholic",
 }
+# Formation / commentary (not pure prayer)
 FAITH_SOURCES = {
-    "Aleteia", "Catholic Daily Reflections", "uCatholic", "Word on Fire",
-    "Catholic Exchange", "New Liturgical Movement", "The Jesuit Post",
-    "Catholic Stand", "Spirit Daily",
+    "Aleteia", "Word on Fire", "Catholic Exchange", "New Liturgical Movement",
+    "The Jesuit Post", "Catholic Stand", "Spirit Daily",
+}
+# Saints, readings, rosary, novenas, daily prayer
+PRAYER_SOURCES = {
+    "uCatholic", "Catholic Daily Reflections", "The Catholic Crusade", "Catholic Online",
 }
 CULTURE_SOURCES = {
     "ChurchPOP", "Hollywood Catholic", "America Magazine", "First Things",
     "The Catholic Thing", "Crisis Magazine", "Catholic World Report",
-}
-WORLD_SOURCES = {
-    "The Catholic Herald", "The Catholic Weekly", "Catholic News Ireland",
-    "The Irish Catholic", "LiCAS.news", "Catholic Culture", "The Wanderer",
-    "The Remnant", "Catholic Online", "Big Pulpit",
 }
 PROLIFE_SOURCES = {
     "Catholic League", "Crisis Magazine", "LifeSiteNews", "Catholic Exchange",
@@ -132,11 +123,16 @@ LOCAL_SOURCES = {
 }
 BREAKING_SOURCES = {"Vatican News", "The Pillar", "OSV News", "Catholic News Agency"}
 
+PRAYER_KEYWORDS = (
+    "saint of the day", "mass readings", "daily readings", "prayer of the day",
+    "rosary", "novena", "chaplet", "adoration", "devotion", "litany",
+    "morning prayer", "evening prayer", "divine mercy",
+)
+
 
 def collect():
     all_items = []
     now = datetime.now(timezone.utc)
-    # Prefer the newest 36 hours; keep older items as fallback.
     recent_cutoff = now.timestamp() - (36 * 60 * 60)
 
     for source, url in SOURCES.items():
@@ -180,7 +176,7 @@ def collect():
     )
 
     categories = {
-        "breaking": [], "vatican": [], "america": [], "faith": [],
+        "breaking": [], "vatican": [], "america": [], "faith": [], "prayer": [],
         "culture_life": [], "culture": [], "world": [],
         "prolife": [], "media": [], "local": [],
     }
@@ -189,7 +185,6 @@ def collect():
         text = item["title"].lower()
         source = item["source"]
 
-        # Specialty panels (can overlap with main columns)
         if source in PROLIFE_SOURCES or any(
             x in text for x in ("abortion", "pro-life", "prolife", "assisted suicide", "euthanasia")
         ):
@@ -201,13 +196,12 @@ def collect():
         if source in LOCAL_SOURCES:
             categories["local"].append(item)
 
-        # Breaking: first few high-signal items from priority wire sources
         if source in BREAKING_SOURCES and len(categories["breaking"]) < 6:
             categories["breaking"].append(item)
 
-        # Main columns — ordered, first match wins
+        # Main columns — first match wins
         if source in VATICAN_SOURCES or any(
-            x in text for x in ("pope leo", "pope francis", "holy see", "vatican", "pontiff", "cardinal")
+            x in text for x in ("pope leo", "pope francis", "holy see", "vatican", "pontiff")
         ):
             categories["vatican"].append(item)
         elif source in AMERICA_SOURCES or any(
@@ -217,11 +211,10 @@ def collect():
             )
         ):
             categories["america"].append(item)
+        elif source in PRAYER_SOURCES or any(x in text for x in PRAYER_KEYWORDS):
+            categories["prayer"].append(item)
         elif source in FAITH_SOURCES or any(
-            x in text for x in (
-                "saint of the day", "mass readings", "homily", "spiritual",
-                "prayer", "rosary", "eucharist", "liturgy", "devotion",
-            )
+            x in text for x in ("homily", "spiritual", "faith formation", "evangelization", "theology")
         ):
             categories["faith"].append(item)
         elif source in CULTURE_SOURCES or any(
@@ -230,13 +223,11 @@ def collect():
                 "music", "art", "literature",
             )
         ):
-            # LifeSite stays out of main Culture & Life (pro-life specialty only)
             if source != "LifeSiteNews":
                 categories["culture_life"].append(item)
         else:
             categories["world"].append(item)
 
-    # Breaking: unique sources, max 3
     unique_breaking = []
     seen_sources = set()
     for item in categories["breaking"] + all_items:
@@ -248,7 +239,10 @@ def collect():
     categories["breaking"] = unique_breaking
 
     used = {story_key(item) for item in categories["breaking"]}
-    for key in ("vatican", "america", "faith", "culture_life", "culture", "world", "prolife", "media", "local"):
+    for key in (
+        "vatican", "america", "faith", "prayer", "culture_life", "culture",
+        "world", "prolife", "media", "local",
+    ):
         filtered = []
         for item in categories[key]:
             item_key = story_key(item)
@@ -264,7 +258,7 @@ def collect():
 
     main_keys = {
         story_key(item)
-        for key in ("breaking", "vatican", "america", "faith", "culture_life", "world")
+        for key in ("breaking", "vatican", "america", "faith", "prayer", "culture_life", "world")
         for item in categories[key]
     }
 
@@ -296,7 +290,7 @@ def collect():
         categories[key] = selected
         if key == "culture":
             reserved = {story_key(item) for item in selected}
-            for main_key in ("vatican", "america", "faith", "culture_life", "world"):
+            for main_key in ("vatican", "america", "faith", "prayer", "culture_life", "world"):
                 categories[main_key] = [
                     item for item in categories[main_key] if story_key(item) not in reserved
                 ]
@@ -356,6 +350,7 @@ def main():
         "VATICAN & POPE": "vatican",
         "CHURCH IN AMERICA": "america",
         "FAITH & SPIRITUALITY": "faith",
+        "PRAYER & DEVOTION": "prayer",
         "CULTURE & LIFE": "culture_life",
         "WORLD CHURCH": "world",
     }
@@ -371,7 +366,7 @@ def main():
 
     displayed_main = {
         story_key(item)
-        for key in ("vatican", "america", "faith", "culture_life", "world")
+        for key in ("vatican", "america", "faith", "prayer", "culture_life", "world")
         for item in categories[key]
     }
     displayed_specialty = set(displayed_main)
