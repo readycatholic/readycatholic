@@ -70,6 +70,11 @@ SOURCES = {
     "Spirit Daily": "https://spiritdaily.com/feed/",
     "Big Pulpit": "https://bigpulpit.com/feed/",
     "Catholic Stand": "https://catholicstand.com/feed/",
+    # Verified additional sources (Sep 2026)
+    "Orange County Catholic": "https://www.occatholic.com/feed/",
+    "The Catholic Telegraph": "https://thecatholictelegraph.com/feed/",
+    "GCatholic Appointments": "https://gcatholic.org/rss/recent.rss",
+    "The Jesuit Post": "https://thejesuitpost.org/feed/",
 }
 
 
