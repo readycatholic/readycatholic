@@ -3,12 +3,16 @@
 from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
+import re
 
 import feedparser
 from bs4 import BeautifulSoup, NavigableString
 
 ROOT = Path(__file__).resolve().parent
 INDEX = ROOT / "index.html"
+
+# LifeSiteNews email digests look like "World 09.16.26" and link under /email/
+_LIFESITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.\d{2}$", re.I)
 
 
 def story_key(item):
@@ -26,6 +30,15 @@ def published_at(entry):
         except (TypeError, ValueError):
             pass
     return None
+
+
+def is_lifesite_digest(title, link):
+    """Skip LifeSite newsletter placeholders that are not real articles."""
+    if "/email/" in (link or "").lower():
+        return True
+    if title and _LIFESITE_DIGEST.match(title.strip()):
+        return True
+    return False
 
 
 SOURCES = {
@@ -52,7 +65,7 @@ SOURCES = {
     "OSV News": "https://www.osvnews.com/feed/",
     "The Pillar": "https://www.pillarcatholic.com/feed",
     "Zenit": "https://zenit.org/feed/",
-    "LifeSiteNews": "https://www.lifesitenews.com/rss/global",
+    "LifeSiteNews": "https://www.lifesitenews.com/feed/",  # main feed only
     "ChurchPOP": "https://www.churchpop.com/feed/",
     "Catholic Daily Reflections": "https://catholic-daily-reflections.com/feed/",
     # Newly added sources
@@ -79,6 +92,8 @@ SOURCES = {
     "National Catholic Reporter": "https://ncronline.org/rss.xml",
     "Word on Fire": "https://www.wordonfire.org/articles/feed/",
     "Rome Reports": "https://www.romereports.com/en/feed/",
+    # Devotional / saints / daily readings
+    "uCatholic": "https://ucatholic.com/feed/",
 }
 
 
@@ -96,6 +111,9 @@ def collect():
         for entry in feed.entries[:15]:
             title = entry.get("title", "").strip()
             link = entry.get("link", "#")
+            # Skip LifeSite email digests (World/Freedom/Catholic/Video placeholders)
+            if source == "LifeSiteNews" and is_lifesite_digest(title, link):
+                continue
             published = published_at(entry)
             image = ""
             media = entry.get("media_content") or entry.get("media_thumbnail") or []
@@ -146,7 +164,7 @@ def collect():
             categories["vatican"].append(item)
         elif source in {"OSV News", "The Pillar"} or any(x in text for x in ("us ", "america", "canada")):
             categories["america"].append(item)
-        elif source in {"Aleteia", "Catholic Daily Reflections"} or "faith" in text or "spiritual" in text:
+        elif source in {"Aleteia", "Catholic Daily Reflections", "uCatholic", "Word on Fire"} or "faith" in text or "spiritual" in text or "saint" in text or "mass readings" in text:
             categories["faith"].append(item)
         elif source in {"LifeSiteNews", "ChurchPOP"} or any(x in text for x in ("life", "culture", "family")):
             categories["culture_life"].append(item)
