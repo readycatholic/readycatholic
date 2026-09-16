@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parent
 INDEX = ROOT / "index.html"
 
 # LifeSiteNews email digests look like "World 09.16.26" and link under /email/
-_LSITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.\d{2}$", re.I)
+_LIFESITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.\d{2}$", re.I)
 
 
 def story_key(item):
@@ -92,6 +92,8 @@ SOURCES = {
     "National Catholic Reporter": "https://ncronline.org/rss.xml",
     "Word on Fire": "https://www.wordonfire.org/articles/feed/",
     "Rome Reports": "https://www.romereports.com/en/feed/",
+    # Devotional / saints / daily readings
+    "uCatholic": "https://ucatholic.com/feed/",
 }
 
 
@@ -162,7 +164,7 @@ def collect():
             categories["vatican"].append(item)
         elif source in {"OSV News", "The Pillar"} or any(x in text for x in ("us ", "america", "canada")):
             categories["america"].append(item)
-        elif source in {"Aleteia", "Catholic Daily Reflections"} or "faith" in text or "spiritual" in text:
+        elif source in {"Aleteia", "Catholic Daily Reflections", "uCatholic", "Word on Fire"} or "faith" in text or "spiritual" in text or "saint" in text or "mass readings" in text:
             categories["faith"].append(item)
         elif source in {"LifeSiteNews", "ChurchPOP"} or any(x in text for x in ("life", "culture", "family")):
             categories["culture_life"].append(item)
