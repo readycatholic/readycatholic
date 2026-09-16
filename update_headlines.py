@@ -75,6 +75,10 @@ SOURCES = {
     "The Catholic Telegraph": "https://thecatholictelegraph.com/feed/",
     "GCatholic Appointments": "https://gcatholic.org/rss/recent.rss",
     "The Jesuit Post": "https://thejesuitpost.org/feed/",
+    # Batch: NCR, Word on Fire, Rome Reports
+    "National Catholic Reporter": "https://ncronline.org/rss.xml",
+    "Word on Fire": "https://www.wordonfire.org/articles/feed/",
+    "Rome Reports": "https://www.romereports.com/en/feed/",
 }
 
 
