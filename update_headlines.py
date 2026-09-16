@@ -96,13 +96,47 @@ SOURCES = {
     "uCatholic": "https://ucatholic.com/feed/",
 }
 
+# --- Category source groups (cleaned Sep 2026) ---
+VATICAN_SOURCES = {
+    "Vatican News", "Rome Reports", "Zenit", "InfoVaticana",
+    "GCatholic Appointments", "Fides News Agency",
+}
+AMERICA_SOURCES = {
+    "OSV News", "The Pillar", "National Catholic Register", "Catholic News Agency",
+    "Crux", "National Catholic Reporter", "Catholic Review",
+    "Orange County Catholic", "The Catholic Telegraph", "Cal Catholic",
+    "Catholic League", "U.S. Catholic", "B.C. Catholic",
+}
+FAITH_SOURCES = {
+    "Aleteia", "Catholic Daily Reflections", "uCatholic", "Word on Fire",
+    "Catholic Exchange", "New Liturgical Movement", "The Jesuit Post",
+    "Catholic Stand", "Spirit Daily",
+}
+CULTURE_SOURCES = {
+    "ChurchPOP", "Hollywood Catholic", "America Magazine", "First Things",
+    "The Catholic Thing", "Crisis Magazine", "Catholic World Report",
+}
+WORLD_SOURCES = {
+    "The Catholic Herald", "The Catholic Weekly", "Catholic News Ireland",
+    "The Irish Catholic", "LiCAS.news", "Catholic Culture", "The Wanderer",
+    "The Remnant", "Catholic Online", "Big Pulpit",
+}
+PROLIFE_SOURCES = {
+    "Catholic League", "Crisis Magazine", "LifeSiteNews", "Catholic Exchange",
+}
+MEDIA_SOURCES = {"Hollywood Catholic", "ChurchPOP"}
+LOCAL_SOURCES = {
+    "Catholic News", "Catholic News Ireland", "The Catholic Weekly",
+    "Cal Catholic", "U.S. Catholic", "Orange County Catholic",
+    "The Catholic Telegraph", "Catholic Review", "B.C. Catholic",
+}
+BREAKING_SOURCES = {"Vatican News", "The Pillar", "OSV News", "Catholic News Agency"}
+
 
 def collect():
     all_items = []
     now = datetime.now(timezone.utc)
-    # Read more than the old five-entry limit so that a busy feed cannot hide
-    # today's stories behind older items. Prefer the newest 36 hours, while
-    # retaining older items as a fallback when a source has not published recently.
+    # Prefer the newest 36 hours; keep older items as fallback.
     recent_cutoff = now.timestamp() - (36 * 60 * 60)
 
     for source, url in SOURCES.items():
@@ -111,7 +145,6 @@ def collect():
         for entry in feed.entries[:15]:
             title = entry.get("title", "").strip()
             link = entry.get("link", "#")
-            # Skip LifeSite email digests (World/Freedom/Catholic/Video placeholders)
             if source == "LifeSiteNews" and is_lifesite_digest(title, link):
                 continue
             published = published_at(entry)
@@ -130,47 +163,80 @@ def collect():
                     "published": published,
                 })
 
-        # Keep recent stories first. If a feed supplies no usable dates, keep
-        # its feed order as a fallback. Older stories remain available only
-        # when needed to avoid leaving a category empty.
         dated = [item for item in source_items if item["published"] is not None]
         recent = [item for item in dated if item["published"].timestamp() >= recent_cutoff]
         fallback = [item for item in source_items if item not in recent]
         if recent:
             source_items = sorted(recent, key=lambda x: x["published"], reverse=True) + fallback
         else:
-            source_items = sorted(dated, key=lambda x: x["published"], reverse=True) + [item for item in source_items if item not in dated]
+            source_items = sorted(dated, key=lambda x: x["published"], reverse=True) + [
+                item for item in source_items if item not in dated
+            ]
         all_items.extend(source_items)
 
-    # Across all publishers, newest stories should be considered first.
-    all_items.sort(key=lambda x: x["published"] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+    all_items.sort(
+        key=lambda x: x["published"] or datetime.min.replace(tzinfo=timezone.utc),
+        reverse=True,
+    )
 
-    categories = {"breaking": [], "vatican": [], "america": [], "faith": [], "culture_life": [], "culture": [], "world": [], "prolife": [], "media": [], "local": []}
-    prolife_sources = {"Catholic League", "Crisis Magazine", "LifeSiteNews", "OSV News", "Catholic Exchange"}
-    media_sources = {"Hollywood Catholic", "ChurchPOP", "The Pillar"}
-    local_sources = {"Catholic News", "Catholic News Ireland", "The Catholic Weekly", "Cal Catholic", "U.S. Catholic"}
+    categories = {
+        "breaking": [], "vatican": [], "america": [], "faith": [],
+        "culture_life": [], "culture": [], "world": [],
+        "prolife": [], "media": [], "local": [],
+    }
+
     for item in all_items:
         text = item["title"].lower()
         source = item["source"]
-        if source in prolife_sources or any(x in text for x in ("abortion", "pro-life", "assisted suicide", "human dignity")):
+
+        # Specialty panels (can overlap with main columns)
+        if source in PROLIFE_SOURCES or any(
+            x in text for x in ("abortion", "pro-life", "prolife", "assisted suicide", "euthanasia")
+        ):
             categories["prolife"].append(item)
-        if source in media_sources or any(x in text for x in ("podcast", "radio", "film", "video", "concert", "music")):
+        if source in MEDIA_SOURCES or any(
+            x in text for x in ("podcast", "radio show", "film review", "concert")
+        ):
             categories["media"].append(item)
-        if source in local_sources:
+        if source in LOCAL_SOURCES:
             categories["local"].append(item)
-        if source in {"Vatican News", "The Pillar", "OSV News"} and not categories["breaking"]:
+
+        # Breaking: first few high-signal items from priority wire sources
+        if source in BREAKING_SOURCES and len(categories["breaking"]) < 6:
             categories["breaking"].append(item)
-        if source == "Vatican News" or "pope" in text or "vatican" in text:
+
+        # Main columns — ordered, first match wins
+        if source in VATICAN_SOURCES or any(
+            x in text for x in ("pope leo", "pope francis", "holy see", "vatican", "pontiff", "cardinal")
+        ):
             categories["vatican"].append(item)
-        elif source in {"OSV News", "The Pillar"} or any(x in text for x in ("us ", "america", "canada")):
+        elif source in AMERICA_SOURCES or any(
+            x in text for x in (
+                "united states", "u.s.", "us bishops", "usccb", "american",
+                "canada", "canadian", "archdiocese of", "diocese of",
+            )
+        ):
             categories["america"].append(item)
-        elif source in {"Aleteia", "Catholic Daily Reflections", "uCatholic", "Word on Fire"} or "faith" in text or "spiritual" in text or "saint" in text or "mass readings" in text:
+        elif source in FAITH_SOURCES or any(
+            x in text for x in (
+                "saint of the day", "mass readings", "homily", "spiritual",
+                "prayer", "rosary", "eucharist", "liturgy", "devotion",
+            )
+        ):
             categories["faith"].append(item)
-        elif source in {"LifeSiteNews", "ChurchPOP"} or any(x in text for x in ("life", "culture", "family")):
-            categories["culture_life"].append(item)
+        elif source in CULTURE_SOURCES or any(
+            x in text for x in (
+                "culture", "family", "marriage", "book review", "film",
+                "music", "art", "literature",
+            )
+        ):
+            # LifeSite stays out of main Culture & Life (pro-life specialty only)
+            if source != "LifeSiteNews":
+                categories["culture_life"].append(item)
         else:
             categories["world"].append(item)
 
+    # Breaking: unique sources, max 3
     unique_breaking = []
     seen_sources = set()
     for item in categories["breaking"] + all_items:
@@ -180,6 +246,7 @@ def collect():
         if len(unique_breaking) == 3:
             break
     categories["breaking"] = unique_breaking
+
     used = {story_key(item) for item in categories["breaking"]}
     for key in ("vatican", "america", "faith", "culture_life", "culture", "world", "prolife", "media", "local"):
         filtered = []
@@ -191,14 +258,30 @@ def collect():
             used.add(item_key)
             filtered.append(item)
         categories[key] = filtered
+
     for key in categories:
         categories[key] = categories[key][:8]
-    main_keys = {story_key(item) for key in ("breaking", "vatican", "america", "faith", "culture_life", "world") for item in categories[key]}
+
+    main_keys = {
+        story_key(item)
+        for key in ("breaking", "vatican", "america", "faith", "culture_life", "world")
+        for item in categories[key]
+    }
+
     specialty_rules = {
-        "prolife": lambda item: item["source"] in {"Catholic League", "Crisis Magazine", "LifeSiteNews", "OSV News", "Catholic Exchange"} or any(x in item["title"].lower() for x in ("abortion", "pro-life", "assisted suicide", "human dignity")),
-        "culture": lambda item: item["source"] in {"America Magazine", "First Things", "The Catholic Thing", "U.S. Catholic", "The Catholic Weekly", "Hollywood Catholic"} or any(x in item["title"].lower() for x in ("culture", "book", "film", "music", "art", "literature", "monastery")),
-        "media": lambda item: item["source"] in {"Vatican News", "Catholic News Agency", "Hollywood Catholic", "The Pillar", "ChurchPOP"} and (item.get("image") or any(x in item["title"].lower() for x in ("podcast", "radio", "video", "film", "concert", "music"))),
-        "local": lambda item: item["source"] in {"Catholic News", "Catholic News Ireland", "The Catholic Weekly", "Cal Catholic", "U.S. Catholic"},
+        "prolife": lambda item: (
+            item["source"] in PROLIFE_SOURCES
+            or any(x in item["title"].lower() for x in ("abortion", "pro-life", "prolife", "assisted suicide", "euthanasia"))
+        ),
+        "culture": lambda item: (
+            item["source"] in CULTURE_SOURCES
+            or any(x in item["title"].lower() for x in ("culture", "book", "film", "music", "art", "literature", "monastery"))
+        ),
+        "media": lambda item: (
+            item["source"] in MEDIA_SOURCES
+            and (item.get("image") or any(x in item["title"].lower() for x in ("podcast", "radio", "video", "film", "concert", "music")))
+        ),
+        "local": lambda item: item["source"] in LOCAL_SOURCES,
     }
     for key, rule in specialty_rules.items():
         selected = []
@@ -214,7 +297,9 @@ def collect():
         if key == "culture":
             reserved = {story_key(item) for item in selected}
             for main_key in ("vatican", "america", "faith", "culture_life", "world"):
-                categories[main_key] = [item for item in categories[main_key] if story_key(item) not in reserved]
+                categories[main_key] = [
+                    item for item in categories[main_key] if story_key(item) not in reserved
+                ]
     return categories
 
 
@@ -279,7 +364,10 @@ def main():
         key = mapping.get(header.get_text(" ", strip=True))
         if not key:
             continue
-        replace_between(header.parent, header, ["section-header", "category-ad"], [item_node(soup, x) for x in categories[key]])
+        replace_between(
+            header.parent, header, ["section-header", "category-ad"],
+            [item_node(soup, x) for x in categories[key]],
+        )
 
     displayed_main = {
         story_key(item)
@@ -292,7 +380,9 @@ def main():
         target = panel.select_one(".category-items")
         if target and key in categories:
             target.clear()
-            specialty_items = [item for item in categories[key] if story_key(item) not in displayed_specialty]
+            specialty_items = [
+                item for item in categories[key] if story_key(item) not in displayed_specialty
+            ]
             for item in specialty_items[:4]:
                 target.append(specialty_node(soup, item, media=(key == "media")))
                 displayed_specialty.add(story_key(item))
