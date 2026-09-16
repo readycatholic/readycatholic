@@ -55,6 +55,21 @@ SOURCES = {
     "LifeSiteNews": "https://www.lifesitenews.com/rss/global",
     "ChurchPOP": "https://www.churchpop.com/feed/",
     "Catholic Daily Reflections": "https://catholic-daily-reflections.com/feed/",
+    # Newly added sources
+    "National Catholic Register": "https://www.ncregister.com/feeds/general-news.xml",
+    "Catholic Culture": "https://feeds.feedburner.com/CatholicWorldNewsFeatureStories",
+    "The Catholic Herald": "https://thecatholicherald.com/feed/",
+    "Catholic Review": "https://catholicreview.org/feed/",
+    "The Wanderer": "https://thewandererpress.com/feed/",
+    "The Remnant": "https://www.remnantnewspaper.com/feed/",
+    "LiCAS.news": "https://www.licas.news/feed/",
+    "The Irish Catholic": "https://www.irishcatholic.com/feed/",
+    "B.C. Catholic": "https://bccatholic.ca/content/feed",
+    "Catholic Online": "https://www.catholic.org/xml/rss_thefeed.php",
+    "New Liturgical Movement": "https://www.newliturgicalmovement.org/feeds/posts/default",
+    "Spirit Daily": "https://spiritdaily.com/feed/",
+    "Big Pulpit": "https://bigpulpit.com/feed/",
+    "Catholic Stand": "https://catholicstand.com/feed/",
 }
 
 
