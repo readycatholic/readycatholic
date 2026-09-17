@@ -16,7 +16,7 @@ _LIFESITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.
 
 MAIN_LIMIT = 5
 SPECIALTY_LIMIT = 4
-# Max items from the same publisher in one main column
+MEDIA_LIMIT = 3  # Catholic Media panel
 MAX_PER_SOURCE = 2
 
 
@@ -95,18 +95,15 @@ SOURCES = {
     "uCatholic": "https://ucatholic.com/feed/",
 }
 
-# Pure wire / Rome sources — strong Vatican default
 VATICAN_SOURCES = {
     "Vatican News", "Rome Reports", "Zenit", "InfoVaticana",
     "GCatholic Appointments", "Fides News Agency",
 }
-# Strong U.S./Canada diocesan or domestic wires (topic can still override)
 AMERICA_STRONG = {
     "OSV News", "The Pillar", "Catholic Review",
     "Orange County Catholic", "The Catholic Telegraph", "Cal Catholic",
     "Catholic League", "U.S. Catholic", "B.C. Catholic",
 }
-# These used to auto-America; now only if geo keywords match
 AMERICA_SOFT = {
     "National Catholic Register", "Catholic News Agency", "Crux",
     "National Catholic Reporter",
@@ -150,7 +147,7 @@ AMERICA_KEYWORDS = (
 )
 WORLD_GEO = (
     "mexico", "mexican", "france", "french", "china", "chinese",
-    "nigeria", "uganda", "philippines", "brazil", "brazil",
+    "nigeria", "uganda", "philippines", "brazil",
     "germany", "german", "poland", "ukraine", "ukrainian",
     "india", "pakistan", "syria", "iraq", "holy land", "israel",
     "gaza", "africa", "asia", "europe", "australia", "ireland",
@@ -196,49 +193,30 @@ def is_culture_topic(text):
 
 
 def classify_main(item):
-    """Topic-first classification for main columns. Returns category key."""
     text = item["title"].lower()
     source = item["source"]
-
-    # 1. Prayer (very specific)
     if source in PRAYER_SOURCES or is_prayer_topic(text):
         return "prayer"
-
-    # 2. Vatican — topic or pure Rome wires
     if source in VATICAN_SOURCES or is_vatican_topic(text):
         return "vatican"
-
-    # 3. America — strong domestic sources OR soft sources with geo keywords
     if source in AMERICA_STRONG or is_america_topic(text):
-        # Foreign geo in title still wins for soft routing below
         if is_world_geo(text) and not is_america_topic(text):
             return "world"
         return "america"
     if source in AMERICA_SOFT and is_america_topic(text):
         return "america"
-
-    # 4. World geo (Mexico, China, France, etc.) before faith/culture defaults
     if is_world_geo(text):
         return "world"
-
-    # 5. Faith formation
     if source in FAITH_SOURCES or is_faith_topic(text):
         return "faith"
-
-    # 6. Culture & life (includes gender/ideology/culture commentary)
     if source in CULTURE_SOURCES or is_culture_topic(text):
         return "culture_life"
-
-    # 7. Soft America sources with no other signal → America
     if source in AMERICA_SOFT:
         return "america"
-
-    # 8. Everything else → World (no longer LifeSite-only dump via source)
     return "world"
 
 
 def diversify(items, limit, max_per_source=MAX_PER_SOURCE):
-    """Keep order but cap how many items come from one publisher."""
     counts = Counter()
     out = []
     for item in items:
@@ -306,8 +284,6 @@ def collect():
     for item in all_items:
         text = item["title"].lower()
         source = item["source"]
-
-        # Specialty: pro-life requires TOPIC keywords (not just LifeSite source)
         if is_prolife_topic(text):
             categories["prolife"].append(item)
         if source in MEDIA_SOURCES or any(
@@ -316,15 +292,11 @@ def collect():
             categories["media"].append(item)
         if source in LOCAL_SOURCES:
             categories["local"].append(item)
-
         if source in BREAKING_SOURCES and len(categories["breaking"]) < 6:
             categories["breaking"].append(item)
-
-        # Main columns — topic-first
         cat = classify_main(item)
         categories[cat].append(item)
 
-    # Breaking: unique sources, max 3
     unique_breaking = []
     seen_sources = set()
     for item in categories["breaking"] + all_items:
@@ -350,11 +322,11 @@ def collect():
             filtered.append(item)
         categories[key] = filtered
 
-    # Cap + diversify main columns
     for key in ("vatican", "america", "faith", "prayer", "culture_life", "world"):
         categories[key] = diversify(categories[key], MAIN_LIMIT)
-    for key in ("prolife", "media", "local", "culture"):
+    for key in ("prolife", "local", "culture"):
         categories[key] = diversify(categories[key], SPECIALTY_LIMIT, max_per_source=SPECIALTY_LIMIT)
+    categories["media"] = diversify(categories["media"], MEDIA_LIMIT, max_per_source=MEDIA_LIMIT)
 
     main_keys = {
         story_key(item)
@@ -362,12 +334,10 @@ def collect():
         for item in categories[key]
     }
 
-    # Rebuild specialty with tight pro-life rule
     specialty_rules = {
         "prolife": lambda item: is_prolife_topic(item["title"].lower()),
         "culture": lambda item: (
-            item["source"] in CULTURE_SOURCES
-            or is_culture_topic(item["title"].lower())
+            item["source"] in CULTURE_SOURCES or is_culture_topic(item["title"].lower())
         ),
         "media": lambda item: (
             item["source"] in MEDIA_SOURCES
@@ -382,6 +352,7 @@ def collect():
         selected = []
         seen = {story_key(item) for item in categories["breaking"]} if key == "culture" else set(main_keys)
         src_counts = Counter()
+        limit = MEDIA_LIMIT if key == "media" else SPECIALTY_LIMIT
         for item in all_items:
             item_key = story_key(item)
             if not rule(item) or item_key in seen:
@@ -391,7 +362,7 @@ def collect():
             selected.append(item)
             seen.add(item_key)
             src_counts[item["source"]] += 1
-            if len(selected) == SPECIALTY_LIMIT:
+            if len(selected) == limit:
                 break
         categories[key] = selected
         if key == "culture":
@@ -485,9 +456,14 @@ def main():
             specialty_items = [
                 item for item in categories[key] if story_key(item) not in displayed_specialty
             ]
-            for item in specialty_items[:SPECIALTY_LIMIT]:
+            limit = MEDIA_LIMIT if key == "media" else SPECIALTY_LIMIT
+            for item in specialty_items[:limit]:
                 target.append(specialty_node(soup, item, media=(key == "media")))
                 displayed_specialty.add(story_key(item))
+            # Keep specialty header text in sync for media panel
+            hdr = panel.select_one(".section-header")
+            if key == "media" and hdr is not None:
+                hdr.string = "CATHOLIC MEDIA"
 
     timestamp = soup.select_one(".timestamp")
     if timestamp:
