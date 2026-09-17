@@ -16,7 +16,7 @@ _LIFESITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.
 
 MAIN_LIMIT = 5
 SPECIALTY_LIMIT = 4
-MEDIA_LIMIT = 3  # Catholic Media panel
+MEDIA_LIMIT = 3
 MAX_PER_SOURCE = 2
 
 
@@ -221,6 +221,29 @@ def classify_main(item):
     return "world"
 
 
+def ensure_one_image(selected, pool, limit, max_per_source=MAX_PER_SOURCE):
+    """Prefer at least one item with a thumbnail when the pool has one."""
+    if not selected:
+        return selected
+    if any(item.get("image") for item in selected):
+        return selected
+    selected_keys = {story_key(i) for i in selected}
+    counts = Counter(i["source"] for i in selected)
+    for item in pool:
+        if not item.get("image"):
+            continue
+        if story_key(item) in selected_keys:
+            continue
+        if counts[item["source"]] >= max_per_source:
+            continue
+        if len(selected) >= limit:
+            selected = selected[:-1] + [item]
+        else:
+            selected = selected + [item]
+        break
+    return selected[:limit]
+
+
 def diversify(items, limit, max_per_source=MAX_PER_SOURCE):
     counts = Counter()
     out = []
@@ -250,11 +273,24 @@ def collect():
                 continue
             published = published_at(entry)
             image = ""
-            media = entry.get("media_content") or entry.get("media_thumbnail") or []
-            if media and isinstance(media, list):
-                image = media[0].get("url", "")
+            media = entry.get("media_content") or []
+            if media and isinstance(media, list) and media:
+                image = media[0].get("url", "") or media[0].get("href", "")
+            if not image:
+                thumbs = entry.get("media_thumbnail") or []
+                if isinstance(thumbs, list) and thumbs:
+                    image = thumbs[0].get("url", "") if isinstance(thumbs[0], dict) else ""
+                elif isinstance(thumbs, dict):
+                    image = thumbs.get("url", "")
             if not image and entry.get("enclosures"):
-                image = entry.enclosures[0].get("href", "")
+                for enc in entry.enclosures:
+                    href = enc.get("href", "")
+                    etype = (enc.get("type") or "").lower()
+                    if href and (etype.startswith("image") or any(href.lower().endswith(ext) for ext in (".jpg", ".jpeg", ".png", ".webp", ".gif"))):
+                        image = href
+                        break
+                    if not image and href and not etype.startswith("audio"):
+                        image = href
             if title and link:
                 source_items.append({
                     "title": title,
@@ -328,10 +364,18 @@ def collect():
         categories[key] = filtered
 
     for key in ("vatican", "america", "faith", "prayer", "culture_life", "world"):
-        categories[key] = diversify(categories[key], MAIN_LIMIT)
+        pool = categories[key]
+        categories[key] = ensure_one_image(diversify(pool, MAIN_LIMIT), pool, MAIN_LIMIT)
     for key in ("prolife", "local", "culture"):
-        categories[key] = diversify(categories[key], SPECIALTY_LIMIT, max_per_source=SPECIALTY_LIMIT)
-    categories["media"] = diversify(categories["media"], MEDIA_LIMIT, max_per_source=1)
+        pool = categories[key]
+        categories[key] = ensure_one_image(
+            diversify(pool, SPECIALTY_LIMIT, max_per_source=SPECIALTY_LIMIT),
+            pool, SPECIALTY_LIMIT, max_per_source=SPECIALTY_LIMIT,
+        )
+    pool = categories["media"]
+    categories["media"] = ensure_one_image(
+        diversify(pool, MEDIA_LIMIT, max_per_source=1), pool, MEDIA_LIMIT, max_per_source=1
+    )
 
     main_keys = {
         story_key(item)
@@ -364,7 +408,9 @@ def collect():
             src_counts[item["source"]] += 1
             if len(selected) == limit:
                 break
-        categories[key] = selected
+        categories[key] = ensure_one_image(
+            selected, all_items, limit, max_per_source=(1 if key == "media" else MAX_PER_SOURCE)
+        )
         if key == "culture":
             reserved = {story_key(item) for item in selected}
             for main_key in ("vatican", "america", "faith", "prayer", "culture_life", "world"):
@@ -375,9 +421,17 @@ def collect():
     return categories
 
 
-def item_node(soup, item, featured=False):
+def item_node(soup, item, featured=False, with_image=False):
     cls = "featured-item" if featured else "news-item"
     div = soup.new_tag("div", attrs={"class": cls})
+    if with_image and item.get("image"):
+        img = soup.new_tag(
+            "img",
+            src=item["image"],
+            alt="",
+            attrs={"class": "story-thumb", "loading": "lazy"},
+        )
+        div.append(img)
     a = soup.new_tag("a", href=item["link"], target="_blank", rel="noopener noreferrer")
     a.string = item["title"]
     div.append(a)
@@ -389,7 +443,7 @@ def item_node(soup, item, featured=False):
 
 def specialty_node(soup, item, media=False):
     div = soup.new_tag("div", attrs={"class": "category-item"})
-    if media and item.get("image"):
+    if item.get("image"):
         img = soup.new_tag("img", src=item["image"], alt="", attrs={"class": "media-thumb", "loading": "lazy"})
         div.append(img)
     a = soup.new_tag("a", href=item["link"], target="_blank", rel="noopener noreferrer")
@@ -437,9 +491,16 @@ def main():
         key = mapping.get(header.get_text(" ", strip=True))
         if not key:
             continue
+        nodes = []
+        shown_img = False
+        for x in categories[key]:
+            use_img = (not shown_img) and bool(x.get("image"))
+            if use_img:
+                shown_img = True
+            nodes.append(item_node(soup, x, with_image=use_img))
         replace_between(
             header.parent, header, ["section-header", "category-ad"],
-            [item_node(soup, x) for x in categories[key]],
+            nodes,
         )
 
     displayed_main = {
@@ -467,6 +528,12 @@ def main():
     timestamp = soup.select_one(".timestamp")
     if timestamp:
         timestamp.string = datetime.now(ZoneInfo("America/Chicago")).strftime("%A, %B %d, %Y")
+    style = soup.select_one("style")
+    if style and ".story-thumb" not in (style.string or ""):
+        style.string = (style.string or "") + (
+            ".story-thumb { display: block; width: 100%; max-height: 120px; "
+            "object-fit: cover; border-radius: 8px; margin-bottom: 7px; }\n"
+        )
     INDEX.write_text(str(soup), encoding="utf-8")
     print("Updated Ready Catholic headlines while preserving the visual design.")
 
