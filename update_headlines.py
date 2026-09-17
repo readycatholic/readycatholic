@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 import re
+from collections import Counter
 
 import feedparser
 from bs4 import BeautifulSoup, NavigableString
@@ -13,9 +14,10 @@ INDEX = ROOT / "index.html"
 
 _LIFESITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.\d{2}$", re.I)
 
-# Max stories shown per main column (keeps layout even)
 MAIN_LIMIT = 5
 SPECIALTY_LIMIT = 4
+# Max items from the same publisher in one main column
+MAX_PER_SOURCE = 2
 
 
 def story_key(item):
@@ -93,18 +95,24 @@ SOURCES = {
     "uCatholic": "https://ucatholic.com/feed/",
 }
 
+# Pure wire / Rome sources — strong Vatican default
 VATICAN_SOURCES = {
     "Vatican News", "Rome Reports", "Zenit", "InfoVaticana",
     "GCatholic Appointments", "Fides News Agency",
 }
-AMERICA_SOURCES = {
-    "OSV News", "The Pillar", "National Catholic Register", "Catholic News Agency",
-    "Crux", "National Catholic Reporter", "Catholic Review",
+# Strong U.S./Canada diocesan or domestic wires (topic can still override)
+AMERICA_STRONG = {
+    "OSV News", "The Pillar", "Catholic Review",
     "Orange County Catholic", "The Catholic Telegraph", "Cal Catholic",
     "Catholic League", "U.S. Catholic", "B.C. Catholic",
 }
+# These used to auto-America; now only if geo keywords match
+AMERICA_SOFT = {
+    "National Catholic Register", "Catholic News Agency", "Crux",
+    "National Catholic Reporter",
+}
 FAITH_SOURCES = {
-    "Aleteia", "Word on Fire", "Catholic Exchange", "New Liturgical Movement",
+    "Aleteia", "Word on Fire", "New Liturgical Movement",
     "The Jesuit Post", "Catholic Stand", "Spirit Daily",
 }
 PRAYER_SOURCES = {
@@ -113,9 +121,6 @@ PRAYER_SOURCES = {
 CULTURE_SOURCES = {
     "ChurchPOP", "Hollywood Catholic", "America Magazine", "First Things",
     "The Catholic Thing", "Crisis Magazine", "Catholic World Report",
-}
-PROLIFE_SOURCES = {
-    "Catholic League", "Crisis Magazine", "LifeSiteNews", "Catholic Exchange",
 }
 MEDIA_SOURCES = {"Hollywood Catholic", "ChurchPOP"}
 LOCAL_SOURCES = {
@@ -130,6 +135,121 @@ PRAYER_KEYWORDS = (
     "rosary", "novena", "chaplet", "adoration", "devotion", "litany",
     "morning prayer", "evening prayer", "divine mercy",
 )
+PROLIFE_KEYWORDS = (
+    "abortion", "pro-life", "prolife", "pro life", "assisted suicide",
+    "euthanasia", "planned parenthood", "roe v", "dobbs",
+)
+VATICAN_KEYWORDS = (
+    "pope leo", "pope francis", "holy see", "vatican", "pontiff",
+    "jubilee year", "synod of bishops", "roman curia", "apostolic",
+)
+AMERICA_KEYWORDS = (
+    "united states", "u.s.", "us bishops", "usccb", "american",
+    "canada", "canadian", "archdiocese of", "diocese of",
+    "joliet", "baltimore", "philadelphia", "los angeles", "new york",
+)
+WORLD_GEO = (
+    "mexico", "mexican", "france", "french", "china", "chinese",
+    "nigeria", "uganda", "philippines", "brazil", "brazil",
+    "germany", "german", "poland", "ukraine", "ukrainian",
+    "india", "pakistan", "syria", "iraq", "holy land", "israel",
+    "gaza", "africa", "asia", "europe", "australia", "ireland",
+    "britain", "uk ", "england", "scotland", "latin america",
+)
+FAITH_KEYWORDS = (
+    "homily", "spiritual", "faith formation", "evangelization",
+    "theology", "saint ", "st.", "liturgy", "catechism",
+)
+CULTURE_KEYWORDS = (
+    "culture", "family", "marriage", "book review", "film",
+    "music", "art", "literature", "feminism", "gender",
+    "transgender", "ideology", "university", "campus",
+)
+
+
+def is_prolife_topic(text):
+    return any(k in text for k in PROLIFE_KEYWORDS)
+
+
+def is_vatican_topic(text):
+    return any(k in text for k in VATICAN_KEYWORDS)
+
+
+def is_america_topic(text):
+    return any(k in text for k in AMERICA_KEYWORDS)
+
+
+def is_world_geo(text):
+    return any(k in text for k in WORLD_GEO)
+
+
+def is_prayer_topic(text):
+    return any(k in text for k in PRAYER_KEYWORDS)
+
+
+def is_faith_topic(text):
+    return any(k in text for k in FAITH_KEYWORDS)
+
+
+def is_culture_topic(text):
+    return any(k in text for k in CULTURE_KEYWORDS)
+
+
+def classify_main(item):
+    """Topic-first classification for main columns. Returns category key."""
+    text = item["title"].lower()
+    source = item["source"]
+
+    # 1. Prayer (very specific)
+    if source in PRAYER_SOURCES or is_prayer_topic(text):
+        return "prayer"
+
+    # 2. Vatican — topic or pure Rome wires
+    if source in VATICAN_SOURCES or is_vatican_topic(text):
+        return "vatican"
+
+    # 3. America — strong domestic sources OR soft sources with geo keywords
+    if source in AMERICA_STRONG or is_america_topic(text):
+        # Foreign geo in title still wins for soft routing below
+        if is_world_geo(text) and not is_america_topic(text):
+            return "world"
+        return "america"
+    if source in AMERICA_SOFT and is_america_topic(text):
+        return "america"
+
+    # 4. World geo (Mexico, China, France, etc.) before faith/culture defaults
+    if is_world_geo(text):
+        return "world"
+
+    # 5. Faith formation
+    if source in FAITH_SOURCES or is_faith_topic(text):
+        return "faith"
+
+    # 6. Culture & life (includes gender/ideology/culture commentary)
+    if source in CULTURE_SOURCES or is_culture_topic(text):
+        return "culture_life"
+
+    # 7. Soft America sources with no other signal → America
+    if source in AMERICA_SOFT:
+        return "america"
+
+    # 8. Everything else → World (no longer LifeSite-only dump via source)
+    return "world"
+
+
+def diversify(items, limit, max_per_source=MAX_PER_SOURCE):
+    """Keep order but cap how many items come from one publisher."""
+    counts = Counter()
+    out = []
+    for item in items:
+        src = item["source"]
+        if counts[src] >= max_per_source:
+            continue
+        out.append(item)
+        counts[src] += 1
+        if len(out) >= limit:
+            break
+    return out
 
 
 def collect():
@@ -187,9 +307,8 @@ def collect():
         text = item["title"].lower()
         source = item["source"]
 
-        if source in PROLIFE_SOURCES or any(
-            x in text for x in ("abortion", "pro-life", "prolife", "assisted suicide", "euthanasia")
-        ):
+        # Specialty: pro-life requires TOPIC keywords (not just LifeSite source)
+        if is_prolife_topic(text):
             categories["prolife"].append(item)
         if source in MEDIA_SOURCES or any(
             x in text for x in ("podcast", "radio show", "film review", "concert")
@@ -201,34 +320,11 @@ def collect():
         if source in BREAKING_SOURCES and len(categories["breaking"]) < 6:
             categories["breaking"].append(item)
 
-        if source in VATICAN_SOURCES or any(
-            x in text for x in ("pope leo", "pope francis", "holy see", "vatican", "pontiff")
-        ):
-            categories["vatican"].append(item)
-        elif source in AMERICA_SOURCES or any(
-            x in text for x in (
-                "united states", "u.s.", "us bishops", "usccb", "american",
-                "canada", "canadian", "archdiocese of", "diocese of",
-            )
-        ):
-            categories["america"].append(item)
-        elif source in PRAYER_SOURCES or any(x in text for x in PRAYER_KEYWORDS):
-            categories["prayer"].append(item)
-        elif source in FAITH_SOURCES or any(
-            x in text for x in ("homily", "spiritual", "faith formation", "evangelization", "theology")
-        ):
-            categories["faith"].append(item)
-        elif source in CULTURE_SOURCES or any(
-            x in text for x in (
-                "culture", "family", "marriage", "book review", "film",
-                "music", "art", "literature",
-            )
-        ):
-            if source != "LifeSiteNews":
-                categories["culture_life"].append(item)
-        else:
-            categories["world"].append(item)
+        # Main columns — topic-first
+        cat = classify_main(item)
+        categories[cat].append(item)
 
+    # Breaking: unique sources, max 3
     unique_breaking = []
     seen_sources = set()
     for item in categories["breaking"] + all_items:
@@ -254,11 +350,11 @@ def collect():
             filtered.append(item)
         categories[key] = filtered
 
-    # Cap main columns at MAIN_LIMIT for even layout
+    # Cap + diversify main columns
     for key in ("vatican", "america", "faith", "prayer", "culture_life", "world"):
-        categories[key] = categories[key][:MAIN_LIMIT]
+        categories[key] = diversify(categories[key], MAIN_LIMIT)
     for key in ("prolife", "media", "local", "culture"):
-        categories[key] = categories[key][:SPECIALTY_LIMIT]
+        categories[key] = diversify(categories[key], SPECIALTY_LIMIT, max_per_source=SPECIALTY_LIMIT)
 
     main_keys = {
         story_key(item)
@@ -266,38 +362,45 @@ def collect():
         for item in categories[key]
     }
 
+    # Rebuild specialty with tight pro-life rule
     specialty_rules = {
-        "prolife": lambda item: (
-            item["source"] in PROLIFE_SOURCES
-            or any(x in item["title"].lower() for x in ("abortion", "pro-life", "prolife", "assisted suicide", "euthanasia"))
-        ),
+        "prolife": lambda item: is_prolife_topic(item["title"].lower()),
         "culture": lambda item: (
             item["source"] in CULTURE_SOURCES
-            or any(x in item["title"].lower() for x in ("culture", "book", "film", "music", "art", "literature", "monastery"))
+            or is_culture_topic(item["title"].lower())
         ),
         "media": lambda item: (
             item["source"] in MEDIA_SOURCES
-            and (item.get("image") or any(x in item["title"].lower() for x in ("podcast", "radio", "video", "film", "concert", "music")))
+            and (
+                item.get("image")
+                or any(x in item["title"].lower() for x in ("podcast", "radio", "video", "film", "concert", "music"))
+            )
         ),
         "local": lambda item: item["source"] in LOCAL_SOURCES,
     }
     for key, rule in specialty_rules.items():
         selected = []
         seen = {story_key(item) for item in categories["breaking"]} if key == "culture" else set(main_keys)
+        src_counts = Counter()
         for item in all_items:
             item_key = story_key(item)
-            if rule(item) and item_key not in seen:
-                selected.append(item)
-                seen.add(item_key)
+            if not rule(item) or item_key in seen:
+                continue
+            if src_counts[item["source"]] >= MAX_PER_SOURCE and key == "prolife":
+                continue
+            selected.append(item)
+            seen.add(item_key)
+            src_counts[item["source"]] += 1
             if len(selected) == SPECIALTY_LIMIT:
                 break
         categories[key] = selected
         if key == "culture":
             reserved = {story_key(item) for item in selected}
             for main_key in ("vatican", "america", "faith", "prayer", "culture_life", "world"):
-                categories[main_key] = [
-                    item for item in categories[main_key] if story_key(item) not in reserved
-                ][:MAIN_LIMIT]
+                categories[main_key] = diversify(
+                    [item for item in categories[main_key] if story_key(item) not in reserved],
+                    MAIN_LIMIT,
+                )
     return categories
 
 
