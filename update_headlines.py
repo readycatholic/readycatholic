@@ -207,7 +207,6 @@ def classify_main(item):
         return "prayer"
     if source in VATICAN_SOURCES or is_vatican_topic(text):
         return "vatican"
-    # Culture-primary publishers before America/Faith keyword routing
     if source in CULTURE_SOURCES:
         return "culture_life"
     if source in AMERICA_STRONG or is_america_topic(text):
@@ -371,7 +370,7 @@ def collect():
     for key in ("vatican", "america", "faith", "prayer", "culture_life", "world"):
         pool = categories[key]
         categories[key] = ensure_one_image(diversify(pool, MAIN_LIMIT), pool, MAIN_LIMIT)
-    for key in ("prolife", "local", "culture"):
+    for key in ("prolife", "local"):
         pool = categories[key]
         categories[key] = ensure_one_image(
             diversify(pool, SPECIALTY_LIMIT, max_per_source=SPECIALTY_LIMIT),
@@ -390,15 +389,12 @@ def collect():
 
     specialty_rules = {
         "prolife": lambda item: is_prolife_topic(item["title"].lower()),
-        "culture": lambda item: (
-            item["source"] in CULTURE_SOURCES or is_culture_topic(item["title"].lower())
-        ),
         "media": lambda item: item["source"] in MEDIA_SOURCES,
         "local": lambda item: item["source"] in LOCAL_SOURCES,
     }
     for key, rule in specialty_rules.items():
         selected = []
-        seen = {story_key(item) for item in categories["breaking"]} if key == "culture" else set(main_keys)
+        seen = set(main_keys)
         src_counts = Counter()
         limit = MEDIA_LIMIT if key == "media" else SPECIALTY_LIMIT
         for item in all_items:
@@ -416,13 +412,6 @@ def collect():
         categories[key] = ensure_one_image(
             selected, all_items, limit, max_per_source=(1 if key == "media" else MAX_PER_SOURCE)
         )
-        if key == "culture":
-            reserved = {story_key(item) for item in selected}
-            for main_key in ("vatican", "america", "faith", "prayer", "culture_life", "world"):
-                categories[main_key] = diversify(
-                    [item for item in categories[main_key] if story_key(item) not in reserved],
-                    MAIN_LIMIT,
-                )
     return categories
 
 
