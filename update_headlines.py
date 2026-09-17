@@ -440,9 +440,9 @@ def item_node(soup, item, featured=False, with_image=False):
     return div
 
 
-def specialty_node(soup, item, media=False):
+def specialty_node(soup, item, show_image=False):
     div = soup.new_tag("div", attrs={"class": "category-item"})
-    if item.get("image"):
+    if show_image and item.get("image"):
         img = soup.new_tag("img", src=item["image"], alt="", attrs={"class": "media-thumb", "loading": "lazy"})
         div.append(img)
     a = soup.new_tag("a", href=item["link"], target="_blank", rel="noopener noreferrer")
@@ -517,8 +517,12 @@ def main():
                 item for item in categories[key] if story_key(item) not in displayed_specialty
             ]
             limit = MEDIA_LIMIT if key == "media" else SPECIALTY_LIMIT
+            shown_img = False
             for item in specialty_items[:limit]:
-                target.append(specialty_node(soup, item, media=(key == "media")))
+                use_img = (not shown_img) and bool(item.get("image"))
+                if use_img:
+                    shown_img = True
+                target.append(specialty_node(soup, item, show_image=use_img))
                 displayed_specialty.add(story_key(item))
             hdr = panel.select_one(".section-header")
             if key == "media" and hdr is not None:
