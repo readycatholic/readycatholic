@@ -20,7 +20,7 @@
         status.textContent =
           "Pilot data loaded (" +
           parishes.length +
-          " parishes — Archdiocese of Chicago sample). Not linked from homepage yet.";
+          " sample parishes — Diocese of Palm Beach & Diocese of Orlando). Not linked from homepage yet.";
       }
     })
     .catch(() => {
@@ -38,7 +38,7 @@
       results.innerHTML =
         "<p class=\"empty\">No parishes found for ZIP <strong>" +
         zip +
-        "</strong> in the pilot dataset. Coverage is limited to a Chicago-area sample until the first diocese is complete.</p>";
+        "</strong> in the pilot dataset. Coverage is a limited Palm Beach / Orlando sample until both dioceses are complete.</p>";
       return;
     }
     const ul = document.createElement("ul");
