@@ -93,6 +93,8 @@ SOURCES = {
     "Word on Fire": "https://www.wordonfire.org/articles/feed/",
     "Rome Reports": "https://www.romereports.com/en/feed/",
     "uCatholic": "https://ucatholic.com/feed/",
+    "Relevant Radio": "https://relevantradio.com/feed/",
+    "Catholic Answers Magazine": "https://www.catholic.com/feeds/magazine/rss",
 }
 
 VATICAN_SOURCES = {
@@ -119,7 +121,10 @@ CULTURE_SOURCES = {
     "ChurchPOP", "Hollywood Catholic", "America Magazine", "First Things",
     "The Catholic Thing", "Crisis Magazine", "Catholic World Report",
 }
-MEDIA_SOURCES = {"Hollywood Catholic", "ChurchPOP"}
+MEDIA_SOURCES = {
+    "Hollywood Catholic", "ChurchPOP", "Relevant Radio",
+    "Catholic Answers Magazine", "Rome Reports", "Word on Fire",
+}
 LOCAL_SOURCES = {
     "Catholic News", "Catholic News Ireland", "The Catholic Weekly",
     "Cal Catholic", "U.S. Catholic", "Orange County Catholic",
@@ -326,7 +331,7 @@ def collect():
         categories[key] = diversify(categories[key], MAIN_LIMIT)
     for key in ("prolife", "local", "culture"):
         categories[key] = diversify(categories[key], SPECIALTY_LIMIT, max_per_source=SPECIALTY_LIMIT)
-    categories["media"] = diversify(categories["media"], MEDIA_LIMIT, max_per_source=MEDIA_LIMIT)
+    categories["media"] = diversify(categories["media"], MEDIA_LIMIT, max_per_source=1)
 
     main_keys = {
         story_key(item)
@@ -339,13 +344,7 @@ def collect():
         "culture": lambda item: (
             item["source"] in CULTURE_SOURCES or is_culture_topic(item["title"].lower())
         ),
-        "media": lambda item: (
-            item["source"] in MEDIA_SOURCES
-            and (
-                item.get("image")
-                or any(x in item["title"].lower() for x in ("podcast", "radio", "video", "film", "concert", "music"))
-            )
-        ),
+        "media": lambda item: item["source"] in MEDIA_SOURCES,
         "local": lambda item: item["source"] in LOCAL_SOURCES,
     }
     for key, rule in specialty_rules.items():
@@ -357,7 +356,8 @@ def collect():
             item_key = story_key(item)
             if not rule(item) or item_key in seen:
                 continue
-            if src_counts[item["source"]] >= MAX_PER_SOURCE and key == "prolife":
+            max_src = 1 if key == "media" else (MAX_PER_SOURCE if key == "prolife" else 99)
+            if src_counts[item["source"]] >= max_src:
                 continue
             selected.append(item)
             seen.add(item_key)
@@ -460,7 +460,6 @@ def main():
             for item in specialty_items[:limit]:
                 target.append(specialty_node(soup, item, media=(key == "media")))
                 displayed_specialty.add(story_key(item))
-            # Keep specialty header text in sync for media panel
             hdr = panel.select_one(".section-header")
             if key == "media" and hdr is not None:
                 hdr.string = "CATHOLIC MEDIA"
