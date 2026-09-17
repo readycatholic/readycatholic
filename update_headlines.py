@@ -16,7 +16,7 @@ _LIFESITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.
 
 MAIN_LIMIT = 5
 SPECIALTY_LIMIT = 4
-MEDIA_LIMIT = 3
+MEDIA_LIMIT = 5
 MAX_PER_SOURCE = 2
 
 
@@ -222,7 +222,6 @@ def classify_main(item):
 
 
 def ensure_one_image(selected, pool, limit, max_per_source=MAX_PER_SOURCE):
-    """Prefer at least one item with a thumbnail when the pool has one."""
     if not selected:
         return selected
     if any(item.get("image") for item in selected):
