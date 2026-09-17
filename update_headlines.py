@@ -166,6 +166,9 @@ CULTURE_KEYWORDS = (
     "culture", "family", "marriage", "book review", "film",
     "music", "art", "literature", "feminism", "gender",
     "transgender", "ideology", "university", "campus",
+    "politics", "election", "midterm", "poll", "society",
+    "opinion", "interview", "novel", "movie", "television",
+    "hollywood", "celebrity", "education", "school", "parenting",
 )
 
 
@@ -204,6 +207,9 @@ def classify_main(item):
         return "prayer"
     if source in VATICAN_SOURCES or is_vatican_topic(text):
         return "vatican"
+    # Culture-primary publishers before America/Faith keyword routing
+    if source in CULTURE_SOURCES:
+        return "culture_life"
     if source in AMERICA_STRONG or is_america_topic(text):
         if is_world_geo(text) and not is_america_topic(text):
             return "world"
@@ -212,10 +218,10 @@ def classify_main(item):
         return "america"
     if is_world_geo(text):
         return "world"
+    if is_culture_topic(text):
+        return "culture_life"
     if source in FAITH_SOURCES or is_faith_topic(text):
         return "faith"
-    if source in CULTURE_SOURCES or is_culture_topic(text):
-        return "culture_life"
     if source in AMERICA_SOFT:
         return "america"
     return "world"
