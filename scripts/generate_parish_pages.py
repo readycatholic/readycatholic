@@ -15,7 +15,13 @@ def esc(s):
     return html.escape(str(s or ""), quote=True)
 
 def load_parishes():
-    files = ["parishes.json", "parishes-orlando.json", "parishes-pb-extra.json"]
+    files = [
+        "parishes.json",
+        "parishes-orlando.json",
+        "parishes-pb-extra.json",
+        "parishes-miami.json",
+        "parishes-miami-b.json",
+    ]
     seen = set()
     out = []
     for name in files:
@@ -156,7 +162,7 @@ footer a{{color:var(--accent)}}
 {web_html}
 <p><a class="btn secondary" href="{esc(maps_url)}" target="_blank" rel="noopener noreferrer">Open in Maps</a></p>
 </div>
-<p class="note">Catholic parish listing on Ready Catholic — Diocese of Palm Beach &amp; Diocese of Orlando pilot.</p>
+<p class="note">Catholic parish listing on Ready Catholic.</p>
 </main>
 <footer><a href="../../">← Back to parish search</a></footer>
 </body>

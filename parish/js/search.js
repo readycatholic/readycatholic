@@ -35,12 +35,14 @@
     fetch("data/parishes.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-orlando.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-pb-extra.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-miami.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-miami-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    zipCoords = parts[3] || {};
+    zipCoords = parts[5] || {};
     var seen = {};
     parishes = [];
-    [parts[0], parts[1], parts[2]].forEach(function (arr) {
+    [parts[0], parts[1], parts[2], parts[3], parts[4]].forEach(function (arr) {
       if (!Array.isArray(arr)) return;
       arr.forEach(function (p) {
         var k = (p.zip || "") + "|" + (p.slug || p.id || "");
@@ -52,8 +54,10 @@
     var withZip = parishes.filter(function (p) { return p.zip; }).length;
     var pb = parishes.filter(function (p) { return p.diocese_id === "palm-beach"; }).length;
     var orl = parishes.filter(function (p) { return p.diocese_id === "orlando"; }).length;
+    var mia = parishes.filter(function (p) { return p.diocese_id === "miami"; }).length;
     setStatus(
-      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — Palm Beach: " + pb + ", Orlando: " + orl +
+      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — Palm Beach: " + pb +
+      ", Orlando: " + orl + ", Miami: " + mia +
       ". SEO pages + nearest fallback. Font: Verdana. Not linked from homepage yet."
     );
   }).catch(function () {
@@ -200,20 +204,20 @@
         if (!nearest.length) {
           results.innerHTML =
             "<p class=\"empty\">No parish in ZIP <strong>" + zip +
-            "</strong>, and distance data is unavailable. Try a ZIP in Palm Beach or Orlando.</p>";
+            "</strong>, and distance data is unavailable. Try a ZIP in Miami, Palm Beach, or Orlando.</p>";
           return;
         }
         var placeNote = c.place ? " (" + c.place + ", " + c.state + ")" : "";
         renderList(nearest, {
           headerHtml:
             "No parish is listed in ZIP <strong>" + zip + "</strong>" + placeNote +
-            ". Closest parishes in our Palm Beach & Orlando dataset:"
+            ". Closest parishes in our dataset:"
         });
       })
       .catch(function () {
         results.innerHTML =
           "<p class=\"empty\">No parish in ZIP <strong>" + zip +
-          "</strong>. Could not look up that ZIP location. Try another ZIP in Palm Beach or Orlando.</p>";
+          "</strong>. Could not look up that ZIP location. Try another ZIP in Miami, Palm Beach, or Orlando.</p>";
       });
   });
 })();
