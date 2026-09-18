@@ -1,0 +1,21 @@
+/* Ready Catholic — Parish finder shared styles */
+:root {
+  --bg: #0f1419;
+  --card: #1a222d;
+  --text: #f2f0e8;
+  --muted: #a8a295;
+  --accent: #c9a227;
+  --border: #2c3644;
+  --font: Verdana, Calibri, Geneva, Tahoma, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  min-height: 100vh;
+}
