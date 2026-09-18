@@ -1,6 +1,6 @@
 /**
  * Ready Catholic — Find your local parish (ZIP lookup)
- * Font: Verdana | Data: parishes.json (combined PB + Orlando)
+ * Font: Verdana | Data: parishes.json + parishes-orlando.json + parishes-pb-extra.json
  */
 (function () {
   const form = document.getElementById("parish-search-form");
@@ -18,7 +18,8 @@
 
   Promise.all([
     fetch("data/parishes.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-orlando.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; })
+    fetch("data/parishes-orlando.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-pb-extra.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; })
   ]).then(function (parts) {
     var seen = {};
     parishes = [];
