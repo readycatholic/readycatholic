@@ -1,6 +1,7 @@
 /**
  * Ready Catholic — Find your local parish (ZIP lookup)
  * Exact ZIP match, or nearest parishes by miles when none match.
+ * Pretty URLs: /parish/{zip}/{slug}/
  * Font: Verdana
  */
 (function () {
@@ -53,7 +54,7 @@
     var orl = parishes.filter(function (p) { return p.diocese_id === "orlando"; }).length;
     setStatus(
       "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — Palm Beach: " + pb + ", Orlando: " + orl +
-      ". Nearest-parish fallback enabled. Font: Verdana. Not linked from homepage yet."
+      ". SEO pages + nearest fallback. Font: Verdana. Not linked from homepage yet."
     );
   }).catch(function () {
     setStatus("Could not load parish data.");
@@ -66,9 +67,9 @@
   function parishUrl(p) {
     var slug = p.slug || p.id;
     if (p.zip && slug) {
-      return "detail.html?zip=" + encodeURIComponent(p.zip) + "&slug=" + encodeURIComponent(slug);
+      return p.zip + "/" + slug + "/";
     }
-    return "detail.html?slug=" + encodeURIComponent(slug);
+    return "detail.html?slug=" + encodeURIComponent(slug || "");
   }
 
   function renderList(list, opts) {
@@ -143,7 +144,6 @@
       scored.push({ parish: p, miles: miles });
     });
     scored.sort(function (a, b) { return a.miles - b.miles; });
-    // one result per parish id
     var seen = {};
     var out = [];
     for (var i = 0; i < scored.length && out.length < limit; i++) {
@@ -159,7 +159,6 @@
     if (zipCoords[zip]) {
       return Promise.resolve(zipCoords[zip]);
     }
-    // Live lookup for ZIPs not in our parish set (e.g. 32968)
     return fetch("https://api.zippopotam.us/us/" + zip)
       .then(function (r) {
         if (!r.ok) throw new Error("zip not found");
@@ -208,7 +207,7 @@
         renderList(nearest, {
           headerHtml:
             "No parish is listed in ZIP <strong>" + zip + "</strong>" + placeNote +
-            ". Closest parishes in our Palm Beach &amp; Orlando dataset:"
+            ". Closest parishes in our Palm Beach & Orlando dataset:"
         });
       })
       .catch(function () {
