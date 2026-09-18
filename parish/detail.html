@@ -39,36 +39,48 @@
     const zip = (params.get("zip") || "").replace(/\D/g, "").slice(0, 5);
     const slug = (params.get("slug") || "").toLowerCase();
     const el = document.getElementById("content");
-    fetch("data/parishes.json")
-      .then((r) => r.json())
-      .then((list) => {
-        let p = list.find((x) => x.zip === zip && x.slug === slug);
-        if (!p && zip && slug) p = list.find((x) => x.zip === zip && (x.slug || "").indexOf(slug) !== -1);
-        if (!p && zip) p = list.find((x) => x.zip === zip);
-        if (!p && slug) p = list.find((x) => x.slug === slug);
-        if (!p) {
-          el.innerHTML = '<p class="empty">Parish not found in the pilot dataset.</p>';
-          return;
-        }
-        document.title = p.name + " | Ready Catholic Parish";
-        const maps = encodeURIComponent([p.name, p.address, p.city, p.state, p.zip].filter(Boolean).join(", "));
-        let html = "<h1>" + p.name + "</h1>";
-        html += '<p class="diocese">' + (p.diocese || "") + "</p>";
-        html += '<div class="card">';
-        html += '<p class="label">Address</p><p>' + (p.address || "") + (p.address ? "<br>" : "") + p.city + ", " + p.state + " " + (p.zip || "") + "</p>";
-        if (p.phone) html += '<p class="label">Phone</p><p>' + p.phone + "</p>";
-        if (p.website) {
-          html += '<p class="label">Website</p><p><a href="' + p.website + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">' + p.website.replace(/^https?:\/\//, "").replace(/\/$/, "") + "</a></p>";
-          html += '<p><a class="btn" href="' + p.website + '" target="_blank" rel="noopener noreferrer">Visit parish website</a></p>';
-        }
-        html += '<p><a class="btn secondary" href="https://www.google.com/maps/search/?api=1&query=' + maps + '" target="_blank" rel="noopener noreferrer">Open in Maps</a></p>';
-        html += "</div>";
-        html += '<p class="pilot">Pilot data — Diocese of Palm Beach & Diocese of Orlando. Font: Verdana. Not linked from homepage yet.</p>';
-        el.innerHTML = html;
-      })
-      .catch(function () {
-        el.innerHTML = '<p class="empty">Could not load parish data.</p>';
+    Promise.all([
+      fetch("data/parishes.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+      fetch("data/parishes-orlando.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+      fetch("data/parishes-pb-extra.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; })
+    ]).then(function (parts) {
+      var list = [];
+      var seen = {};
+      parts.forEach(function (arr) {
+        if (!Array.isArray(arr)) return;
+        arr.forEach(function (x) {
+          var k = (x.zip || "") + "|" + (x.slug || x.id || "");
+          if (seen[k]) return;
+          seen[k] = true;
+          list.push(x);
+        });
       });
+      var p = list.find(function (x) { return x.zip === zip && x.slug === slug; });
+      if (!p && zip && slug) p = list.find(function (x) { return x.zip === zip && (x.slug || "").indexOf(slug) !== -1; });
+      if (!p && zip) p = list.find(function (x) { return x.zip === zip; });
+      if (!p && slug) p = list.find(function (x) { return x.slug === slug; });
+      if (!p) {
+        el.innerHTML = '<p class="empty">Parish not found in the pilot dataset.</p>';
+        return;
+      }
+      document.title = p.name + " | Ready Catholic Parish";
+      var maps = encodeURIComponent([p.name, p.address, p.city, p.state, p.zip].filter(Boolean).join(", "));
+      var html = "<h1>" + p.name + "</h1>";
+      html += '<p class="diocese">' + (p.diocese || "") + "</p>";
+      html += '<div class="card">';
+      html += '<p class="label">Address</p><p>' + (p.address || "") + (p.address ? "<br>" : "") + p.city + ", " + p.state + " " + (p.zip || "") + "</p>";
+      if (p.phone) html += '<p class="label">Phone</p><p>' + p.phone + "</p>";
+      if (p.website) {
+        html += '<p class="label">Website</p><p><a href="' + p.website + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">' + p.website.replace(/^https?:\/\//, "").replace(/\/$/, "") + "</a></p>";
+        html += '<p><a class="btn" href="' + p.website + '" target="_blank" rel="noopener noreferrer">Visit parish website</a></p>';
+      }
+      html += '<p><a class="btn secondary" href="https://www.google.com/maps/search/?api=1&query=' + maps + '" target="_blank" rel="noopener noreferrer">Open in Maps</a></p>';
+      html += "</div>";
+      html += '<p class="pilot">Pilot data — Diocese of Palm Beach & Diocese of Orlando. Font: Verdana. Not linked from homepage yet.</p>';
+      el.innerHTML = html;
+    }).catch(function () {
+      el.innerHTML = '<p class="empty">Could not load parish data.</p>';
+    });
   })();
   </script>
 </body>
