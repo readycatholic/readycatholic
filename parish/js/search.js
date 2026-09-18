@@ -1,6 +1,7 @@
 /**
  * Ready Catholic — Find your local parish (ZIP lookup)
  * Client-side only; data from /parish/data/parishes.json
+ * Detail pages: /parish/{zip}/{slug}/
  */
 (function () {
   const form = document.getElementById("parish-search-form");
@@ -32,6 +33,11 @@
     return digits.slice(0, 5);
   }
 
+  function parishUrl(p) {
+    const slug = p.slug || p.id;
+    return p.zip + "/" + slug + "/";
+  }
+
   function render(list, zip) {
     results.innerHTML = "";
     if (!list.length) {
@@ -47,7 +53,10 @@
       const li = document.createElement("li");
       li.className = "parish-card";
       const title = document.createElement("h3");
-      title.textContent = p.name;
+      const link = document.createElement("a");
+      link.href = parishUrl(p);
+      link.textContent = p.name;
+      title.appendChild(link);
       li.appendChild(title);
       const addr = document.createElement("p");
       addr.className = "addr";
@@ -64,14 +73,10 @@
         phone.textContent = p.phone;
         li.appendChild(phone);
       }
-      if (p.website) {
-        const a = document.createElement("a");
-        a.href = p.website;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.textContent = "Parish website";
-        li.appendChild(a);
-      }
+      const more = document.createElement("a");
+      more.href = parishUrl(p);
+      more.textContent = "Parish page →";
+      li.appendChild(more);
       ul.appendChild(li);
     });
     results.appendChild(ul);
