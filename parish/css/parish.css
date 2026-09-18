@@ -11,9 +11,16 @@
 
 * { box-sizing: border-box; }
 
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font) !important;
+}
+
 body {
   margin: 0;
-  font-family: var(--font);
   background: var(--bg);
   color: var(--text);
   line-height: 1.55;
