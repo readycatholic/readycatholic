@@ -9,7 +9,8 @@
     "diocese": "Diocese of Palm Beach",
     "diocese_id": "palm-beach",
     "phone": "561-622-2565",
-    "website": "https://www.cathedralpb.com/"
+    "website": "https://www.cathedralpb.com/",
+    "slug": "cathedral-of-st-ignatius-loyola"
   },
   {
     "id": "pb-basilica-st-edward",
@@ -21,7 +22,8 @@
     "diocese": "Diocese of Palm Beach",
     "diocese_id": "palm-beach",
     "phone": "561-832-0400",
-    "website": "https://www.stedwardpb.com/"
+    "website": "https://www.stedwardpb.com/",
+    "slug": "basilica-of-st-edward"
   },
   {
     "id": "pb-st-peter-jupiter",
@@ -33,7 +35,8 @@
     "diocese": "Diocese of Palm Beach",
     "diocese_id": "palm-beach",
     "phone": "561-575-0837",
-    "website": "https://www.stpeterjupiter.com/"
+    "website": "https://www.stpeterjupiter.com/",
+    "slug": "st-peter"
   },
   {
     "id": "pb-st-joan-arc-boca",
@@ -45,7 +48,8 @@
     "diocese": "Diocese of Palm Beach",
     "diocese_id": "palm-beach",
     "phone": "561-392-0007",
-    "website": "https://www.stjoan.org/"
+    "website": "https://www.stjoan.org/",
+    "slug": "st-joan-of-arc"
   },
   {
     "id": "pb-st-rita-wellington",
@@ -57,7 +61,8 @@
     "diocese": "Diocese of Palm Beach",
     "diocese_id": "palm-beach",
     "phone": "561-793-8544",
-    "website": "https://www.saintrita.com/"
+    "website": "https://www.saintrita.com/",
+    "slug": "st-rita"
   },
   {
     "id": "pb-st-sebastian",
@@ -69,7 +74,8 @@
     "diocese": "Diocese of Palm Beach",
     "diocese_id": "palm-beach",
     "phone": "772-589-5790",
-    "website": "https://www.stsebastian.com/"
+    "website": "https://www.stsebastian.com/",
+    "slug": "st-sebastian"
   },
   {
     "id": "orl-st-james-cathedral",
@@ -81,7 +87,8 @@
     "diocese": "Diocese of Orlando",
     "diocese_id": "orlando",
     "phone": "407-422-2005",
-    "website": "https://stjamesorlando.org/"
+    "website": "https://stjamesorlando.org/",
+    "slug": "cathedral-of-st-james"
   },
   {
     "id": "orl-holy-family",
@@ -92,7 +99,8 @@
     "zip": "32819",
     "diocese": "Diocese of Orlando",
     "diocese_id": "orlando",
-    "website": "https://www.holyfamilyorlando.org/"
+    "website": "https://www.holyfamilyorlando.org/",
+    "slug": "holy-family"
   },
   {
     "id": "orl-blessed-trinity",
@@ -104,7 +112,8 @@
     "diocese": "Diocese of Orlando",
     "diocese_id": "orlando",
     "phone": "407-277-1702",
-    "website": "https://btccorl.org/"
+    "website": "https://btccorl.org/",
+    "slug": "blessed-trinity"
   },
   {
     "id": "orl-good-shepherd",
@@ -116,7 +125,8 @@
     "diocese": "Diocese of Orlando",
     "diocese_id": "orlando",
     "phone": "407-277-3939",
-    "website": "https://gs.church/"
+    "website": "https://gs.church/",
+    "slug": "good-shepherd"
   },
   {
     "id": "orl-annunciation",
@@ -128,7 +138,8 @@
     "diocese": "Diocese of Orlando",
     "diocese_id": "orlando",
     "phone": "407-869-9472",
-    "website": "https://www.annunciationorlando.org/"
+    "website": "https://www.annunciationorlando.org/",
+    "slug": "annunciation"
   },
   {
     "id": "orl-corpus-christi",
@@ -140,6 +151,7 @@
     "diocese": "Diocese of Orlando",
     "diocese_id": "orlando",
     "phone": "321-939-1491",
-    "website": "https://celebrationcatholic.org/"
+    "website": "https://celebrationcatholic.org/",
+    "slug": "corpus-christi"
   }
 ]
