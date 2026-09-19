@@ -63,5 +63,44 @@
     "phone": "305-871-5780",
     "website": "https://www.blessedtrinitymiamisprings.org/",
     "slug": "blessed-trinity-parish"
+  },
+  {
+    "id": "mia-cathedral-of-st-mary",
+    "name": "Cathedral of Saint Mary",
+    "address": "7525 N.W. 2nd Avenue",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33150",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-759-4531",
+    "website": "https://www.thecathedralofstmary.org/",
+    "slug": "cathedral-of-st-mary"
+  },
+  {
+    "id": "mia-christ-the-king-parish",
+    "name": "Christ the King Parish",
+    "address": "16000 S.W. 112th Avenue",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33157",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-238-2485",
+    "website": "https://www.christthekingmiami.org/",
+    "slug": "christ-the-king-parish"
+  },
+  {
+    "id": "mia-corpus-christi-parish",
+    "name": "Corpus Christi Parish",
+    "address": "3220 N.W. 7th Avenue",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33127",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-635-1331",
+    "website": "https://www.corpuschristimiami.org/",
+    "slug": "corpus-christi-parish"
   }
 ]
