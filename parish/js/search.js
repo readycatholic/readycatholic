@@ -183,7 +183,7 @@
         if (!nearest.length) {
           results.innerHTML =
             "<p class=\"empty\">No parish in ZIP <strong>" + zip +
-            "</strong>, and distance data is unavailable. Try a ZIP in St. Petersburg, Miami, Venice, Palm Beach, or Orlando.</p>";
+            "</strong>, and distance data is unavailable. Try a ZIP in St. Augustine, St. Petersburg, Miami, Venice, Palm Beach, or Orlando.</p>";
           return;
         }
         var placeNote = c.place ? " (" + c.place + ", " + c.state + ")" : "";
@@ -196,7 +196,7 @@
       .catch(function () {
         results.innerHTML =
           "<p class=\"empty\">No parish in ZIP <strong>" + zip +
-          "</strong>. Could not look up that ZIP location. Try another ZIP in St. Petersburg, Miami, Venice, Palm Beach, or Orlando.</p>";
+          "</strong>. Could not look up that ZIP location. Try another ZIP in St. Augustine, St. Petersburg, Miami, Venice, Palm Beach, or Orlando.</p>";
       });
   }
 
@@ -210,12 +210,14 @@
     fetch("data/parishes-venice-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-stpete.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-stpete-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-staug.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-staug-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    zipCoords = parts[9] || {};
+    zipCoords = parts[11] || {};
     var seen = {};
     parishes = [];
-    [parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7], parts[8]].forEach(function (arr) {
+    [parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7], parts[8], parts[9], parts[10]].forEach(function (arr) {
       if (!Array.isArray(arr)) return;
       arr.forEach(function (p) {
         var k = (p.zip || "") + "|" + (p.slug || p.id || "");
@@ -231,9 +233,10 @@
     var mia = parishes.filter(function (p) { return p.diocese_id === "miami"; }).length;
     var ven = parishes.filter(function (p) { return p.diocese_id === "venice"; }).length;
     var stp = parishes.filter(function (p) { return p.diocese_id === "st-petersburg"; }).length;
+    var sta = parishes.filter(function (p) { return p.diocese_id === "st-augustine"; }).length;
     setStatus(
-      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — St. Petersburg: " + stp +
-      ", Miami: " + mia + ", Venice: " + ven + ", Palm Beach: " + pb + ", Orlando: " + orl + "."
+      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — St. Augustine: " + sta +
+      ", St. Petersburg: " + stp + ", Miami: " + mia + ", Venice: " + ven + ", Palm Beach: " + pb + ", Orlando: " + orl + "."
     );
 
     // Auto-search if ?zip= is present (from homepage form)
