@@ -14,6 +14,7 @@
 
   let parishes = [];
   let zipCoords = {};
+  let dataReady = false;
 
   function setStatus(msg) {
     if (status) status.textContent = msg;
@@ -30,39 +31,6 @@
       Math.sin(dLng / 2) * Math.sin(dLng / 2);
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
-
-  Promise.all([
-    fetch("data/parishes.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-orlando.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-pb-extra.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-miami.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-miami-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
-  ]).then(function (parts) {
-    zipCoords = parts[5] || {};
-    var seen = {};
-    parishes = [];
-    [parts[0], parts[1], parts[2], parts[3], parts[4]].forEach(function (arr) {
-      if (!Array.isArray(arr)) return;
-      arr.forEach(function (p) {
-        var k = (p.zip || "") + "|" + (p.slug || p.id || "");
-        if (seen[k]) return;
-        seen[k] = true;
-        parishes.push(p);
-      });
-    });
-    var withZip = parishes.filter(function (p) { return p.zip; }).length;
-    var pb = parishes.filter(function (p) { return p.diocese_id === "palm-beach"; }).length;
-    var orl = parishes.filter(function (p) { return p.diocese_id === "orlando"; }).length;
-    var mia = parishes.filter(function (p) { return p.diocese_id === "miami"; }).length;
-    setStatus(
-      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — Palm Beach: " + pb +
-      ", Orlando: " + orl + ", Miami: " + mia +
-      ". SEO pages + nearest fallback. Font: Verdana. Not linked from homepage yet."
-    );
-  }).catch(function () {
-    setStatus("Could not load parish data.");
-  });
 
   function normalizeZip(raw) {
     return String(raw || "").replace(/\D/g, "").slice(0, 5);
@@ -182,9 +150,8 @@
       });
   }
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var zip = normalizeZip(input.value);
+  function doSearch(zip) {
+    zip = normalizeZip(zip);
     if (zip.length !== 5) {
       results.innerHTML = "<p class=\"empty\">Please enter a 5-digit ZIP code.</p>";
       return;
@@ -219,5 +186,51 @@
           "<p class=\"empty\">No parish in ZIP <strong>" + zip +
           "</strong>. Could not look up that ZIP location. Try another ZIP in Miami, Palm Beach, or Orlando.</p>";
       });
+  }
+
+  Promise.all([
+    fetch("data/parishes.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-orlando.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-pb-extra.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-miami.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-miami-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
+  ]).then(function (parts) {
+    zipCoords = parts[5] || {};
+    var seen = {};
+    parishes = [];
+    [parts[0], parts[1], parts[2], parts[3], parts[4]].forEach(function (arr) {
+      if (!Array.isArray(arr)) return;
+      arr.forEach(function (p) {
+        var k = (p.zip || "") + "|" + (p.slug || p.id || "");
+        if (seen[k]) return;
+        seen[k] = true;
+        parishes.push(p);
+      });
+    });
+    dataReady = true;
+    var withZip = parishes.filter(function (p) { return p.zip; }).length;
+    var pb = parishes.filter(function (p) { return p.diocese_id === "palm-beach"; }).length;
+    var orl = parishes.filter(function (p) { return p.diocese_id === "orlando"; }).length;
+    var mia = parishes.filter(function (p) { return p.diocese_id === "miami"; }).length;
+    setStatus(
+      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — Miami: " + mia +
+      ", Palm Beach: " + pb + ", Orlando: " + orl + "."
+    );
+
+    // Auto-search if ?zip= is present (from homepage form)
+    var params = new URLSearchParams(window.location.search);
+    var qZip = params.get("zip");
+    if (qZip) {
+      input.value = normalizeZip(qZip);
+      doSearch(qZip);
+    }
+  }).catch(function () {
+    setStatus("Could not load parish data.");
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    doSearch(input.value);
   });
 })();
