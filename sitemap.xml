@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://readycatholic.github.io/readycatholic/</loc>
-    <lastmod>2026-09-10</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://readycatholic.github.io/readycatholic/sitemap-pages.xml</loc>
+    <lastmod>2026-09-18</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://readycatholic.github.io/readycatholic/parish/sitemap-parishes.xml</loc>
+    <lastmod>2026-09-18</lastmod>
+  </sitemap>
+</sitemapindex>
