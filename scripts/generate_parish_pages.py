@@ -21,6 +21,8 @@ def load_parishes():
         "parishes-pb-extra.json",
         "parishes-miami.json",
         "parishes-miami-b.json",
+        "parishes-venice.json",
+        "parishes-venice-b.json",
     ]
     seen = set()
     out = []
