@@ -211,8 +211,11 @@ footer a{{color:var(--accent)}}
             f"  <url><loc>{u}</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>"
         )
     sm.append("</urlset>")
-    (OUT / "sitemap-parishes.xml").write_text("\n".join(sm), encoding="utf-8")
-    print(f"Generated {count} parish pages + sitemap")
+    sm_text = "\n".join(sm)
+    # Write under parish/ (historical path) and site root so /sitemap-parishes.xml resolves
+    (OUT / "sitemap-parishes.xml").write_text(sm_text, encoding="utf-8")
+    (ROOT / "sitemap-parishes.xml").write_text(sm_text, encoding="utf-8")
+    print(f"Generated {count} parish pages + sitemap (parish/ and root)")
 
 if __name__ == "__main__":
     main()
