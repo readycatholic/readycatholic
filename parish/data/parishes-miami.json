@@ -453,5 +453,70 @@
     "phone": "305-556-4442",
     "website": "https://www.santabarbarahialeah.org/",
     "slug": "santa-barbara-parish"
+  },
+  {
+    "id": "mia-st-agatha-parish",
+    "name": "St. Agatha Parish",
+    "address": "1111 S.W. 107th Avenue",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33174",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-222-1500",
+    "website": "https://church.stagathaonline.org/",
+    "slug": "st-agatha-parish"
+  },
+  {
+    "id": "mia-st-agnes-parish",
+    "name": "St. Agnes Parish",
+    "address": "100 Harbor Drive",
+    "city": "Key Biscayne",
+    "state": "FL",
+    "zip": "33149",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-361-2351",
+    "website": "https://www.stagneskeybiscayne.org/",
+    "slug": "st-agnes-parish"
+  },
+  {
+    "id": "mia-st-ambrose-parish",
+    "name": "St. Ambrose Parish",
+    "address": "380 S. Federal Highway",
+    "city": "Deerfield Beach",
+    "state": "FL",
+    "zip": "33441",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "954-427-2225",
+    "website": "https://www.stambrosedb.org/",
+    "slug": "st-ambrose-parish"
+  },
+  {
+    "id": "mia-st-andrew-parish",
+    "name": "St. Andrew Parish",
+    "address": "9950 N.W. 29th Street",
+    "city": "Coral Springs",
+    "state": "FL",
+    "zip": "33065",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "954-752-3950",
+    "website": "https://www.standrewcoralsprings.org/",
+    "slug": "st-andrew-parish"
+  },
+  {
+    "id": "mia-st-anthony-parish",
+    "name": "St. Anthony Parish",
+    "address": "901 N.E. 2nd Street",
+    "city": "Fort Lauderdale",
+    "state": "FL",
+    "zip": "33301",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "954-463-4614",
+    "website": "https://www.stanthonyftl.org/",
+    "slug": "st-anthony-parish"
   }
 ]
