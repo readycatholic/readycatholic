@@ -20,6 +20,18 @@
     if (status) status.textContent = msg;
   }
 
+  function formatPhone(raw) {
+    if (!raw) return "";
+    var digits = String(raw).replace(/\D/g, "");
+    if (digits.length === 11 && digits.charAt(0) === "1") {
+      digits = digits.slice(1);
+    }
+    if (digits.length === 10) {
+      return "(" + digits.slice(0, 3) + ") " + digits.slice(3, 6) + "-" + digits.slice(6);
+    }
+    return String(raw).trim();
+  }
+
   function haversineMiles(lat1, lng1, lat2, lng2) {
     var R = 3958.8;
     var toRad = function (d) { return (d * Math.PI) / 180; };
@@ -93,7 +105,7 @@
       if (p.phone) {
         var phone = document.createElement("p");
         phone.className = "phone";
-        phone.textContent = p.phone;
+        phone.textContent = formatPhone(p.phone);
         li.appendChild(phone);
       }
       var more = document.createElement("a");
