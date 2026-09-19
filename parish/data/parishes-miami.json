@@ -284,5 +284,83 @@
     "phone": "305-593-6123",
     "website": "https://www.guadalupedoral.org/",
     "slug": "our-lady-of-guadalupe-parish"
+  },
+  {
+    "id": "mia-our-lady-of-la-vang-vietnamese-mission",
+    "name": "Our Lady of La Vang Vietnamese Mission",
+    "address": "123 N.W. 6th Avenue",
+    "city": "Hallandale",
+    "state": "FL",
+    "zip": "33009",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "954-457-2000",
+    "website": "",
+    "slug": "our-lady-of-la-vang-vietnamese-mission"
+  },
+  {
+    "id": "mia-our-lady-of-the-holy-rosary-st-richard-parish",
+    "name": "Our Lady of the Holy Rosary-St. Richard Parish",
+    "address": "7500 S.W. 152nd Street",
+    "city": "Palmetto Bay",
+    "state": "FL",
+    "zip": "33157",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-235-5135",
+    "website": "https://www.olhrstrichard.org/",
+    "slug": "our-lady-of-the-holy-rosary-st-richard-parish"
+  },
+  {
+    "id": "mia-our-lady-of-the-lakes-parish",
+    "name": "Our Lady of the Lakes Parish",
+    "address": "15801 N.W. 67th Avenue",
+    "city": "Miami Lakes",
+    "state": "FL",
+    "zip": "33014",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-558-2202",
+    "website": "https://www.ollnet.com/",
+    "slug": "our-lady-of-the-lakes-parish"
+  },
+  {
+    "id": "mia-our-lady-of-lourdes-parish",
+    "name": "Our Lady of Lourdes Parish",
+    "address": "11291 S.W. 142nd Avenue",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33186",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-386-4121",
+    "website": "https://www.ololourdes.org/",
+    "slug": "our-lady-of-lourdes-parish"
+  },
+  {
+    "id": "mia-our-lady-of-mercy-parish",
+    "name": "Our Lady of Mercy Parish",
+    "address": "5201 North Military Trail",
+    "city": "Deerfield Beach",
+    "state": "FL",
+    "zip": "33064",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "954-421-3246",
+    "website": "https://www.olomercy.org/",
+    "slug": "our-lady-of-mercy-parish"
+  },
+  {
+    "id": "mia-our-lady-queen-of-heaven-parish",
+    "name": "Our Lady Queen of Heaven Parish",
+    "address": "1400 S. State Road 7",
+    "city": "North Lauderdale",
+    "state": "FL",
+    "zip": "33068",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "954-971-5400",
+    "website": "https://www.olqh.org/",
+    "slug": "our-lady-queen-of-heaven-parish"
   }
 ]
