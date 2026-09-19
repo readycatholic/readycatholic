@@ -128,5 +128,70 @@
     "phone": "305-379-1424",
     "website": "https://www.gesuchurch.org/",
     "slug": "gesu-parish"
+  },
+  {
+    "id": "mia-good-shepherd-parish",
+    "name": "Good Shepherd Parish",
+    "address": "14187 S.W. 72nd Street",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33183",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-385-4320",
+    "website": "https://www.goodshepherdmiami.org/",
+    "slug": "good-shepherd-parish"
+  },
+  {
+    "id": "mia-holy-family-parish",
+    "name": "Holy Family Parish",
+    "address": "14500 N.E. 11th Avenue",
+    "city": "North Miami",
+    "state": "FL",
+    "zip": "33161",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-947-5043",
+    "website": "https://www.holyfamilynorthmiami.org/",
+    "slug": "holy-family-parish"
+  },
+  {
+    "id": "mia-holy-redeemer-parish",
+    "name": "Holy Redeemer Parish",
+    "address": "1301 N.W. 71st Street",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33147",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-691-1701",
+    "website": "https://www.holyredeemermiami.org/",
+    "slug": "holy-redeemer-parish"
+  },
+  {
+    "id": "mia-immaculate-conception-parish",
+    "name": "Immaculate Conception Parish",
+    "address": "4497 W. 1st Avenue",
+    "city": "Hialeah",
+    "state": "FL",
+    "zip": "33012",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-822-2011",
+    "website": "https://www.icchialeah.org/",
+    "slug": "immaculate-conception-parish"
+  },
+  {
+    "id": "mia-little-flower-parish-coral-gables",
+    "name": "Little Flower Parish (Coral Gables)",
+    "address": "2711 Indian Mound Trail",
+    "city": "Coral Gables",
+    "state": "FL",
+    "zip": "33134",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-446-9950",
+    "website": "https://www.cotlf.org/",
+    "slug": "little-flower-parish-coral-gables"
   }
 ]
