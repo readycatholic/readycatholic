@@ -102,5 +102,31 @@
     "phone": "305-635-1331",
     "website": "https://www.corpuschristimiami.org/",
     "slug": "corpus-christi-parish"
+  },
+  {
+    "id": "mia-epiphany-parish",
+    "name": "Epiphany Parish",
+    "address": "8081 SW 54th Court",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33143",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-667-4911",
+    "website": "https://www.epiphanycatholic.org/",
+    "slug": "epiphany-parish"
+  },
+  {
+    "id": "mia-gesu-parish",
+    "name": "Gesu Parish",
+    "address": "118 N.E. 2nd Street",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33132",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-379-1424",
+    "website": "https://www.gesuchurch.org/",
+    "slug": "gesu-parish"
   }
 ]
