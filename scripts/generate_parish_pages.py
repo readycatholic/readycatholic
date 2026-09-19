@@ -57,15 +57,22 @@ def main():
         website = p.get("website") or ""
         canonical = f"{SITE}/parish/{zipc}/{slug}/"
         title = f"{name} | {city}, {state} | Ready Catholic"
-        desc_parts = [name]
+
+        # Build description carefully so the brand suffix is never truncated
+        suffix = " Contact info and directions on Ready Catholic."
+        parts = [name]
         if city:
-            desc_parts.append(f"in {city}, {state}")
+            parts.append(f"in {city}, {state}")
         if diocese:
-            desc_parts.append(f"({diocese})")
+            parts.append(f"({diocese})")
         if address:
-            desc_parts.append(f"Address: {address}, {city}, {state} {zipc}")
-        desc_parts.append("Contact info and directions on Ready Catholic.")
-        description = " ".join(desc_parts)[:160]
+            parts.append(f"Address: {address}, {city}, {state} {zipc}")
+        front = " ".join(parts)
+        max_front = 160 - len(suffix)
+        if len(front) > max_front:
+            front = front[: max_front - 1].rsplit(" ", 1)[0] + "…"
+        description = front + suffix
+
         if address:
             addr_html = f"{esc(address)}<br>{esc(city)}, {esc(state)} {esc(zipc)}"
         else:
