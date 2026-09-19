@@ -14,6 +14,17 @@ SITE = "https://readycatholic.github.io/readycatholic"
 def esc(s):
     return html.escape(str(s or ""), quote=True)
 
+def format_phone(raw):
+    """Normalize any phone string to (xxx) xxx-xxxx when possible."""
+    if not raw:
+        return ""
+    digits = re.sub(r"\D", "", str(raw))
+    if len(digits) == 11 and digits.startswith("1"):
+        digits = digits[1:]
+    if len(digits) == 10:
+        return f"({digits[:3]}) {digits[3:6]}-{digits[6:]}"
+    return str(raw).strip()
+
 def load_parishes():
     files = [
         "parishes.json",
@@ -55,7 +66,7 @@ def main():
         state = p.get("state") or "FL"
         diocese = p.get("diocese") or ""
         address = p.get("address") or ""
-        phone = p.get("phone") or ""
+        phone = format_phone(p.get("phone") or "")
         website = p.get("website") or ""
         canonical = f"{SITE}/parish/{zipc}/{slug}/"
         title = f"{name} | {city}, {state} | Ready Catholic"
