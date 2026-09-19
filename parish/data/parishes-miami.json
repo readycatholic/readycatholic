@@ -1,15 +1,1 @@
-[
-  {
-    "id": "mia-all-saints-parish",
-    "name": "All Saints Parish",
-    "address": "10900 W. Oakland Park Boulevard",
-    "city": "Sunrise",
-    "state": "FL",
-    "zip": "33351",
-    "diocese": "Archdiocese of Miami",
-    "diocese_id": "miami",
-    "phone": "954-742-2666",
-    "website": "https://www.allsaintsvillage.com/",
-    "slug": "all-saints-parish"
-  }
-]
+[{"id": "mia-all-saints-parish", "name": "All Saints Parish", "address": "10900 W. Oakland Park Boulevard", "city": "Sunrise", "state": "FL", "zip": "33351", "diocese": "Archdiocese of Miami", "diocese_id": "miami", "phone": "954-742-2666", "website": "https://www.allsaintsvillage.com/", "slug": "all-saints-parish"}]
