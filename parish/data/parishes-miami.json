@@ -1,1 +1,106 @@
-[{"id": "mia-all-saints-parish", "name": "All Saints Parish", "address": "10900 W. Oakland Park Boulevard", "city": "Sunrise", "state": "FL", "zip": "33351", "diocese": "Archdiocese of Miami", "diocese_id": "miami", "phone": "954-742-2666", "website": "https://www.allsaintsvillage.com/", "slug": "all-saints-parish"}, {"id": "mia-annunciation-parish", "name": "Annunciation Parish", "address": "3781 S.W. 39th Street", "city": "West Hollywood", "state": "FL", "zip": "33023", "diocese": "Archdiocese of Miami", "diocese_id": "miami", "phone": "954-989-0606", "website": "https://www.annun.org/", "slug": "annunciation-parish"}, {"id": "mia-assumption-parish", "name": "Assumption Parish", "address": "2001 S. Ocean Boulevard", "city": "Lauderdale-by-the-Sea", "state": "FL", "zip": "33062", "diocese": "Archdiocese of Miami", "diocese_id": "miami", "phone": "954-941-7647", "website": "https://www.assumptionlbs.org/", "slug": "assumption-parish"}]
+[
+  {
+    "id": "mia-all-saints-parish",
+    "name": "All Saints Parish",
+    "address": "10900 W. Oakland Park Boulevard",
+    "city": "Sunrise",
+    "state": "FL",
+    "zip": "33351",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "954-742-2666",
+    "website": "https://www.allsaintsvillage.com/",
+    "slug": "all-saints-parish"
+  },
+  {
+    "id": "mia-annunciation-parish",
+    "name": "Annunciation Parish",
+    "address": "3781 S.W. 39th Street",
+    "city": "West Hollywood",
+    "state": "FL",
+    "zip": "33023",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "954-989-0606",
+    "website": "https://www.annun.org/",
+    "slug": "annunciation-parish"
+  },
+  {
+    "id": "mia-assumption-parish",
+    "name": "Assumption Parish",
+    "address": "2001 S. Ocean Boulevard",
+    "city": "Lauderdale-by-the-Sea",
+    "state": "FL",
+    "zip": "33062",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "954-941-7647",
+    "website": "https://www.assumptionlbs.org/",
+    "slug": "assumption-parish"
+  },
+  {
+    "id": "mia-blessed-sacrament-parish",
+    "name": "Blessed Sacrament Parish",
+    "address": "1701 E. Oakland Park Boulevard",
+    "city": "Oakland Park",
+    "state": "FL",
+    "zip": "33334",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "954-564-1010",
+    "website": "https://www.blessedsacramentop.org/",
+    "slug": "blessed-sacrament-parish"
+  },
+  {
+    "id": "mia-blessed-trinity-parish",
+    "name": "Blessed Trinity Parish",
+    "address": "4020 Curtiss Parkway",
+    "city": "Miami Springs",
+    "state": "FL",
+    "zip": "33166",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-871-5780",
+    "website": "https://www.blessedtrinitymiamisprings.org/",
+    "slug": "blessed-trinity-parish"
+  },
+  {
+    "id": "mia-cathedral-of-st-mary",
+    "name": "Cathedral of Saint Mary",
+    "address": "7525 N.W. 2nd Avenue",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33150",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-759-4531",
+    "website": "https://www.thecathedralofstmary.org/",
+    "slug": "cathedral-of-st-mary"
+  },
+  {
+    "id": "mia-christ-the-king-parish",
+    "name": "Christ the King Parish",
+    "address": "16000 S.W. 112th Avenue",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33157",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-238-2485",
+    "website": "https://www.christthekingmiami.org/",
+    "slug": "christ-the-king-parish"
+  },
+  {
+    "id": "mia-corpus-christi-parish",
+    "name": "Corpus Christi Parish",
+    "address": "3220 N.W. 7th Avenue",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33127",
+    "diocese": "Archdiocese of Miami",
+    "diocese_id": "miami",
+    "phone": "305-635-1331",
+    "website": "https://www.corpuschristimiami.org/",
+    "slug": "corpus-christi-parish"
+  }
+]
