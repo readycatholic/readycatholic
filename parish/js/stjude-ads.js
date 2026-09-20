@@ -1,5 +1,5 @@
 /**
- * St. Jude 300x250 rotating creatives
+ * St. Jude 300x250 rotating creatives for parish detail pages.
  * Link: http://fundraising.stjude.org/goto/ReadyCatholic
  */
 (function () {
@@ -10,39 +10,12 @@
     var scripts = document.getElementsByTagName("script");
     for (var i = 0; i < scripts.length; i++) {
       if (scripts[i].src && scripts[i].src.indexOf("stjude-ads.js") !== -1) {
-        base = scripts[i].src.replace(/stjude-ads\.js.*$/, "");
+        base = scripts[i].src.replace(/js\/stjude-ads\.js.*$/, "ads/");
         break;
       }
     }
   } catch (e) {}
-  if (!base) base = "../../js/";
-  // manifest: adId -> number of chunks
-  var manifest = {1: 9, 2: 9, 3: 9};
-  var pending = 0;
-  var ids = [1, 2, 3];
-  function assemble() {
-    var ads = [];
-    ids.forEach(function (n) {
-      var parts = window["__SJ" + n];
-      if (parts && parts.length === manifest[n]) {
-        ads.push("data:image/jpeg;base64," + parts.join(""));
-      }
-    });
-    if (!ads.length) return;
-    img.src = ads[Math.floor(Math.random() * ads.length)];
-  }
-  ids.forEach(function (n) {
-    for (var p = 0; p < manifest[n]; p++) {
-      pending++;
-      (function (n, p) {
-        var s = document.createElement("script");
-        s.src = base + "sj" + n + "_" + p + ".js";
-        s.onload = s.onerror = function () {
-          pending--;
-          if (pending <= 0) assemble();
-        };
-        document.head.appendChild(s);
-      })(n, p);
-    }
-  });
+  if (!base) base = "../../ads/";
+  var files = ["stjude-1.jpg", "stjude-2.jpg", "stjude-3.jpg"];
+  img.src = base + files[Math.floor(Math.random() * files.length)];
 })();
