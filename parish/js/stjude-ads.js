@@ -16,19 +16,19 @@
     }
   } catch (e) {}
   if (!base) base = "../../ads/";
-  var picks = [
-    ["stjude-1a.txt","stjude-1b.txt","stjude-1c.txt","stjude-1d.txt"],
-    ["stjude-2a.txt","stjude-2b.txt","stjude-2c.txt","stjude-2d.txt"],
-    ["stjude-3a.txt","stjude-3b.txt","stjude-3c.txt","stjude-3d.txt"]
-  ];
-  var pick = picks[Math.floor(Math.random() * picks.length)];
-  Promise.all(pick.map(function (f) {
-    return fetch(base + f).then(function (r) { return r.text(); });
-  })).then(function (parts) {
-    var b64 = parts.join("").replace(/\s+/g, "");
-    while (b64.length % 4) b64 += "=";
-    img.src = "data:image/jpeg;base64," + b64;
-  }).catch(function (err) {
-    console.warn("St. Jude ad load failed", err);
-  });
+  var files = ["stjude-1.b64.txt", "stjude-2.b64.txt", "stjude-3.b64.txt"];
+  var pick = files[Math.floor(Math.random() * files.length)];
+  fetch(base + pick)
+    .then(function (r) {
+      if (!r.ok) throw new Error("fetch " + r.status);
+      return r.text();
+    })
+    .then(function (b64) {
+      b64 = b64.replace(/\s+/g, "");
+      while (b64.length % 4) b64 += "=";
+      img.src = "data:image/jpeg;base64," + b64;
+    })
+    .catch(function (err) {
+      console.warn("St. Jude ad load failed", err);
+    });
 })();
