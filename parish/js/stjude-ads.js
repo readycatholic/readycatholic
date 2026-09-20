@@ -1,5 +1,5 @@
 /**
- * St. Jude 300x250 rotating creatives (high quality, split parts).
+ * St. Jude 300x250 HQ rotating creatives.
  * Link: http://fundraising.stjude.org/goto/ReadyCatholic
  */
 (function () {
@@ -16,13 +16,19 @@
     }
   } catch (e) {}
   if (!base) base = "../../ads/";
-  var picks = [["stjude-1a.txt","stjude-1b.txt"],["stjude-2a.txt","stjude-2b.txt"],["stjude-3a.txt","stjude-3b.txt"]];
+  var picks = [
+    ["stjude-1a.txt","stjude-1b.txt","stjude-1c.txt","stjude-1d.txt"],
+    ["stjude-2a.txt","stjude-2b.txt","stjude-2c.txt","stjude-2d.txt"],
+    ["stjude-3a.txt","stjude-3b.txt","stjude-3c.txt","stjude-3d.txt"]
+  ];
   var pick = picks[Math.floor(Math.random() * picks.length)];
-  Promise.all(pick.map(function (f) { return fetch(base + f).then(function (r) { return r.text(); }); }))
-    .then(function (parts) {
-      var b64 = (parts[0] + parts[1]).replace(/\s+/g, "");
-      while (b64.length % 4) b64 += "=";
-      img.src = "data:image/jpeg;base64," + b64;
-    })
-    .catch(function (err) { console.warn("St. Jude ad load failed", err); });
+  Promise.all(pick.map(function (f) {
+    return fetch(base + f).then(function (r) { return r.text(); });
+  })).then(function (parts) {
+    var b64 = parts.join("").replace(/\s+/g, "");
+    while (b64.length % 4) b64 += "=";
+    img.src = "data:image/jpeg;base64," + b64;
+  }).catch(function (err) {
+    console.warn("St. Jude ad load failed", err);
+  });
 })();
