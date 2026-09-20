@@ -16,6 +16,7 @@
     }
   } catch (e) {}
   if (!base) base = "../../js/";
+  // manifest: adId -> number of chunks (more ads added as uploaded)
   var manifest = {1: 8, 2: 8, 3: 9};
   var pending = 0;
   var ids = [1, 2, 3];
@@ -23,7 +24,9 @@
     var ads = [];
     ids.forEach(function (n) {
       var parts = window["__SJ" + n];
-      if (parts && parts.length) ads.push("data:image/jpeg;base64," + parts.join(""));
+      if (parts && parts.length === manifest[n]) {
+        ads.push("data:image/jpeg;base64," + parts.join(""));
+      }
     });
     if (!ads.length) return;
     img.src = ads[Math.floor(Math.random() * ads.length)];
@@ -34,7 +37,10 @@
       (function (n, p) {
         var s = document.createElement("script");
         s.src = base + "sj" + n + "_" + p + ".js";
-        s.onload = s.onerror = function () { pending--; if (pending <= 0) assemble(); };
+        s.onload = s.onerror = function () {
+          pending--;
+          if (pending <= 0) assemble();
+        };
         document.head.appendChild(s);
       })(n, p);
     }
