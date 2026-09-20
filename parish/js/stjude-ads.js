@@ -16,8 +16,8 @@
     }
   } catch (e) {}
   if (!base) base = "../../js/";
-  // manifest: adId -> number of chunks (more ads added as uploaded)
-  var manifest = {1: 8, 2: 8, 3: 9};
+  // manifest: adId -> number of chunks
+  var manifest = {1: 9, 2: 9, 3: 9};
   var pending = 0;
   var ids = [1, 2, 3];
   function assemble() {
