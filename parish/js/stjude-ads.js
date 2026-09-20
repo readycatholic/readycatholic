@@ -16,19 +16,6 @@
     }
   } catch (e) {}
   if (!base) base = "../../ads/";
-  var files = ["stjude-1.b64.txt", "stjude-2.b64.txt", "stjude-3.b64.txt"];
-  var pick = files[Math.floor(Math.random() * files.length)];
-  fetch(base + pick)
-    .then(function (r) {
-      if (!r.ok) throw new Error("fetch " + r.status);
-      return r.text();
-    })
-    .then(function (b64) {
-      b64 = b64.replace(/\s+/g, "");
-      while (b64.length % 4) b64 += "=";
-      img.src = "data:image/jpeg;base64," + b64;
-    })
-    .catch(function (err) {
-      console.warn("St. Jude ad load failed", err);
-    });
+  var files = ["stjude-1.jpg", "stjude-2.jpg", "stjude-3.jpg"];
+  img.src = base + files[Math.floor(Math.random() * files.length)];
 })();
