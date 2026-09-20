@@ -5,6 +5,13 @@
 (function () {
   var img = document.getElementById("stjude-ad-img");
   if (!img) return;
+
+  function pick() {
+    if (!window.__STJUDE_ADS || !window.__STJUDE_ADS.length) return;
+    var i = Math.floor(Math.random() * window.__STJUDE_ADS.length);
+    img.src = window.__STJUDE_ADS[i];
+  }
+
   var base = "";
   try {
     var scripts = document.getElementsByTagName("script");
@@ -16,18 +23,18 @@
     }
   } catch (e) {}
   if (!base) base = "../../js/";
+
   var files = ["stjude-ad-1.js", "stjude-ad-2.js", "stjude-ad-3.js"];
-  var loaded = 0;
+  var pending = files.length;
+  function done() {
+    pending--;
+    if (pending <= 0) pick();
+  }
   files.forEach(function (f) {
     var s = document.createElement("script");
     s.src = base + f;
-    s.onload = function () {
-      loaded++;
-      if (loaded === files.length && window.__STJUDE_ADS && window.__STJUDE_ADS.length) {
-        var i = Math.floor(Math.random() * window.__STJUDE_ADS.length);
-        img.src = window.__STJUDE_ADS[i];
-      }
-    };
+    s.onload = done;
+    s.onerror = done;
     document.head.appendChild(s);
   });
 })();
