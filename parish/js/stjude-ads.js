@@ -16,6 +16,22 @@
     }
   } catch (e) {}
   if (!base) base = "../../ads/";
-  var files = ["stjude-1.jpg", "stjude-2.jpg", "stjude-3.jpg"];
-  img.src = base + files[Math.floor(Math.random() * files.length)];
+  var picks = [
+    ["s1a.txt","s1b.txt","s1c.txt"],
+    ["s2a.txt","s2b.txt","s2c.txt"],
+    ["s3a.txt","s3b.txt","s3c.txt"]
+  ];
+  var pick = picks[Math.floor(Math.random() * picks.length)];
+  Promise.all(pick.map(function (f) {
+    return fetch(base + f).then(function (r) {
+      if (!r.ok) throw new Error(f + " " + r.status);
+      return r.text();
+    });
+  })).then(function (parts) {
+    var b64 = parts.join("").replace(/\s+/g, "");
+    while (b64.length % 4) b64 += "=";
+    img.src = "data:image/jpeg;base64," + b64;
+  }).catch(function (err) {
+    console.warn("St. Jude ad load failed", err);
+  });
 })();
