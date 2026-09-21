@@ -1,7 +1,7 @@
 /**
  * Ready Catholic — Find your local parish (ZIP lookup)
  * Exact ZIP match, or nearest parishes by miles when none match.
- * Pretty URLs: /parish/{zip}/{slug}/
+ * Pretty URLs: /parish/{zip}/{slug}/ from full parish name
  * Font: Verdana
  */
 (function () {
@@ -48,8 +48,29 @@
     return String(raw || "").replace(/\D/g, "").slice(0, 5);
   }
 
+  function slugify(s) {
+    return String(s || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function parishSlug(p) {
+    // Full parish name in the URL — never abbreviated source codes
+    var name = (p.name || "").trim();
+    var city = (p.city || "").trim();
+    var state = (p.state || "").trim();
+    var parts = [];
+    if (name) parts.push(name);
+    if (city) parts.push(city);
+    if (state) parts.push(state);
+    var slug = slugify(parts.join(" "));
+    if (!slug) slug = slugify(p.slug || p.id || "parish");
+    return slug;
+  }
+
   function parishUrl(p) {
-    var slug = p.slug || p.id;
+    var slug = parishSlug(p);
     if (p.zip && slug) {
       return p.zip + "/" + slug + "/";
     }
