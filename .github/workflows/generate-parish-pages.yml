@@ -30,10 +30,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add parish/
+          git add parish/ sitemap-parishes.xml || true
           if git diff --staged --quiet; then
             echo "No parish page changes"
           else
             git commit -m "Generate SEO parish static pages [skip ci]"
+            # Rebase onto remote in case concurrent runs updated main
+            git pull --rebase origin main || git pull --rebase --autostash origin main
             git push
           fi
