@@ -40,6 +40,17 @@ def load_parishes():
         "parishes-staug-b.json",
         "parishes-pt.json",
         "parishes-pt-b.json",
+        "parishes-archny.json",
+        "parishes-archny-b.json",
+        "parishes-archny-c.json",
+        "parishes-archny-d.json",
+        "parishes-archny-e.json",
+        "parishes-archny-f.json",
+        "parishes-archny-g.json",
+        "parishes-archny-h.json",
+        "parishes-archny-i.json",
+        "parishes-archny-j.json",
+        "parishes-archny-k.json",
     ]
     seen = set()
     out = []
@@ -149,7 +160,7 @@ def main():
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="{esc(title)}"/>
 <meta name="twitter:description" content="{esc(description)}"/>
-<meta name="geo.region" content="US-FL"/>
+<meta name="geo.region" content="US-{esc(state)}"/>
 <meta name="geo.placename" content="{esc(city)}"/>
 <link rel="icon" href="../../../favicon.svg" type="image/svg+xml"/>
 <link rel="stylesheet" href="../../css/parish.css"/>
