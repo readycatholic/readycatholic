@@ -26,13 +26,22 @@
 .top-ad img{display:block;width:min(100%,728px);height:auto;margin:0 auto;border-radius:8px}
 header{text-align:center;padding:1.25rem 1rem 1rem;border-bottom:1px solid var(--border)}
 header a.brand{color:var(--accent);text-decoration:none;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
-main{max-width:640px;margin:0 auto;padding:1.75rem 1rem 3rem}
+main{max-width:728px;margin:0 auto;padding:1.75rem 1rem 3rem}
 .crumb{font-size:.85rem;color:var(--muted);margin-bottom:1.25rem}
 .crumb a{color:var(--accent);text-decoration:none}
 h1{margin:0 0 .35rem;font-size:1.65rem;font-weight:normal;color:var(--accent)}
 .diocese{color:var(--muted);margin:0 0 1.25rem;font-size:.95rem}
-.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.15rem 1.25rem}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.15rem 1.25rem;max-width:728px;width:100%;margin-left:auto;margin-right:auto;box-sizing:border-box}
 .card p{margin:.4rem 0}
+.card-row{display:flex;flex-wrap:wrap;align-items:center;gap:1.25rem}
+.card-info{flex:1 1 280px;min-width:0}
+.card-ad{flex:0 0 auto;margin-left:auto}
+.card-ad a{display:block;line-height:0}
+.card-ad img{display:block;width:300px;max-width:100%;height:auto;border-radius:8px}
+@media (max-width:720px){
+  .card-row{flex-direction:column;align-items:stretch}
+  .card-ad{margin-left:0;align-self:center}
+}
 .label{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
 a.btn{display:inline-block;margin-top:.75rem;margin-right:.5rem;padding:.55rem .9rem;background:var(--accent);color:#1a1508;text-decoration:none;border-radius:8px;font-weight:600;font-size:.9rem}
 a.btn.secondary{background:transparent;border:1px solid var(--border);color:var(--text)}
@@ -56,12 +65,22 @@ footer a{color:var(--accent)}
 <h1>Our Lady of Lourdes Parish</h1>
 <p class="diocese">Diocese of Orlando</p>
 <div class="card">
+<div class="card-row">
+<div class="card-info">
 <p class="label">Address</p>
 <p>201 University Blvd<br>Daytona Beach, FL 32118</p>
 
 
 <p><a class="btn secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Our%20Lady%20of%20Lourdes%20Parish%2C%20201%20University%20Blvd%2C%20Daytona%20Beach%2C%20FL%2C%2032118" target="_blank" rel="noopener noreferrer">Open in Maps</a></p>
 </div>
+<div class="card-ad">
+<a href="http://fundraising.stjude.org/goto/ReadyCatholic" target="_blank" rel="noopener noreferrer sponsored" aria-label="Support St. Jude Children's Research Hospital">
+<img id="stjude-ad-img" width="300" height="250" alt="St. Jude Children's Research Hospital — Let's help more kids just be kids. Learn More." src=""/>
+</a>
+</div>
+</div>
+</div>
+<script src="../../js/stjude-ads.js"></script>
 <p class="note">Catholic parish listing on Ready Catholic.</p>
 </main>
 <footer><a href="../../">← Back to parish search</a></footer>
