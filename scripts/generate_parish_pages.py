@@ -70,7 +70,24 @@ def load_parishes():
     return out
 
 def slugify(s):
-    return re.sub(r"[^a-z0-9\-]+", "-", (s or "").lower()).strip("-")
+    return re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")
+
+def parish_slug(p):
+    """Full parish name in the URL path — never abbreviated source codes."""
+    name = (p.get("name") or "").strip()
+    city = (p.get("city") or "").strip()
+    state = (p.get("state") or "").strip()
+    # Prefer full name; append city (and state) for uniqueness when useful
+    parts = [name]
+    if city:
+        parts.append(city)
+    if state:
+        parts.append(state)
+    slug = slugify(" ".join(parts))
+    # Safety: avoid empty
+    if not slug:
+        slug = slugify(p.get("slug") or p.get("id") or "parish")
+    return slug
 
 def main():
     parishes = load_parishes()
@@ -78,7 +95,7 @@ def main():
     count = 0
     for p in parishes:
         zipc = (p.get("zip") or "").strip()
-        slug = slugify(p.get("slug") or p.get("id") or "")
+        slug = parish_slug(p)
         if not zipc or not slug:
             continue
         name = p.get("name") or "Catholic Parish"
