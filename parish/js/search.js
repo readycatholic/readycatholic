@@ -117,12 +117,25 @@
     results.appendChild(ul);
   }
 
+  function parishCoords(p) {
+    // Prefer per-parish lat/lng (e.g. ArchNY); fall back to ZIP centroid table
+    var lat = parseFloat(p.lat);
+    var lng = parseFloat(p.lng);
+    if (!isNaN(lat) && !isNaN(lng)) {
+      return { lat: lat, lng: lng };
+    }
+    if (p.zip && zipCoords[p.zip]) {
+      return zipCoords[p.zip];
+    }
+    return null;
+  }
+
   function findNearest(searchLat, searchLng, limit) {
     limit = limit || 5;
     var scored = [];
     parishes.forEach(function (p) {
       if (!p.zip) return;
-      var c = zipCoords[p.zip];
+      var c = parishCoords(p);
       if (!c) return;
       var miles = haversineMiles(searchLat, searchLng, c.lat, c.lng);
       scored.push({ parish: p, miles: miles });
@@ -183,7 +196,7 @@
         if (!nearest.length) {
           results.innerHTML =
             "<p class=\"empty\">No parish in ZIP <strong>" + zip +
-            "</strong>, and distance data is unavailable. Try a ZIP in Florida or the Archdiocese of New York.</p>";
+            "</strong>, and distance data is unavailable. Try a ZIP in Florida or New York.</p>";
           return;
         }
         var placeNote = c.place ? " (" + c.place + ", " + c.state + ")" : "";
@@ -196,7 +209,7 @@
       .catch(function () {
         results.innerHTML =
           "<p class=\"empty\">No parish in ZIP <strong>" + zip +
-          "</strong>. Could not look up that ZIP location. Try a ZIP in Florida or the Archdiocese of New York.</p>";
+          "</strong>. Could not look up that ZIP location. Try a ZIP in Florida or New York.</p>";
       });
   }
 
@@ -225,12 +238,15 @@
     fetch("data/parishes-archny-i.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-archny-j.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-archny-k.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-albany.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-albany-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-albany-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    zipCoords = parts[24] || {};
+    zipCoords = parts[27] || {};
     var seen = {};
     parishes = [];
-    parts.slice(0, 24).forEach(function (arr) {
+    parts.slice(0, 27).forEach(function (arr) {
       if (!Array.isArray(arr)) return;
       arr.forEach(function (p) {
         var k = (p.zip || "") + "|" + (p.slug || p.id || "");
@@ -241,11 +257,10 @@
     });
     dataReady = true;
     var withZip = parishes.filter(function (p) { return p.zip; }).length;
-    var ny = parishes.filter(function (p) { return (p.diocese || "").indexOf("New York") !== -1; }).length;
-    var fl = parishes.length - ny;
+    var ny = parishes.filter(function (p) { return (p.state || "") === "NY"; }).length;
+    var fl = parishes.filter(function (p) { return (p.state || "") === "FL"; }).length;
     setStatus(
-      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — Florida: " + fl +
-      ", Archdiocese of New York: " + ny + "."
+      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — FL: " + fl + ", NY: " + ny + "."
     );
 
     var params = new URLSearchParams(window.location.search);
