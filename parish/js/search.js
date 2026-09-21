@@ -183,7 +183,7 @@
         if (!nearest.length) {
           results.innerHTML =
             "<p class=\"empty\">No parish in ZIP <strong>" + zip +
-            "</strong>, and distance data is unavailable. Try a ZIP anywhere in Florida — all seven dioceses are covered.</p>";
+            "</strong>, and distance data is unavailable. Try a ZIP in Florida or the Archdiocese of New York.</p>";
           return;
         }
         var placeNote = c.place ? " (" + c.place + ", " + c.state + ")" : "";
@@ -196,7 +196,7 @@
       .catch(function () {
         results.innerHTML =
           "<p class=\"empty\">No parish in ZIP <strong>" + zip +
-          "</strong>. Could not look up that ZIP location. Try a ZIP anywhere in Florida — all seven dioceses are covered.</p>";
+          "</strong>. Could not look up that ZIP location. Try a ZIP in Florida or the Archdiocese of New York.</p>";
       });
   }
 
@@ -214,12 +214,23 @@
     fetch("data/parishes-staug-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-pt.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-pt-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny-d.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny-e.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny-f.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny-g.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny-h.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny-i.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny-j.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-archny-k.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    zipCoords = parts[13] || {};
+    zipCoords = parts[24] || {};
     var seen = {};
     parishes = [];
-    [parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7], parts[8], parts[9], parts[10], parts[11], parts[12]].forEach(function (arr) {
+    parts.slice(0, 24).forEach(function (arr) {
       if (!Array.isArray(arr)) return;
       arr.forEach(function (p) {
         var k = (p.zip || "") + "|" + (p.slug || p.id || "");
@@ -230,17 +241,11 @@
     });
     dataReady = true;
     var withZip = parishes.filter(function (p) { return p.zip; }).length;
-    var pb = parishes.filter(function (p) { return p.diocese_id === "palm-beach"; }).length;
-    var orl = parishes.filter(function (p) { return p.diocese_id === "orlando"; }).length;
-    var mia = parishes.filter(function (p) { return p.diocese_id === "miami"; }).length;
-    var ven = parishes.filter(function (p) { return p.diocese_id === "venice"; }).length;
-    var stp = parishes.filter(function (p) { return p.diocese_id === "st-petersburg"; }).length;
-    var sta = parishes.filter(function (p) { return p.diocese_id === "st-augustine"; }).length;
-    var pt = parishes.filter(function (p) { return p.diocese_id === "pensacola-tallahassee"; }).length;
+    var ny = parishes.filter(function (p) { return (p.diocese || "").indexOf("New York") !== -1; }).length;
+    var fl = parishes.length - ny;
     setStatus(
-      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — Pensacola-Tallahassee: " + pt +
-      ", St. Augustine: " + sta + ", St. Petersburg: " + stp + ", Miami: " + mia + ", Venice: " + ven +
-      ", Palm Beach: " + pb + ", Orlando: " + orl + "."
+      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — Florida: " + fl +
+      ", Archdiocese of New York: " + ny + "."
     );
 
     var params = new URLSearchParams(window.location.search);
