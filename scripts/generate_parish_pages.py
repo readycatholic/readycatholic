@@ -54,6 +54,10 @@ def load_parishes():
         "parishes-albany.json",
         "parishes-albany-b.json",
         "parishes-albany-c.json",
+        "parishes-brooklyn.json",
+        "parishes-brooklyn-b.json",
+        "parishes-brooklyn-c.json",
+        "parishes-brooklyn-d.json",
     ]
     seen = set()
     out = []
@@ -77,14 +81,12 @@ def parish_slug(p):
     name = (p.get("name") or "").strip()
     city = (p.get("city") or "").strip()
     state = (p.get("state") or "").strip()
-    # Prefer full name; append city (and state) for uniqueness when useful
     parts = [name]
     if city:
         parts.append(city)
     if state:
         parts.append(state)
     slug = slugify(" ".join(parts))
-    # Safety: avoid empty
     if not slug:
         slug = slugify(p.get("slug") or p.get("id") or "parish")
     return slug
