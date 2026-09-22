@@ -64,6 +64,7 @@ def load_parishes():
         "parishes-ogdensburg.json",
         "parishes-ogdensburg-b.json",
         "parishes-ogdensburg-c.json",
+        "parishes-rochester.json",
     ]
     seen = set()
     out = []
