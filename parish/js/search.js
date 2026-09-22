@@ -126,7 +126,7 @@
         var phone = document.createElement("p");
         phone.className = "phone";
         phone.textContent = formatPhone(p.phone);
-        li.appendChild(phone);
+      li.appendChild(phone);
       }
       var more = document.createElement("a");
       more.href = parishUrl(p);
@@ -267,12 +267,15 @@
     fetch("data/parishes-buffalo.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-buffalo-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-buffalo-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-ogdensburg.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-ogdensburg-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-ogdensburg-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    zipCoords = parts[34] || {};
+    zipCoords = parts[37] || {};
     var seen = {};
     parishes = [];
-    parts.slice(0, 34).forEach(function (arr) {
+    parts.slice(0, 37).forEach(function (arr) {
       if (!Array.isArray(arr)) return;
       arr.forEach(function (p) {
         var k = (p.zip || "") + "|" + (p.slug || p.id || "");
