@@ -56,7 +56,6 @@
   }
 
   function parishSlug(p) {
-    // Full parish name in the URL — never abbreviated source codes
     var name = (p.name || "").trim();
     var city = (p.city || "").trim();
     var state = (p.state || "").trim();
@@ -139,7 +138,6 @@
   }
 
   function parishCoords(p) {
-    // Prefer per-parish lat/lng (e.g. ArchNY); fall back to ZIP centroid table
     var lat = parseFloat(p.lat);
     var lng = parseFloat(p.lng);
     if (!isNaN(lat) && !isNaN(lng)) {
@@ -266,12 +264,15 @@
     fetch("data/parishes-brooklyn-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-brooklyn-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-brooklyn-d.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-buffalo.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-buffalo-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-buffalo-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    zipCoords = parts[31] || {};
+    zipCoords = parts[34] || {};
     var seen = {};
     parishes = [];
-    parts.slice(0, 31).forEach(function (arr) {
+    parts.slice(0, 34).forEach(function (arr) {
       if (!Array.isArray(arr)) return;
       arr.forEach(function (p) {
         var k = (p.zip || "") + "|" + (p.slug || p.id || "");
