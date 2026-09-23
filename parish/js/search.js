@@ -271,12 +271,14 @@
     fetch("data/parishes-ogdensburg-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-ogdensburg-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-rochester.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-rochester-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-rochester-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    zipCoords = parts[38] || {};
+    zipCoords = parts[40] || {};
     var seen = {};
     parishes = [];
-    parts.slice(0, 38).forEach(function (arr) {
+    parts.slice(0, 40).forEach(function (arr) {
       if (!Array.isArray(arr)) return;
       arr.forEach(function (p) {
         var k = (p.zip || "") + "|" + (p.slug || p.id || "");
