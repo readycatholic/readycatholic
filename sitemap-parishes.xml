@@ -669,6 +669,16 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/12992/st-joseph-west-chazy-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/12993/st-philip-neri-westport-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/12996/st-philip-of-jesus-willsboro-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13021/sacred-heart-auburn-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13021/st-alphonsus-auburn-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13026/st-patrick-aurora-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13064/st-jude-fair-haven-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13081/our-lady-of-the-lake-king-ferry-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13118/st-patrick-moravia-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13130/st-ann-owasco-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13143/st-thomas-red-creek-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13160/st-michael-union-springs-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13165/st-francis-and-st-clare-waterloo-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13320/st-thomas-the-apostle-church-cherry-valley-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13325/st-mary-constableville-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13326/st-mary-s-church-cooperstown-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -731,11 +741,13 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13690/st-hubert-star-lake-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13694/st-mary-waddington-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13731/st-ann-s-375-main-st-andes-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13732/st-margaret-mary-apalachin-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13753/st-peter-s-church-delhi-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13755/church-of-the-holy-family-downsville-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13783/st-paul-the-apostle-church-hancock-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13808/holy-cross-church-morris-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13820/st-mary-s-church-oneonta-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/13827/blessed-trinity-st-patrick-owego-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13838/sacred-heart-church-sidney-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/13856/st-john-the-baptist-church-walton-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14001/st-teresa-of-avila-akron-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -841,24 +853,49 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14304/st-vincent-de-paul-niagara-falls-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14305/st-raphael-niagara-falls-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14411/holy-family-albion-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14414/st-agnes-avon-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14420/nativity-of-the-blessed-virgin-mary-brockport-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14423/st-columba-st-patrick-caledonia-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14428/st-vincent-de-paul-churchville-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14432/st-felix-clifton-springs-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14445/church-of-st-jerome-east-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14450/church-of-the-assumption-fairport-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14450/church-of-the-resurrection-fairport-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14454/st-mary-geneseo-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14467/st-marianne-cope-henrietta-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14470/st-mary-holley-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14472/st-paul-of-the-cross-honeoye-falls-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14476/st-mark-kendall-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14482/our-lady-of-mercy-le-roy-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14482/st-brigid-bergen-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14485/st-rose-lima-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14502/st-patrick-macedon-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14510/st-patrick-mount-morris-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14512/st-januarius-naples-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14517/holy-angels-nunda-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14519/st-mary-of-the-lake-ontario-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14521/holy-cross-ovid-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14522/st-anne-palmyra-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14527/st-michael-penn-yan-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14532/st-francis-phelps-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14534/st-louis-pittsford-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14539/st-lucy-retsof-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14546/st-mary-of-the-assumption-scottsville-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14548/st-dominic-shortsville-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14551/church-of-the-epiphany-sodus-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14569/st-isidore-silver-springs-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14569/st-michael-warsaw-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14580/church-of-the-holy-spirit-webster-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14590/st-mary-magdalene-wolcott-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14605/st-frances-xavier-cabrini-corpus-christi-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14605/st-frances-xavier-cabrini-st-michael-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14606/holy-apostles-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14606/parish-of-the-holy-family-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14607/blessed-sacrament-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14607/st-mary-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14609/peace-of-christ-st-ambrose-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14609/peace-of-christ-st-james-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14609/st-frances-xavier-cabrini-annunciation-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14610/peace-of-christ-st-john-the-evangelist-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14610/st-thomas-more-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14611/st-monica-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -867,11 +904,16 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14615/sacred-heart-cathedral-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14616/st-charles-borromeo-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14617/st-kateri-tekakwitha-christ-the-king-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14617/st-kateri-tekakwitha-st-thomas-the-apostle-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14617/st-margaret-mary-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14618/our-lady-of-lourdes-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14618/our-lady-queen-of-peace-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14620/st-anne-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14620/st-boniface-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14622/st-kateri-tekakwitha-st-cecilia-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14623/rit-newman-catholic-community-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14624/st-pius-x-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14626/st-john-the-evangelist-rochester-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14701/holy-apostles-jamestown-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14701/sacred-heart-lakewood-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14701/st-james-jamestown-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -888,8 +930,20 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14772/st-patrick-randolph-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14779/our-lady-of-peace-salamanca-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14787/st-dominic-westfield-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14810/st-mary-bath-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14830/all-saints-corning-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14840/st-gabriel-hammondsport-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14847/st-francis-solanus-interlaken-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14873/st-patrick-prattsburgh-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14882/all-saints-roman-catholic-parish-lansing-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14886/st-james-the-apostle-trumansburg-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14892/st-james-waverly-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/14895/immaculate-conception-wellsville-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14901/ss-peter-and-paul-elmira-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14901/st-casimir-elmira-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14901/st-patrick-elmira-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14904/st-mary-elmira-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/14905/our-lady-of-lourdes-elmira-ny/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/32003/sacred-heart-catholic-church-fleming-island-fl/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/32008/san-juan-de-la-cruz-mission-branford-fl/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/32011/our-lady-of-consolation-catholic-church-callahan-fl/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
