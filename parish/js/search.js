@@ -291,20 +291,40 @@
         parishes.push(p);
       });
     });
-    dataReady = true;
-    var withZip = parishes.filter(function (p) { return p.zip; }).length;
-    var ny = parishes.filter(function (p) { return (p.state || "") === "NY"; }).length;
-    var fl = parishes.filter(function (p) { return (p.state || "") === "FL"; }).length;
-    setStatus(
-      "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — FL: " + fl + ", NY: " + ny + "."
-    );
-
-    var params = new URLSearchParams(window.location.search);
-    var qZip = params.get("zip");
-    if (qZip) {
-      input.value = normalizeZip(qZip);
-      doSearch(qZip);
-    }
+    // Pre-resolve parish ZIP coords missing from zip_coords.json (e.g. NY)
+    var need = {};
+    parishes.forEach(function (p) {
+      if (p.zip && !zipCoords[p.zip] && !p.lat) need[p.zip] = true;
+    });
+    var needList = Object.keys(need);
+    setStatus("Loaded " + parishes.length + " parishes. Resolving " + needList.length + " ZIP coords…");
+    var fetches = needList.map(function (z) {
+      return fetch("https://api.zippopotam.us/us/" + z)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (!data || !data.places || !data.places[0]) return;
+          zipCoords[z] = {
+            lat: parseFloat(data.places[0].latitude),
+            lng: parseFloat(data.places[0].longitude)
+          };
+        })
+        .catch(function () {});
+    });
+    Promise.all(fetches).then(function () {
+      dataReady = true;
+      var withZip = parishes.filter(function (p) { return p.zip; }).length;
+      var ny = parishes.filter(function (p) { return (p.state || "") === "NY"; }).length;
+      var fl = parishes.filter(function (p) { return (p.state || "") === "FL"; }).length;
+      setStatus(
+        "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — FL: " + fl + ", NY: " + ny + "."
+      );
+      var params = new URLSearchParams(window.location.search);
+      var qZip = params.get("zip");
+      if (qZip) {
+        input.value = normalizeZip(qZip);
+        doSearch(qZip);
+      }
+    });
   }).catch(function () {
     setStatus("Could not load parish data.");
   });
