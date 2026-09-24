@@ -202,7 +202,6 @@
       return;
     }
 
-    // Wait until parish data + ZIP coords are ready
     if (!dataReady) {
       pendingSearch = zip;
       results.innerHTML = "<p class=\"empty\">Loading parish data…</p>";
@@ -285,9 +284,12 @@
     fetch("data/parishes-rvc-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-rvc-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-rvc-d.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-syr.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-syr-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-syr-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-syr-d.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    // Last fetch is always zip_coords.json; rest are parish arrays
     var parishParts = parts.slice(0, -1);
     zipCoords = parts[parts.length - 1] || {};
     if (Array.isArray(zipCoords)) zipCoords = {};
@@ -304,7 +306,6 @@
       });
     });
 
-    // Safety net: resolve any parish ZIP still missing from offline cache
     var need = {};
     parishes.forEach(function (p) {
       if (p.zip && !zipCoords[p.zip]) {
@@ -337,7 +338,6 @@
     }
 
     setStatus("Loaded " + parishes.length + " parishes. Resolving " + needList.length + " ZIP coords…");
-    // Batch in groups of 25 to avoid rate limits
     var i = 0;
     function nextBatch() {
       var batch = needList.slice(i, i + 25);
