@@ -301,6 +301,7 @@
     fetch("data/parishes-chicago-b8.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-chicago-b9.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-chicago-b10.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-belleville.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
     var parishParts = parts.slice(0, -1);
