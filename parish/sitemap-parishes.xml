@@ -1903,6 +1903,7 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60804/our-lady-of-the-mount-our-lady-the-mystical-rose-cicero-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60804/st-mary-of-czestochowa-our-lady-of-czestochowa-and-charity-cicero-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62201/holy-rosary-fairmont-city-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62205/immaculate-conception-chapel-east-st-louis-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62205/st-augustine-of-hippo-east-st-louis-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62206/holy-family-cahokia-heights-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62208/holy-trinity-fairview-heights-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -1916,6 +1917,7 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62221/st-teresa-of-the-child-jesus-belleville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62223/blessed-sacrament-belleville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62223/our-lady-queen-of-peace-belleville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62226/st-augustine-of-canterbury-belleville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62226/st-henry-belleville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62226/st-mary-belleville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62230/st-augustine-breese-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -1936,20 +1938,36 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62254/st-joseph-lebanon-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62258/holy-childhood-of-jesus-mascoutah-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62260/st-james-millstadt-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62263/our-lady-of-perpetual-help-nashville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62263/st-ann-nashville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62264/st-agatha-new-athens-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62265/st-george-new-baden-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62268/st-anthony-oakdale-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62269/corpus-christi-shiloh-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62269/st-clare-o-fallon-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62269/st-nicholas-o-fallon-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62271/st-barbara-okawville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62274/st-bruno-pinckneyville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62277/st-joseph-prairie-du-rocher-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62278/st-john-the-baptist-red-bud-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62282/st-liborius-st-libory-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62297/st-pius-v-walsh-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62298/st-michael-waterloo-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62439/st-lawrence-lawrenceville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62450/st-joseph-olney-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62801/st-mary-centralia-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62812/st-joseph-benton-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62821/st-polycarp-carmi-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62828/st-john-nepomucene-chapel-dahlgren-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62831/st-charles-borromeo-dubois-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62832/sacred-heart-du-quoin-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62835/st-patrick-enfield-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62837/st-edward-fairfield-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62839/st-stephen-flora-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62854/st-elizabeth-ann-seton-kinmundy-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62859/st-john-the-baptist-mcleansboro-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62863/st-mary-mount-carmel-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62864/st-mary-the-immaculate-conception-mount-vernon-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62901/newman-center-carbondale-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62901/st-francis-xavier-carbondale-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62906/st-mary-anna-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -1957,10 +1975,12 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62918/holy-spirit-carterville-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62920/st-joseph-cobden-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62930/st-mary-s-eldorado-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62931/st-joseph-elizabethtown-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62946/st-mary-harrisburg-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62948/our-lady-of-mt-carmel-herrin-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62951/st-paul-johnston-city-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62959/st-joseph-marion-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62960/st-rose-of-lima-metropolis-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/62966/st-andrew-murphysboro-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/62995/st-paul-vienna-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
