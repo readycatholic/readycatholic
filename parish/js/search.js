@@ -189,11 +189,18 @@
     fetch("data/parishes-belleville-e.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-joliet.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
-    fetch("data/zip_coords-b.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
+    fetch("data/zip_coords-b.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
+    fetch("data/zip_coords-c.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
+    fetch("data/zip_coords-d.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
+    fetch("data/zip_coords-e.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
+    fetch("data/zip_coords-f.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
+    fetch("data/zip_coords-g.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
+    fetch("data/zip_coords-h.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
+    fetch("data/zip_coords-i.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    var parishParts = parts.slice(0, -2);
+    var parishParts = parts.slice(0, -9);
     zipCoords = {};
-    parts.slice(-2).forEach(function (obj) {
+    parts.slice(-9).forEach(function (obj) {
       if (obj && typeof obj === "object" && !Array.isArray(obj)) {
         Object.keys(obj).forEach(function (z) { zipCoords[z] = obj[z]; });
       }
