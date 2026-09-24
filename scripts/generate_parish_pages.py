@@ -71,6 +71,10 @@ def load_parishes():
         "parishes-rvc-b.json",
         "parishes-rvc-c.json",
         "parishes-rvc-d.json",
+        "parishes-syr.json",
+        "parishes-syr-b.json",
+        "parishes-syr-c.json",
+        "parishes-syr-d.json",
     ]
     seen = set()
     out = []
