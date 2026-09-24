@@ -15,6 +15,7 @@
   let parishes = [];
   let zipCoords = {};
   let dataReady = false;
+  let pendingSearch = null;
 
   function setStatus(msg) {
     if (status) status.textContent = msg;
@@ -201,6 +202,13 @@
       return;
     }
 
+    // Wait until parish data + ZIP coords are ready
+    if (!dataReady) {
+      pendingSearch = zip;
+      results.innerHTML = "<p class=\"empty\">Loading parish data…</p>";
+      return;
+    }
+
     var exact = parishes.filter(function (p) { return p.zip === zip; });
     if (exact.length) {
       renderList(exact.map(function (p) { return { parish: p }; }));
@@ -215,20 +223,20 @@
         if (!nearest.length) {
           results.innerHTML =
             "<p class=\"empty\">No parish in ZIP <strong>" + zip +
-            "</strong>, and distance data is unavailable. Try a ZIP in Florida or New York.</p>";
+            "</strong>, and we could not compute distances yet. Please try again in a moment.</p>";
           return;
         }
         var placeNote = c.place ? " (" + c.place + ", " + c.state + ")" : "";
         renderList(nearest, {
           headerHtml:
             "No parish is listed in ZIP <strong>" + zip + "</strong>" + placeNote +
-            ". Closest parishes in our dataset:"
+            ". Closest parishes:"
         });
       })
       .catch(function () {
         results.innerHTML =
           "<p class=\"empty\">No parish in ZIP <strong>" + zip +
-          "</strong>. Could not look up that ZIP location. Try a ZIP in Florida or New York.</p>";
+          "</strong>. Could not look up that ZIP location. Please check the ZIP and try again.</p>";
       });
   }
 
@@ -279,10 +287,14 @@
     fetch("data/parishes-rvc-d.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    zipCoords = parts[44] || {};
+    // Last fetch is always zip_coords.json; rest are parish arrays
+    var parishParts = parts.slice(0, -1);
+    zipCoords = parts[parts.length - 1] || {};
+    if (Array.isArray(zipCoords)) zipCoords = {};
+
     var seen = {};
     parishes = [];
-    parts.slice(0, 44).forEach(function (arr) {
+    parishParts.forEach(function (arr) {
       if (!Array.isArray(arr)) return;
       arr.forEach(function (p) {
         var k = (p.zip || "") + "|" + (p.slug || p.id || "");
@@ -291,40 +303,63 @@
         parishes.push(p);
       });
     });
-    // Pre-resolve parish ZIP coords missing from zip_coords.json (e.g. NY)
+
+    // Safety net: resolve any parish ZIP still missing from offline cache
     var need = {};
     parishes.forEach(function (p) {
-      if (p.zip && !zipCoords[p.zip] && !p.lat) need[p.zip] = true;
+      if (p.zip && !zipCoords[p.zip]) {
+        var lat = parseFloat(p.lat);
+        var lng = parseFloat(p.lng);
+        if (isNaN(lat) || isNaN(lng)) need[p.zip] = true;
+      }
     });
     var needList = Object.keys(need);
-    setStatus("Loaded " + parishes.length + " parishes. Resolving " + needList.length + " ZIP coords…");
-    var fetches = needList.map(function (z) {
-      return fetch("https://api.zippopotam.us/us/" + z)
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (data) {
-          if (!data || !data.places || !data.places[0]) return;
-          zipCoords[z] = {
-            lat: parseFloat(data.places[0].latitude),
-            lng: parseFloat(data.places[0].longitude)
-          };
-        })
-        .catch(function () {});
-    });
-    Promise.all(fetches).then(function () {
+
+    function finishReady() {
       dataReady = true;
       var withZip = parishes.filter(function (p) { return p.zip; }).length;
-      var ny = parishes.filter(function (p) { return (p.state || "") === "NY"; }).length;
-      var fl = parishes.filter(function (p) { return (p.state || "") === "FL"; }).length;
-      setStatus(
-        "Loaded " + parishes.length + " parishes (" + withZip + " with ZIP) — FL: " + fl + ", NY: " + ny + "."
-      );
+      setStatus("Loaded " + parishes.length + " parishes (" + withZip + " with ZIP).");
+      var run = pendingSearch;
+      pendingSearch = null;
       var params = new URLSearchParams(window.location.search);
       var qZip = params.get("zip");
-      if (qZip) {
+      if (run) {
+        doSearch(run);
+      } else if (qZip) {
         input.value = normalizeZip(qZip);
         doSearch(qZip);
       }
-    });
+    }
+
+    if (!needList.length) {
+      finishReady();
+      return;
+    }
+
+    setStatus("Loaded " + parishes.length + " parishes. Resolving " + needList.length + " ZIP coords…");
+    // Batch in groups of 25 to avoid rate limits
+    var i = 0;
+    function nextBatch() {
+      var batch = needList.slice(i, i + 25);
+      i += 25;
+      if (!batch.length) {
+        finishReady();
+        return;
+      }
+      Promise.all(batch.map(function (z) {
+        return fetch("https://api.zippopotam.us/us/" + z)
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (data) {
+            if (!data || !data.places || !data.places[0]) return;
+            zipCoords[z] = {
+              lat: parseFloat(data.places[0].latitude),
+              lng: parseFloat(data.places[0].longitude)
+            };
+          })
+          .catch(function () {});
+      })).then(nextBatch);
+    }
+    nextBatch();
   }).catch(function () {
     setStatus("Could not load parish data.");
   });
