@@ -1734,6 +1734,8 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/34996/st-joseph-stuart-fl/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/34997/st-andrew-stuart-fl/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60004/st-edna-arlington-heights-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/60007/queen-of-the-rosary-our-lady-of-the-blessed-sacrament-elk-grove-village-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/60007/st-julian-eymard-our-lady-of-the-blessed-sacrament-elk-grove-village-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60008/st-colette-st-clare-of-assisi-rolling-meadows-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60010/st-anne-barrington-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60026/st-catherine-laboure-glenview-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -1742,6 +1744,7 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60053/st-martha-all-saints-morton-grove-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60056/st-cecilia-st-clare-of-assisi-mount-prospect-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60056/st-emily-mount-prospect-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/60062/st-norbert-and-our-lady-of-the-brook-northbrook-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60083/st-brigid-wadsworth-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60085/most-blessed-trinity-waukegan-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60093/sacred-heart-divine-mercy-winnetka-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -1750,12 +1753,14 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60302/st-edmund-ascension-and-st-edmund-oak-park-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60302/st-giles-st-catherine-of-siena-st-lucy-and-st-giles-oak-park-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60304/ascension-ascension-and-st-edmund-oak-park-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/60402/st-odilo-berwyn-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60406/st-donatus-blue-island-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60438/all-souls-lansing-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60439/ss-cyril-and-methodius-lemont-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60439/st-alphonsus-st-alphonsus-and-st-patrick-lemont-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60439/st-patrick-st-alphonsus-and-st-patrick-lemont-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60452/st-damian-oak-forest-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/60453/our-lady-at-st-germaine-oak-lawn-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60453/st-catherine-of-alexandria-oak-lawn-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60459/st-albert-the-great-burbank-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60463/st-alexander-palos-heights-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -1766,6 +1771,9 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60608/st-ann-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60608/st-barbara-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60609/blessed-sacrament-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/60609/holy-cross-immaculate-heart-of-mary-st-oscar-romero-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/60609/st-joseph-st-oscar-romero-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/60609/st-michael-the-archangel-st-oscar-romero-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60614/st-clement-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60618/st-benedict-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60621/st-benedict-the-african-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
@@ -1786,10 +1794,12 @@
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60652/st-bede-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60652/st-bede-the-venerable-st-bede-the-venerable-and-st-denis-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60652/st-denis-st-bede-the-venerable-and-st-denis-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/60653/our-lady-of-africa-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60654/assumption-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60655/st-cajetan-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60655/st-christina-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60657/st-alphonsus-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60657/st-andrew-chicago-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://readycatholic.github.io/readycatholic/parish/60714/st-isaac-jogues-all-saints-niles-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://readycatholic.github.io/readycatholic/parish/60804/our-lady-of-charity-our-lady-of-czestochowa-and-charity-cicero-il/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
