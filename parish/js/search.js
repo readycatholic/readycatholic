@@ -289,6 +289,8 @@
     fetch("data/parishes-syr-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-syr-d.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-chicago.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-chicago-a2.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-chicago-a3.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-chicago-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
