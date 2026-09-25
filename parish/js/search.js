@@ -189,6 +189,7 @@
     fetch("data/parishes-belleville-e.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-joliet.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-joliet-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+    fetch("data/parishes-joliet-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/zip_coords.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
     fetch("data/zip_coords-b.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
     fetch("data/zip_coords-c.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
