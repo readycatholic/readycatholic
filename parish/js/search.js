@@ -200,11 +200,12 @@
     fetch("data/zip_coords-f.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
     fetch("data/zip_coords-g.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
     fetch("data/zip_coords-h.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
-    fetch("data/zip_coords-i.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
+    fetch("data/zip_coords-i.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }),
+    fetch("data/zip_coords-j.json").then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
   ]).then(function (parts) {
-    var parishParts = parts.slice(0, -9);
+    var parishParts = parts.slice(0, -10);
     zipCoords = {};
-    parts.slice(-9).forEach(function (obj) {
+    parts.slice(-10).forEach(function (obj) {
       if (obj && typeof obj === "object" && !Array.isArray(obj)) {
         Object.keys(obj).forEach(function (z) { zipCoords[z] = obj[z]; });
       }
@@ -243,20 +244,16 @@
       }
     }
 
-    if (!needList.length) {
-      finishReady();
-      return;
-    }
+    // Always unlock search immediately; fill any missing coords in background
+    finishReady();
+    if (!needList.length) return;
 
     var batchSize = 25;
     var i = 0;
     function nextBatch() {
       var batch = needList.slice(i, i + batchSize);
       i += batchSize;
-      if (!batch.length) {
-        finishReady();
-        return;
-      }
+      if (!batch.length) return;
       Promise.all(
         batch.map(function (z) {
           return fetch("https://api.zippopotam.us/us/" + z)
