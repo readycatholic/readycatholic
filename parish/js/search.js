@@ -10,10 +10,15 @@
   var dataReady = false;
   var pendingSearch = null;
 
-  var form = document.getElementById("zip-form");
+  var form = document.getElementById("parish-search-form");
   var input = document.getElementById("zip-input");
-  var results = document.getElementById("results");
+  var results = document.getElementById("parish-results");
+  var statusEl = document.getElementById("parish-status");
   if (!form || !input || !results) return;
+
+  function setStatus(msg) {
+    if (statusEl) statusEl.textContent = msg || "";
+  }
 
   function haversine(lat1, lng1, lat2, lng2) {
     var R = 3958.8;
@@ -102,9 +107,11 @@
     }
     if (!dataReady) {
       pendingSearch = zip;
+      setStatus("Loading parish data…");
       results.innerHTML = '<p class="empty">Loading parish data…</p>';
       return;
     }
+    setStatus("");
 
     var exact = parishes.filter(function (p) {
       return p.zip === zip;
@@ -149,6 +156,7 @@
   setTimeout(function () {
     if (!dataReady) {
       dataReady = true;
+      setStatus("");
       console.warn("[ReadyCatholic] Forced ready after timeout");
       if (pendingSearch) {
         var run = pendingSearch;
@@ -240,6 +248,7 @@
 
     function finishReady() {
       dataReady = true;
+      setStatus("");
       var withZip = parishes.filter(function (p) { return p.zip; }).length;
       console.log("[ReadyCatholic] Loaded " + parishes.length + " parishes (" + withZip + " with ZIP), " + Object.keys(zipCoords).length + " ZIP coords");
       if (pendingSearch) {
@@ -281,6 +290,7 @@
   }).catch(function (err) {
     console.error("[ReadyCatholic] Load error", err);
     dataReady = true;
+    setStatus("");
     if (pendingSearch) {
       var run = pendingSearch;
       pendingSearch = null;
