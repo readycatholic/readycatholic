@@ -145,11 +145,21 @@
       });
   }
 
+  // Safety: never leave UI stuck on Loading
+  setTimeout(function () {
+    if (!dataReady) {
+      dataReady = true;
+      console.warn("[ReadyCatholic] Forced ready after timeout");
+      if (pendingSearch) {
+        var run = pendingSearch;
+        pendingSearch = null;
+        doSearch(run);
+      }
+    }
+  }, 8000);
+
   Promise.all([
     fetch("data/parishes.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-d.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-albany.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-albany-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-brooklyn.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
@@ -164,11 +174,6 @@
     fetch("data/parishes-rochester.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-rochester-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-rochester-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-rockville.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-rockville-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-rockville-c.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-syracuse.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
-    fetch("data/parishes-syracuse-b.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-chicago.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-chicago-a2.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
     fetch("data/parishes-chicago-a3.json").then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
@@ -273,6 +278,14 @@
       ).then(nextBatch);
     }
     nextBatch();
+  }).catch(function (err) {
+    console.error("[ReadyCatholic] Load error", err);
+    dataReady = true;
+    if (pendingSearch) {
+      var run = pendingSearch;
+      pendingSearch = null;
+      doSearch(run);
+    }
   });
 
   form.addEventListener("submit", function (e) {
