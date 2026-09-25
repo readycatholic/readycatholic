@@ -26,7 +26,7 @@
   }
 
   function parishSlug(p) {
-    // Original preferred format: parish-name-city-state
+    // Original preferred format: parish-name-city-state (full length, matches sitemap)
     var name = (p.name || "parish");
     var city = p.city || "";
     var state = p.state || "";
@@ -37,8 +37,7 @@
       .join(" ")
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "")
-      .slice(0, 80);
+      .replace(/^-|-$/g, "");
   }
 
   function parishUrl(p) {
