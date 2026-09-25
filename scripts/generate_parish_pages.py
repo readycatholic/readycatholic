@@ -94,6 +94,10 @@ def load_parishes():
         "parishes-belleville-d.json",
         "parishes-belleville-e.json",
         "parishes-joliet.json",
+        "parishes-joliet-b.json",
+        "parishes-joliet-c.json",
+        "parishes-joliet-d.json",
+        "parishes-joliet-e.json",
     ]
     seen = set()
     out = []
@@ -113,7 +117,10 @@ def slugify(s):
     return re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")
 
 def parish_slug(p):
-    """Full parish name in the URL path — never abbreviated source codes."""
+    """Prefer stored slug (matches search.js links); else name-city-state."""
+    existing = (p.get("slug") or "").strip()
+    if existing:
+        return existing
     name = (p.get("name") or "").strip()
     city = (p.get("city") or "").strip()
     state = (p.get("state") or "").strip()
@@ -124,7 +131,7 @@ def parish_slug(p):
         parts.append(state)
     slug = slugify(" ".join(parts))
     if not slug:
-        slug = slugify(p.get("slug") or p.get("id") or "parish")
+        slug = slugify(p.get("id") or "parish")
     return slug
 
 def main():
