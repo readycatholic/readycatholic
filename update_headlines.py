@@ -14,6 +14,17 @@ INDEX = ROOT / "index.html"
 
 _LIFESITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.\d{2}$", re.I)
 
+_TRACKING_PIXEL = re.compile(
+    r"(piwik|matomo|/pixel|analytics|beacon|/track(ing)?[./?]|utm_|"
+    r"\bgif\?|1x1|feedburner\.com/~/|stat(?:counter|s)?\.php)",
+    re.I,
+)
+
+
+def _is_tracking_pixel(url):
+    """True for known analytics/tracking-beacon images embedded in some RSS descriptions."""
+    return bool(url) and bool(_TRACKING_PIXEL.search(url))
+
 MAIN_LIMIT = 5
 SPECIALTY_LIMIT = 5
 MEDIA_LIMIT = 5
@@ -287,17 +298,24 @@ def collect():
             image = ""
             media = entry.get("media_content") or []
             if media and isinstance(media, list) and media:
-                image = media[0].get("url", "") or media[0].get("href", "")
+                candidate = media[0].get("url", "") or media[0].get("href", "")
+                if not _is_tracking_pixel(candidate):
+                    image = candidate
             if not image:
                 thumbs = entry.get("media_thumbnail") or []
+                candidate = ""
                 if isinstance(thumbs, list) and thumbs:
-                    image = thumbs[0].get("url", "") if isinstance(thumbs[0], dict) else ""
+                    candidate = thumbs[0].get("url", "") if isinstance(thumbs[0], dict) else ""
                 elif isinstance(thumbs, dict):
-                    image = thumbs.get("url", "")
+                    candidate = thumbs.get("url", "")
+                if not _is_tracking_pixel(candidate):
+                    image = candidate
             if not image and entry.get("enclosures"):
                 for enc in entry.enclosures:
                     href = enc.get("href", "")
                     etype = (enc.get("type") or "").lower()
+                    if _is_tracking_pixel(href):
+                        continue
                     if href and (etype.startswith("image") or any(href.lower().endswith(ext) for ext in (".jpg", ".jpeg", ".png", ".webp", ".gif"))):
                         image = href
                         break
@@ -309,9 +327,13 @@ def collect():
                     if isinstance(raw_html, list) and raw_html:
                         raw_html = raw_html[0].get("value", "") if isinstance(raw_html[0], dict) else str(raw_html[0])
                     raw_html = str(raw_html)
-                    m_img = re.search(r'<img[^>]+src=["\']([^"\']+)["\']', raw_html, re.I)
-                    if m_img:
-                        image = m_img.group(1)
+                    found = None
+                    for m_img in re.finditer(r'<img[^>]+src=["\']([^"\']+)["\']', raw_html, re.I):
+                        if not _is_tracking_pixel(m_img.group(1)):
+                            found = m_img.group(1)
+                            break
+                    if found:
+                        image = found
                         break
             if title and link:
                 source_items.append({
