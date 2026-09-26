@@ -51,16 +51,6 @@ body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; background: linear-g
 .footer { text-align: center; padding: 20px; font-size: 11px; color: var(--muted); }
 .footer strong { color: var(--navy); }
 @media (max-width: 768px) { body { padding: 8px; } .container { margin: 0 auto 8px; padding: 12px; border-radius: 17px; } .header h1 { font-size: 34px; letter-spacing: 1px; } .section-header { font-size: 17px; } .main-content { grid-template-columns: 1fr; } }
-.specialty-sections { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 20px; align-items: start; }
-.category-panel { background: linear-gradient(135deg, #fffdf6, #f7f1d9); border: 2px solid #d5b45d; border-radius: 18px; padding: 14px; box-shadow: 0 5px 15px rgba(18,54,107,.09); }
-.category-panel .section-header { margin-bottom: 12px; }
-.category-item { background: rgba(255,255,255,.78); border: 1px solid #eadcae; border-radius: 11px; padding: 9px; margin-bottom: 9px; min-height: 58px; }
-.category-item:last-child { margin-bottom: 0; }
-.category-item a { color: var(--navy); font-weight: 700; font-size: 14px; text-decoration: none; }
-.category-item a:hover { color: #8a650d; text-decoration: underline; }
-.category-item .source { font-size: 10px; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
-.media-thumb { display: block; width: 100%; max-height: 130px; object-fit: cover; border-radius: 8px; margin-bottom: 7px; }
-@media (max-width: 768px) { .specialty-sections { grid-template-columns: 1fr; } }
 .story-thumb { display: block; width: 100%; max-height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 7px; }
 /* For the faithful — bottom of home page */
 .faithful-home {
@@ -117,7 +107,7 @@ body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; background: linear-g
 <img alt="Catholic Order of Foresters — Insurance shaped by Catholic values. Learn More." src="COF728X90.png"/>
 </a>
 </div>
-<div id="main-mount"><p style="padding:20px;text-align:center;color:#68758a">Loading full news layout…</p></div>
+<div id="main-mount"><p style="padding:20px;text-align:center;color:#68758a">Loading…</p></div>
 <script>
 (function(){
   var url = "https://cdn.jsdelivr.net/gh/readycatholic/readycatholic@527b1c25f6bad3fbbcf5261349e96ccc9af7f138/index.html";
@@ -125,9 +115,63 @@ body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; background: linear-g
     var doc = new DOMParser().parseFromString(html, "text/html");
     var c = doc.querySelector(".container");
     if (!c) throw new Error("no container");
-    // Remove any old parish search from the loaded content
+
+    // Remove old parish search
     var ps = c.querySelector(".parish-search-home");
     if (ps) ps.remove();
+
+    // Convert specialty panels to match main column / news-item styling
+    var specialty = c.querySelector(".specialty-sections");
+    if (specialty) {
+      var panels = specialty.querySelectorAll(".category-panel");
+      var newRow = document.createElement("div");
+      newRow.className = "main-content";
+      newRow.style.marginTop = "18px";
+      panels.forEach(function(panel){
+        var col = document.createElement("div");
+        col.className = "column";
+        var header = panel.querySelector(".section-header");
+        if (header) {
+          var sh = document.createElement("div");
+          sh.className = "section-header";
+          sh.textContent = header.textContent;
+          col.appendChild(sh);
+        }
+        panel.querySelectorAll(".category-item").forEach(function(ci){
+          var ni = document.createElement("div");
+          ni.className = "news-item";
+          var img = ci.querySelector("img");
+          if (img) {
+            var newImg = document.createElement("img");
+            newImg.src = img.src;
+            newImg.alt = "";
+            newImg.className = "story-thumb";
+            newImg.loading = "lazy";
+            ni.appendChild(newImg);
+          }
+          var a = ci.querySelector("a");
+          if (a) {
+            var newA = document.createElement("a");
+            newA.href = a.href;
+            newA.target = "_blank";
+            newA.rel = "noopener noreferrer";
+            newA.textContent = a.textContent;
+            ni.appendChild(newA);
+          }
+          var src = ci.querySelector(".source");
+          if (src) {
+            var newSrc = document.createElement("div");
+            newSrc.className = "source";
+            newSrc.textContent = src.textContent;
+            ni.appendChild(newSrc);
+          }
+          col.appendChild(ni);
+        });
+        newRow.appendChild(col);
+      });
+      specialty.replaceWith(newRow);
+    }
+
     var mount = document.getElementById("main-mount");
     mount.replaceWith(c);
   }).catch(function(){
