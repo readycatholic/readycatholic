@@ -177,7 +177,11 @@
         .replace(/"/g, "&" + "quot;");
     }
     function displayUrl(u) {
-      return String(u || "").replace(/^https?:\/\//i, "").replace(/\/$/, "");
+      u = String(u || "");
+      if (u.indexOf("https://") === 0) u = u.slice(8);
+      else if (u.indexOf("http://") === 0) u = u.slice(7);
+      if (u.charAt(u.length - 1) === "/") u = u.slice(0, -1);
+      return u;
     }
     var files = [];
     for (var i = 0; i < 10; i++) files.push("data-" + i + ".json");
