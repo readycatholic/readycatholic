@@ -171,13 +171,13 @@
   (function () {
     function esc(s) {
       return String(s || "")
-        .replace(/&/g, "&")
-        .replace(/</g, "<")
-        .replace(/>/g, ">")
-        .replace(/"/g, """);
+        .replace(/&/g, "&" + "amp;")
+        .replace(/</g, "&" + "lt;")
+        .replace(/>/g, "&" + "gt;")
+        .replace(/"/g, "&" + "quot;");
     }
     function displayUrl(u) {
-      return String(u || "").replace(/^https?:\/\//i, "").replace(/\/$/, "");
+      return String(u || "").replace(/^https?:\/\/i, "").replace(/\/$/, "");
     }
     var files = [];
     for (var i = 0; i < 10; i++) files.push("data-" + i + ".json");
