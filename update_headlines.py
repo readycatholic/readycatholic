@@ -15,7 +15,7 @@ INDEX = ROOT / "index.html"
 _LIFESITE_DIGEST = re.compile(r"^(World|Freedom|Catholic|Video)\s+\d{2}\.\d{2}\.\d{2}$", re.I)
 
 MAIN_LIMIT = 5
-SPECIALTY_LIMIT = 4
+SPECIALTY_LIMIT = 5
 MEDIA_LIMIT = 5
 MAX_PER_SOURCE = 2
 
@@ -168,7 +168,7 @@ CULTURE_KEYWORDS = (
     "transgender", "ideology", "university", "campus",
     "politics", "election", "midterm", "poll", "society",
     "opinion", "interview", "novel", "movie", "television",
-    "hollywood", "celebrity", "education", "school", "parenting",
+    "actor", "celebrity", "education", "school", "parenting",
 )
 
 
@@ -227,12 +227,20 @@ def classify_main(item):
 
 
 def ensure_one_image(selected, pool, limit, max_per_source=MAX_PER_SOURCE):
+    """Guarantee at least one image-bearing item when possible; put it first."""
     if not selected:
-        return selected
-    if any(item.get("image") for item in selected):
         return selected
     selected_keys = {story_key(i) for i in selected}
     counts = Counter(i["source"] for i in selected)
+
+    def with_image_first(items):
+        imgs = [i for i in items if i.get("image")]
+        rest = [i for i in items if not i.get("image")]
+        return (imgs + rest)[:limit]
+
+    if any(item.get("image") for item in selected):
+        return with_image_first(selected)
+
     for item in pool:
         if not item.get("image"):
             continue
@@ -245,7 +253,7 @@ def ensure_one_image(selected, pool, limit, max_per_source=MAX_PER_SOURCE):
         else:
             selected = selected + [item]
         break
-    return selected[:limit]
+    return with_image_first(selected[:limit])
 
 
 def diversify(items, limit, max_per_source=MAX_PER_SOURCE):
@@ -295,6 +303,16 @@ def collect():
                         break
                     if not image and href and not etype.startswith("audio"):
                         image = href
+            if not image:
+                for field in ("summary", "description", "content"):
+                    raw_html = entry.get(field) or ""
+                    if isinstance(raw_html, list) and raw_html:
+                        raw_html = raw_html[0].get("value", "") if isinstance(raw_html[0], dict) else str(raw_html[0])
+                    raw_html = str(raw_html)
+                    m_img = re.search(r'<img[^>]+src=["\']([^"\']+)["\']', raw_html, re.I)
+                    if m_img:
+                        image = m_img.group(1)
+                        break
             if title and link:
                 source_items.append({
                     "title": title,
