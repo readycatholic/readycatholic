@@ -118,22 +118,47 @@ body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; background: linear-g
 <img alt="Catholic Order of Foresters — Insurance shaped by Catholic values. Learn More." src="COF728X90.png"/>
 </a>
 </div>
-<div id="main-mount"><p style="padding:20px;text-align:center;color:#68758a">Loading news…</p></div>
-<script>
-(function(){
-  var url = "https://cdn.jsdelivr.net/gh/readycatholic/readycatholic@527b1c25f6bad3fbbcf5261349e96ccc9af7f138/index.html";
-  fetch(url).then(function(r){ return r.text(); }).then(function(html){
-    var doc = new DOMParser().parseFromString(html, "text/html");
-    var c = doc.querySelector(".container");
-    if (!c) throw new Error("no container");
-    var mount = document.getElementById("main-mount");
-    mount.replaceWith(c);
-  }).catch(function(){
-    var m = document.getElementById("main-mount");
-    if (m) m.innerHTML = "<div class=\"container\"><div class=\"header\"><h1>READY CATHOLIC</h1><div class=\"tagline\">DAILY CATHOLIC NEWS & UPDATES</div></div><p style=\"padding:20px;text-align:center\">Could not load headlines. <a href=\"/\">Refresh</a></p></div>";
-  });
-})();
-</script>
+<div class="container">
+<div class="header">
+<h1>READY CATHOLIC</h1>
+<div class="tagline">DAILY CATHOLIC NEWS & UPDATES</div>
+<div class="timestamp">Updated Saturday, September 26, 2026</div>
+</div>
+<div class="featured-section">
+<h2>⚡ TOP STORIES</h2><div class="featured-item"><a href="https://www.vaticannews.va/en/pope/news/2026-09/correspondent-brings-us-to-pope-leo-s-meeting-with-young-people.html" rel="noopener noreferrer" target="_blank">Correspondent brings us to Pope Leo's meeting with young people of France</a><div class="source">Vatican News</div></div><div class="featured-item"><a href="https://www.osvnews.com/pope-encourages-french-youth-to-seek-holiness-during-visual-message/" rel="noopener noreferrer" target="_blank">Pope encourages French youth to seek holiness during visual message</a><div class="source">OSV News</div></div><div class="featured-item"><a href="https://www.ncregister.com/news/pope-leo-xiv-in-paris-unesco-ai-human-dignity" rel="noopener noreferrer" target="_blank">Pope Leo XIV at UNESCO: AI must serve human dignity, not replace it</a><div class="source">National Catholic Register</div></div>
+</div>
+<div class="main-content">
+<div class="column">
+<div class="section-header">VATICAN & POPE</div>
+<div class="news-item"><a href="https://www.vaticannews.va/en/pope/news/2026-09/pope-leo-xiv-addresses-french-parliament.html" rel="noopener noreferrer" target="_blank">Pope Leo XIV addresses French parliament on life and family</a><div class="source">Vatican News</div></div>
+<div class="news-item"><a href="https://www.catholicnewsagency.com/news/259012/pope-leo-xiv-meets-with-french-bishops" rel="noopener noreferrer" target="_blank">Pope Leo XIV meets with French bishops during apostolic visit</a><div class="source">Catholic News Agency</div></div>
+<div class="news-item"><a href="https://www.vaticannews.va/en/pope/news/2026-09/pope-leo-prays-at-notre-dame.html" rel="noopener noreferrer" target="_blank">Pope prays at restored Notre-Dame Cathedral in Paris</a><div class="source">Vatican News</div></div>
+</div>
+<div class="column">
+<div class="section-header">CHURCH NEWS</div>
+<div class="news-item"><a href="https://www.osvnews.com/us-bishops-issue-statement-on-religious-liberty/" rel="noopener noreferrer" target="_blank">U.S. bishops issue statement on religious liberty challenges</a><div class="source">OSV News</div></div>
+<div class="news-item"><a href="https://www.ncregister.com/news/catholic-charities-aid-to-migrants" rel="noopener noreferrer" target="_blank">Catholic Charities continues aid to migrants amid policy shifts</a><div class="source">National Catholic Register</div></div>
+<div class="news-item"><a href="https://www.catholicnewsagency.com/news/259000/new-cardinals-announced" rel="noopener noreferrer" target="_blank">Pope Leo XIV announces new cardinals from five continents</a><div class="source">Catholic News Agency</div></div>
+</div>
+<div class="column">
+<div class="section-header">FAITH & CULTURE</div>
+<div class="news-item"><a href="https://www.wordonfire.org/articles/contributors/the-beauty-of-the-mass/" rel="noopener noreferrer" target="_blank">The Beauty of the Mass: Encountering Christ in the Eucharist</a><div class="source">Word on Fire</div></div>
+<div class="news-item"><a href="https://www.churchpop.com/martin-sheen-took-his-stage-name-from-blessed-fulton-sheen-then-met-him-in-an-unforgettable-way/" rel="noopener noreferrer" target="_blank">Martin Sheen Took His Stage Name from Blessed Fulton Sheen… Then Met Him in an Unforgettable Way</a><div class="source">ChurchPOP</div></div>
+<div class="news-item"><a href="https://hollywoodcatholic.com/2026/09/22/padre-pio-final-mass-before-death/" rel="noopener noreferrer" target="_blank">Padre Pio’s Final Mass, Just Hours Before His Death (Rare Footage Inside)</a><div class="source">Hollywood Catholic</div></div>
+</div>
+</div>
+<div class="specialty-sections">
+<section class="category-panel" data-specialty="prolife"><div class="section-header">PRO-LIFE</div><div class="category-items"><div class="category-item"><a href="https://www.osvnews.com/pope-leo-xiv-arrives-in-paris-urging-french-leaders-to-protect-the-right-to-life/" rel="noopener noreferrer" target="_blank">Pope Leo XIV arrives in Paris, urging French leaders to protect the right to life</a><div class="source">OSV News</div></div><div class="category-item"><a href="https://www.ncregister.com/news/march-for-life-2026" rel="noopener noreferrer" target="_blank">March for Life 2026: Thousands gather in Washington, D.C.</a><div class="source">National Catholic Register</div></div><div class="category-item"><a href="https://www.catholicnewsagency.com/news/258990/pro-life-advocates-react-to-new-legislation" rel="noopener noreferrer" target="_blank">Pro-life advocates react to new state legislation</a><div class="source">Catholic News Agency</div></div></div></section>
+<section class="category-panel" data-specialty="media"><div class="section-header">MEDIA & CULTURE</div><div class="category-items"><div class="category-item"><img alt="" class="media-thumb" loading="lazy" src="https://storage.ghost.io/c/be/b2/beb2e498-f089-4f96-8ffb-b7ccee3bfe35/content/images/2026/09/6-Moments-When-You-Should-Make-the-Sign-of-the-Cross--1080-x-1080-px---10-.jpg"/><a href="https://www.churchpop.com/martin-sheen-took-his-stage-name-from-blessed-fulton-sheen-then-met-him-in-an-unforgettable-way/" rel="noopener noreferrer" target="_blank">Martin Sheen Took His Stage Name from Blessed Fulton Sheen… Then Met Him in an Unforgettable Way</a><div class="source">ChurchPOP</div></div><div class="category-item"><a href="https://hollywoodcatholic.com/2026/09/22/padre-pio-final-mass-before-death/" rel="noopener noreferrer" target="_blank">Padre Pio’s Final Mass, Just Hours Before His Death (Rare Footage Inside)</a><div class="source">Hollywood Catholic</div></div></div></section>
+<section class="category-panel" data-specialty="local"><div class="section-header">LOCAL & DIOCESAN</div><div class="category-items"><div class="category-item"><a href="https://catholicreview.org/at-unesco-pope-laments-paradox-of-celebrating-ai-while-human-dignity-discarded/" rel="noopener noreferrer" target="_blank">At UNESCO, pope laments paradox of celebrating AI while human dignity ‘discarded’</a><div class="source">Catholic Review</div></div><div class="category-item"><a href="https://catholicreview.org/pope-leo-xiv-arrives-in-paris-urging-french-leaders-to-protect-the-right-to-life/" rel="noopener noreferrer" target="_blank">Pope Leo XIV arrives in Paris, urging French leaders to protect the right to life</a><div class="source">Catholic Review</div></div><div class="category-item"><a href="https://www.osvnews.com/peoria-bishop-at-thanksgiving-mass-for-sheen-beatification-this-is-what-god-has-done/?utm_source=rss&utm_medium=rss&utm_campaign=peoria-bishop-at-thanksgiving-mass-for-sheen-beatification-this-is-what-god-has-done" rel="noopener noreferrer" target="_blank">Peoria bishop at thanksgiving Mass for Sheen beatification: ‘This is what God has done’</a><div class="source">Catholic News</div></div></div></section>
+</div>
+<div class="divider"></div>
+<div class="footer">
+<p><strong>READY CATHOLIC</strong></p>
+<p>Catholic news aggregator.</p>
+<p>© 2026 Ready Catholic. All rights reserved.</p>
+</div>
+</div>
 <!-- For the faithful — bottom of home page -->
 <div class="faithful-home">
 <p class="section-label">For the faithful</p>
