@@ -35,10 +35,7 @@
       line-height: 1.5;
       font-size: 15px;
     }
-    .top-ad {
-      text-align: center;
-      padding: 0.75rem 1rem 0;
-    }
+    .top-ad { text-align: center; padding: 0.75rem 1rem 0; }
     .top-ad a { display: inline-block; line-height: 0; }
     .top-ad img {
       display: block;
@@ -131,21 +128,10 @@
       font-weight: normal;
       color: var(--text);
     }
-    .diocese .addr {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
+    .diocese .addr { margin: 0; color: var(--muted); font-size: 0.9rem; }
     .diocese .web { margin: 0.5rem 0 0; }
-    .diocese .web a {
-      color: var(--accent);
-      font-size: 0.9rem;
-      word-break: break-all;
-    }
-    .back-top {
-      font-size: 0.8rem;
-      margin-top: 0.75rem;
-    }
+    .diocese .web a { color: var(--accent); font-size: 0.9rem; word-break: break-all; }
+    .back-top { font-size: 0.8rem; margin-top: 0.75rem; }
     .back-top a { color: var(--muted); }
     footer {
       text-align: center;
@@ -174,65 +160,87 @@
       <a href="https://www.usccb.org/about/bishops-and-dioceses/all-dioceses" target="_blank" rel="noopener noreferrer">USCCB dioceses directory</a>.
       For parishes, Mass times, and ministries, visit your diocese website.
     </p>
-    <nav class="states" aria-label="Jump to state">
-      <a href="#al">AL</a>
-      <a href="#ak">AK</a>
-      <a href="#az">AZ</a>
-      <a href="#ar">AR</a>
-      <a href="#ca">CA</a>
-      <a href="#co">CO</a>
-      <a href="#ct">CT</a>
-      <a href="#de">DE</a>
-      <a href="#dc">DC</a>
-      <a href="#fl">FL</a>
-      <a href="#ga">GA</a>
-      <a href="#hi">HI</a>
-      <a href="#id">ID</a>
-      <a href="#il">IL</a>
-      <a href="#in">IN</a>
-      <a href="#ia">IA</a>
-      <a href="#ks">KS</a>
-      <a href="#ky">KY</a>
-      <a href="#la">LA</a>
-      <a href="#me">ME</a>
-      <a href="#md">MD</a>
-      <a href="#ma">MA</a>
-      <a href="#mi">MI</a>
-      <a href="#mn">MN</a>
-      <a href="#ms">MS</a>
-      <a href="#mo">MO</a>
-      <a href="#mt">MT</a>
-      <a href="#ne">NE</a>
-      <a href="#nv">NV</a>
-      <a href="#nh">NH</a>
-      <a href="#nj">NJ</a>
-      <a href="#nm">NM</a>
-      <a href="#ny">NY</a>
-      <a href="#nc">NC</a>
-      <a href="#nd">ND</a>
-      <a href="#oh">OH</a>
-      <a href="#ok">OK</a>
-      <a href="#or">OR</a>
-      <a href="#pa">PA</a>
-      <a href="#ri">RI</a>
-      <a href="#sc">SC</a>
-      <a href="#sd">SD</a>
-      <a href="#tn">TN</a>
-      <a href="#tx">TX</a>
-      <a href="#ut">UT</a>
-      <a href="#vt">VT</a>
-      <a href="#va">VA</a>
-      <a href="#vi">VI</a>
-      <a href="#wa">WA</a>
-      <a href="#wv">WV</a>
-      <a href="#wi">WI</a>
-      <a href="#wy">WY</a>
-    </nav>
-PLACEHOLDER_BODY
+    <nav class="states" id="state-nav" aria-label="Jump to state"></nav>
+    <div id="list"><p style="color:var(--muted)">Loading diocese list…</p></div>
   </main>
   <footer>
     <a href="../">← Back to Ready Catholic news</a>
-    <p style="margin:0.75rem 0 0;">196 dioceses and eparchies listed · Source: USCCB</p>
+    <p id="count-line" style="margin:0.75rem 0 0;"></p>
   </footer>
+  <script>
+  (function () {
+    function esc(s) {
+      return String(s || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+    function displayUrl(u) {
+      return String(u || "").replace(/^https?:\/\//i, "").replace(/\/$/, "");
+    }
+    fetch("data.json")
+      .then(function (r) {
+        if (!r.ok) throw new Error("load failed");
+        return r.json();
+      })
+      .then(function (data) {
+        var names = data.stateNames || {};
+        var list = data.dioceses || [];
+        var by = {};
+        list.forEach(function (e) {
+          var st = e.state || "XX";
+          if (!by[st]) by[st] = [];
+          by[st].push(e);
+        });
+        var order = Object.keys(by).sort(function (a, b) {
+          return (names[a] || a).localeCompare(names[b] || b);
+        });
+        var nav = document.getElementById("state-nav");
+        var out = document.getElementById("list");
+        nav.innerHTML = order
+          .map(function (st) {
+            return '<a href="#' + esc(st.toLowerCase()) + '">' + esc(st) + "</a>";
+          })
+          .join("");
+        var html = "";
+        order.forEach(function (st) {
+          var slug = st.toLowerCase();
+          html += '<section class="state" id="' + esc(slug) + '">';
+          html += "<h2>" + esc(names[st] || st) + "</h2>";
+          by[st].forEach(function (e) {
+            var lines = [];
+            if (e.address1) lines.push(esc(e.address1));
+            if (e.address2) lines.push(esc(e.address2));
+            var city = [e.city, e.state].filter(Boolean).join(", ");
+            if (e.zip) city = (city ? city + " " : "") + e.zip;
+            if (city) lines.push(esc(city));
+            html += '<article class="diocese">';
+            html += "<h3>" + esc(e.name) + "</h3>";
+            if (lines.length) html += '<p class="addr">' + lines.join("<br>") + "</p>";
+            if (e.website) {
+              html +=
+                '<p class="web"><a href="' +
+                esc(e.website) +
+                '" target="_blank" rel="noopener noreferrer">' +
+                esc(displayUrl(e.website)) +
+                "</a></p>";
+            }
+            html += "</article>";
+          });
+          html += '<p class="back-top"><a href="#">↑ Back to top</a></p></section>';
+        });
+        out.innerHTML = html;
+        var cl = document.getElementById("count-line");
+        if (cl)
+          cl.textContent =
+            list.length + " dioceses and eparchies listed · Source: USCCB";
+      })
+      .catch(function () {
+        document.getElementById("list").innerHTML =
+          '<p class="note">Could not load the diocese list. Please try again later.</p>';
+      });
+  })();
+  </script>
 </body>
 </html>
