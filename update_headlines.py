@@ -153,12 +153,12 @@ PROLIFE_KEYWORDS = (
     "euthanasia", "planned parenthood", "roe v", "dobbs",
 )
 VATICAN_KEYWORDS = (
-    "pope leo", "pope francis", "holy see", "vatican", "pontiff",
+    "pope", "holy see", "vatican", "pontiff",
     "jubilee year", "synod of bishops", "roman curia", "apostolic",
 )
 AMERICA_KEYWORDS = (
     "united states", "u.s.", "us bishops", "usccb", "american",
-    "canada", "canadian", "archdiocese of", "diocese of",
+    "canada", "canadian",
     "joliet", "baltimore", "philadelphia", "los angeles", "new york",
 )
 WORLD_GEO = (
@@ -214,26 +214,40 @@ def is_culture_topic(text):
 def classify_main(item):
     text = item["title"].lower()
     source = item["source"]
+
+    # Devotional content is unambiguous regardless of source or any other keyword match.
     if source in PRAYER_SOURCES or is_prayer_topic(text):
         return "prayer"
-    if source in VATICAN_SOURCES or is_vatican_topic(text):
+
+    # A headline's actual content should win over "this outlet usually writes culture
+    # pieces" — a Culture-tagged source (e.g. Catholic World Report, America Magazine)
+    # covering the Pope's trip is still Vatican news, not Culture & Life.
+    if is_vatican_topic(text) or source in VATICAN_SOURCES:
         return "vatican"
-    if source in CULTURE_SOURCES:
-        return "culture_life"
-    if source in AMERICA_STRONG or is_america_topic(text):
-        if is_world_geo(text) and not is_america_topic(text):
-            return "world"
-        return "america"
-    if source in AMERICA_SOFT and is_america_topic(text):
-        return "america"
-    if is_world_geo(text):
+
+    is_world = is_world_geo(text)
+    is_america = is_america_topic(text)
+
+    # A story naming a specific world region wins over a bare America hit, unless the
+    # headline also carries an explicit America signal (e.g. "American bishop in Rome").
+    if is_world and not is_america:
         return "world"
-    if is_culture_topic(text):
+
+    if source in AMERICA_STRONG or is_america:
+        return "america"
+
+    if source in CULTURE_SOURCES or is_culture_topic(text):
         return "culture_life"
+
+    if is_world:
+        return "world"
+
     if source in FAITH_SOURCES or is_faith_topic(text):
         return "faith"
+
     if source in AMERICA_SOFT:
         return "america"
+
     return "world"
 
 
