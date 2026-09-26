@@ -179,14 +179,14 @@
     function displayUrl(u) {
       return String(u || "").replace(/^https?:\/\//i, "").replace(/\/$/, "");
     }
-    fetch("data.json")
-      .then(function (r) {
-        if (!r.ok) throw new Error("load failed");
-        return r.json();
-      })
-      .then(function (data) {
+    Promise.all([
+      fetch("data-a.json").then(function (r) { if (!r.ok) throw new Error("a"); return r.json(); }),
+      fetch("data-b.json").then(function (r) { if (!r.ok) throw new Error("b"); return r.json(); })
+    ])
+      .then(function (parts) {
+        var data = parts[0];
         var names = data.stateNames || {};
-        var list = data.dioceses || [];
+        var list = (data.dioceses || []).concat(parts[1].dioceses || []);
         var by = {};
         list.forEach(function (e) {
           var st = e.state || "XX";
