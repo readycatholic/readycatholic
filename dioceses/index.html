@@ -171,22 +171,30 @@
   (function () {
     function esc(s) {
       return String(s || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+        .replace(/&/g, "&")
+        .replace(/</g, "<")
+        .replace(/>/g, ">")
+        .replace(/"/g, """);
     }
     function displayUrl(u) {
       return String(u || "").replace(/^https?:\/\//i, "").replace(/\/$/, "");
     }
-    Promise.all([
-      fetch("data-a.json").then(function (r) { if (!r.ok) throw new Error("a"); return r.json(); }),
-      fetch("data-b.json").then(function (r) { if (!r.ok) throw new Error("b"); return r.json(); })
-    ])
+    var files = [];
+    for (var i = 0; i < 10; i++) files.push("data-" + i + ".json");
+    Promise.all(
+      files.map(function (f) {
+        return fetch(f).then(function (r) {
+          if (!r.ok) throw new Error(f);
+          return r.json();
+        });
+      })
+    )
       .then(function (parts) {
-        var data = parts[0];
-        var names = data.stateNames || {};
-        var list = (data.dioceses || []).concat(parts[1].dioceses || []);
+        var names = parts[0].stateNames || {};
+        var list = [];
+        parts.forEach(function (p) {
+          (p.dioceses || []).forEach(function (e) { list.push(e); });
+        });
         var by = {};
         list.forEach(function (e) {
           var st = e.state || "XX";
