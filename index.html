@@ -6,7 +6,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="2UNArHCP_rSVy6Ojj2nLXOJGOqecceZcmLdyrcavVqY" name="google-site-verification"/>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
-<title>Ready Catholic | Daily Catholic News, Vatican Updates &amp; Catholic Faith</title>
+<title>Ready Catholic | Daily Catholic News, Vatican Updates & Catholic Faith</title>
 <meta content="Stay informed with Ready Catholic: daily Catholic news, Vatican and Pope updates, Church news, Catholic faith, spirituality, culture, and pro-life perspectives from trusted Catholic sources." name="description"/>
 <meta content="Catholic news, daily Catholic news, Vatican news, Pope news, Catholic Church news, Catholic faith, Catholic spirituality, Catholic culture, Catholic world news, Catholic news aggregator, pro-life news" name="keywords"/>
 <meta content="Ready Catholic" name="author"/>
@@ -14,12 +14,12 @@
 <link href="https://readycatholic.github.io/readycatholic/" rel="canonical"/>
 <meta content="website" property="og:type"/>
 <meta content="Ready Catholic" property="og:site_name"/>
-<meta content="Ready Catholic | Daily Catholic News &amp; Vatican Updates" property="og:title"/>
+<meta content="Ready Catholic | Daily Catholic News & Vatican Updates" property="og:title"/>
 <meta content="Daily Catholic news, Vatican and Pope updates, Church news, faith, spirituality, culture, and Catholic perspectives from trusted sources." property="og:description"/>
 <meta content="https://readycatholic.github.io/readycatholic/" property="og:url"/>
 <meta content="https://readycatholic.github.io/readycatholic/COF728X90.png" property="og:image"/>
 <meta content="summary_large_image" name="twitter:card"/>
-<meta content="Ready Catholic | Daily Catholic News &amp; Vatican Updates" name="twitter:title"/>
+<meta content="Ready Catholic | Daily Catholic News & Vatican Updates" name="twitter:title"/>
 <meta content="Daily Catholic news, Vatican and Pope updates, Church news, faith, spirituality, culture, and Catholic perspectives from trusted sources." name="twitter:description"/>
 <meta content="https://readycatholic.github.io/readycatholic/COF728X90.png" name="twitter:image"/>
 <style>
@@ -118,14 +118,22 @@ body { font-family: Calibri, 'Segoe UI', Arial, sans-serif; background: linear-g
 <img alt="Catholic Order of Foresters — Insurance shaped by Catholic values. Learn More." src="COF728X90.png"/>
 </a>
 </div>
-<div class="container">
-<div class="header">
-<h1>READY CATHOLIC</h1>
-<div class="tagline">DAILY CATHOLIC NEWS &amp; UPDATES</div>
-<div class="timestamp">Saturday, September 26, 2026</div>
-</div>
-<p style="padding:20px;text-align:center;color:#68758a">News content loading from latest build… If this message persists, refresh in a moment.</p>
-</div>
+<div id="main-mount"><p style="padding:20px;text-align:center;color:#68758a">Loading news…</p></div>
+<script>
+(function(){
+  var url = "https://cdn.jsdelivr.net/gh/readycatholic/readycatholic@527b1c25f6bad3fbbcf5261349e96ccc9af7f138/index.html";
+  fetch(url).then(function(r){ return r.text(); }).then(function(html){
+    var doc = new DOMParser().parseFromString(html, "text/html");
+    var c = doc.querySelector(".container");
+    if (!c) throw new Error("no container");
+    var mount = document.getElementById("main-mount");
+    mount.replaceWith(c);
+  }).catch(function(){
+    var m = document.getElementById("main-mount");
+    if (m) m.innerHTML = "<div class=\"container\"><div class=\"header\"><h1>READY CATHOLIC</h1><div class=\"tagline\">DAILY CATHOLIC NEWS & UPDATES</div></div><p style=\"padding:20px;text-align:center\">Could not load headlines. <a href=\"/\">Refresh</a></p></div>";
+  });
+})();
+</script>
 <!-- For the faithful — bottom of home page -->
 <div class="faithful-home">
 <p class="section-label">For the faithful</p>
