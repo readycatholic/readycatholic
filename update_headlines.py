@@ -163,11 +163,30 @@ AMERICA_KEYWORDS = (
 )
 WORLD_GEO = (
     "mexico", "mexican", "france", "french", "china", "chinese",
-    "nigeria", "uganda", "philippines", "brazil",
-    "germany", "german", "poland", "ukraine", "ukrainian",
-    "india", "pakistan", "syria", "iraq", "holy land", "israel",
-    "gaza", "africa", "asia", "europe", "australia", "ireland",
-    "britain", "uk ", "england", "scotland", "latin america",
+    "nigeria", "uganda", "philippines", "brazil", "brazilian",
+    "germany", "german", "poland", "polish", "ukraine", "ukrainian",
+    "india", "indian", "pakistan", "pakistani", "syria", "syrian",
+    "iraq", "iraqi", "holy land", "israel", "israeli", "palestin",
+    "gaza", "africa", "african", "asia", "asian", "europe", "european",
+    "australia", "australian", "ireland", "irish",
+    "britain", "british", "uk ", "u.k.", "england", "english",
+    "scotland", "scottish", "wales", "welsh", "latin america",
+    "ethiopia", "ethiopian", "kenya", "kenyan", "south sudan",
+    "sudan", "sudanese", "congo", "rwanda", "ghana", "ivory coast",
+    "cameroon", "tanzania", "zimbabwe", "south africa",
+    "vietnam", "vietnamese", "south korea", "korean", "japan", "japanese",
+    "indonesia", "indonesian", "sri lanka", "bangladesh", "myanmar",
+    "argentina", "argentine", "colombia", "colombian", "peru", "peruvian",
+    "venezuela", "venezuelan", "chile", "chilean", "bolivia", "ecuador",
+    "cuba", "cuban", "haiti", "haitian", "nicaragua", "guatemala",
+    "spain", "spanish", "italy", "italian", "portugal", "portuguese",
+    "austria", "austrian", "hungary", "hungarian", "croatia", "croatian",
+    "bosnia", "serbia", "serbian", "slovakia", "slovenia", "romania",
+    "lithuania", "latvia", "estonia", "netherlands", "dutch", "belgium",
+    "belgian", "switzerland", "swiss", "lebanon", "lebanese", "jordan",
+    "jordanian", "turkey", "turkish", "egypt", "egyptian", "iran",
+    "iranian", "afghanistan", "afghan", "malaysia", "singapore",
+    "thailand", "cambodia", "laos", "taiwan", "hong kong", "north korea",
 )
 FAITH_KEYWORDS = (
     "homily", "spiritual", "faith formation", "evangelization",
@@ -244,9 +263,6 @@ def classify_main(item):
 
     if source in FAITH_SOURCES or is_faith_topic(text):
         return "faith"
-
-    if source in AMERICA_SOFT:
-        return "america"
 
     return "world"
 
