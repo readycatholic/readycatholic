@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 import re
+from difflib import SequenceMatcher
 from collections import Counter
 
 import feedparser
@@ -35,6 +36,21 @@ def story_key(item):
     title = "".join(ch.lower() for ch in item["title"] if ch.isalnum())
     link = item["link"].split("?", 1)[0].rstrip("/").lower()
     return title, link
+
+
+def is_same_story(item, seen_items):
+    """True if item duplicates one already chosen (same link, same title, or near-identical title)."""
+    key = story_key(item)
+    for other in seen_items:
+        okey = story_key(other)
+        if key[1] == okey[1] or (key[0] and key[0] == okey[0]):
+            return True
+        if len(key[0]) > 25 and len(okey[0]) > 25 and SequenceMatcher(None, key[0], okey[0]).ratio() >= 0.88:
+            return True
+    return False
+
+
+MAX_AGE_DAYS = 7
 
 
 def published_at(entry):
@@ -390,6 +406,14 @@ def collect():
         reverse=True,
     )
 
+    age_cutoff = now.timestamp() - (MAX_AGE_DAYS * 24 * 60 * 60)
+    fresh_items = [
+        item for item in all_items
+        if item["published"] is None or item["published"].timestamp() >= age_cutoff
+    ]
+    if len(fresh_items) >= 40:  # safety: never blank the page if feeds are mostly stale
+        all_items = fresh_items
+
     categories = {
         "breaking": [], "vatican": [], "america": [], "faith": [], "prayer": [],
         "culture_life": [], "culture": [], "world": [],
@@ -422,18 +446,16 @@ def collect():
             break
     categories["breaking"] = unique_breaking
 
-    used = {story_key(item) for item in categories["breaking"]}
+    used_items = list(categories["breaking"])
     for key in (
         "vatican", "america", "faith", "prayer", "culture_life", "culture",
         "world", "prolife", "media", "local",
     ):
         filtered = []
         for item in categories[key]:
-            item_key = story_key(item)
-            title_key = item_key[0]
-            if item_key in used or any(title_key and title_key == existing[0] for existing in used):
+            if is_same_story(item, used_items):
                 continue
-            used.add(item_key)
+            used_items.append(item)
             filtered.append(item)
         categories[key] = filtered
 
@@ -451,11 +473,11 @@ def collect():
         diversify(pool, MEDIA_LIMIT, max_per_source=1), pool, MEDIA_LIMIT, max_per_source=1
     )
 
-    main_keys = {
-        story_key(item)
+    main_items = [
+        item
         for key in ("breaking", "vatican", "america", "faith", "prayer", "culture_life", "world")
         for item in categories[key]
-    }
+    ]
 
     specialty_rules = {
         "prolife": lambda item: is_prolife_topic(item["title"].lower()),
@@ -464,18 +486,17 @@ def collect():
     }
     for key, rule in specialty_rules.items():
         selected = []
-        seen = set(main_keys)
+        seen = list(main_items)
         src_counts = Counter()
         limit = MEDIA_LIMIT if key == "media" else SPECIALTY_LIMIT
         for item in all_items:
-            item_key = story_key(item)
-            if not rule(item) or item_key in seen:
+            if not rule(item) or is_same_story(item, seen):
                 continue
             max_src = 1 if key == "media" else (MAX_PER_SOURCE if key == "prolife" else 99)
             if src_counts[item["source"]] >= max_src:
                 continue
             selected.append(item)
-            seen.add(item_key)
+            seen.append(item)
             src_counts[item["source"]] += 1
             if len(selected) == limit:
                 break
@@ -567,19 +588,18 @@ def main():
             nodes,
         )
 
-    displayed_main = {
-        story_key(item)
+    displayed_specialty = [
+        item
         for key in ("vatican", "america", "faith", "prayer", "culture_life", "world")
         for item in categories[key]
-    }
-    displayed_specialty = set(displayed_main)
+    ]
     for panel in soup.select(".category-panel"):
         key = panel.get("data-specialty")
         target = panel.select_one(".category-items")
         if target and key in categories:
             target.clear()
             specialty_items = [
-                item for item in categories[key] if story_key(item) not in displayed_specialty
+                item for item in categories[key] if not is_same_story(item, displayed_specialty)
             ]
             limit = MEDIA_LIMIT if key == "media" else SPECIALTY_LIMIT
             shown_img = False
@@ -588,7 +608,7 @@ def main():
                 if use_img:
                     shown_img = True
                 target.append(specialty_node(soup, item, show_image=use_img))
-                displayed_specialty.add(story_key(item))
+                displayed_specialty.append(item)
             hdr = panel.select_one(".section-header")
             if key == "media" and hdr is not None:
                 hdr.string = "CATHOLIC MEDIA"
