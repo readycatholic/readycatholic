@@ -326,24 +326,25 @@ footer a{{color:var(--accent)}}
         stale += 1
 
     today = date.today().isoformat()
+    # One consolidated sitemap at the site root: main pages + every current parish page.
+    entries = [
+        (f"{SITE}/", "daily", "1.0"),
+        (f"{SITE}/parish/", "weekly", "0.9"),
+        (f"{SITE}/dioceses/", "weekly", "0.7"),
+    ]
     sm = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
+    for u, freq, prio in entries:
+        sm.append(f"  <url><loc>{u}</loc><lastmod>{today}</lastmod><changefreq>{freq}</changefreq><priority>{prio}</priority></url>")
     for u in sorted(set(sitemap)):
         sm.append(
             f"  <url><loc>{u}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>"
         )
     sm.append("</urlset>")
-    sm_text = "\n".join(sm)
-    (OUT / "sitemap-parishes.xml").write_text(sm_text, encoding="utf-8")
-    (ROOT / "sitemap-parishes.xml").write_text(sm_text, encoding="utf-8")
-    # Keep the sitemap index dates in step with the regenerated parish sitemap.
-    for name in ("sitemap.xml",):
-        sp = ROOT / name
-        if sp.exists():
-            sp.write_text(re.sub(r"(parish/sitemap-parishes\.xml</loc>\s*<lastmod>)[^<]*", r"\g<1>" + today, sp.read_text(encoding="utf-8")), encoding="utf-8")
-    print(f"Generated {count} parish pages + sitemap (parish/ and root); {stale} legacy pages set to noindex")
+    (ROOT / "sitemap.xml").write_text("\n".join(sm) + "\n", encoding="utf-8")
+    print(f"Generated {count} parish pages + consolidated sitemap.xml; {stale} legacy pages set to noindex")
 
 if __name__ == "__main__":
     main()

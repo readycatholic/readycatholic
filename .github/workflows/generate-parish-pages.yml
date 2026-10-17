@@ -30,7 +30,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add parish/ sitemap-parishes.xml || true
+          git add -A parish/ sitemap.xml || true
           if git diff --staged --quiet; then
             echo "No parish page changes"
           else
