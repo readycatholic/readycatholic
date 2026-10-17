@@ -3,6 +3,7 @@
 import json
 import html
 import re
+from datetime import date
 import urllib.parse
 from pathlib import Path
 
@@ -135,6 +136,8 @@ def main():
     parishes = load_parishes()
     sitemap = []
     count = 0
+    current = {}     # (zip, slug) -> canonical URL of every current page
+    legacy = {}      # (zip, old short slug/id) -> (zip, current slug)
     for p in parishes:
         zipc = (p.get("zip") or "").strip()
         slug = parish_slug(p)
@@ -148,6 +151,10 @@ def main():
         phone = format_phone(p.get("phone") or "")
         website = p.get("website") or ""
         canonical = f"{SITE}/parish/{zipc}/{slug}/"
+        current[(zipc, slug)] = canonical
+        for alt in (p.get("slug"), p.get("id")):
+            if alt:
+                legacy.setdefault((zipc, str(alt)), (zipc, slug))
         title = f"{name} | {city}, {state} | Ready Catholic"
 
         suffix = " Contact info and directions on Ready Catholic."
@@ -287,6 +294,7 @@ footer a{{color:var(--accent)}}
 </div>
 </div>
 <script src="../../js/stjude-ads.js"></script>
+<script defer src="../../js/rc-analytics.js"></script>
 <p class="note">Catholic parish listing on Ready Catholic.</p>
 </main>
 <footer><a href="../../">← Back to parish search</a></footer>
@@ -299,19 +307,43 @@ footer a{{color:var(--accent)}}
         sitemap.append(canonical)
         count += 1
 
+    # Old-format pages left over from earlier URL schemes: keep them reachable but
+    # tell search engines to ignore them (and point to the current page when known).
+    stale = 0
+    for f in OUT.glob("*/*/index.html"):
+        key = (f.parent.parent.name, f.parent.name)
+        if key in current:
+            continue
+        text = f.read_text(encoding="utf-8")
+        new = re.sub(r'<meta name="robots" content="[^"]*"\s*/?>',
+                     '<meta name="robots" content="noindex, follow"/>', text, count=1)
+        target = current.get(legacy.get(key, ("", "")))
+        if target:
+            new = re.sub(r'<link rel="canonical" href="[^"]*"\s*/?>',
+                         f'<link rel="canonical" href="{esc(target)}"/>', new, count=1)
+        if new != text:
+            f.write_text(new, encoding="utf-8")
+        stale += 1
+
+    today = date.today().isoformat()
     sm = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
     for u in sorted(set(sitemap)):
         sm.append(
-            f"  <url><loc>{u}</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>"
+            f"  <url><loc>{u}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>"
         )
     sm.append("</urlset>")
     sm_text = "\n".join(sm)
     (OUT / "sitemap-parishes.xml").write_text(sm_text, encoding="utf-8")
     (ROOT / "sitemap-parishes.xml").write_text(sm_text, encoding="utf-8")
-    print(f"Generated {count} parish pages + sitemap (parish/ and root)")
+    # Keep the sitemap index dates in step with the regenerated parish sitemap.
+    for name in ("sitemap.xml",):
+        sp = ROOT / name
+        if sp.exists():
+            sp.write_text(re.sub(r"(parish/sitemap-parishes\.xml</loc>\s*<lastmod>)[^<]*", r"\g<1>" + today, sp.read_text(encoding="utf-8")), encoding="utf-8")
+    print(f"Generated {count} parish pages + sitemap (parish/ and root); {stale} legacy pages set to noindex")
 
 if __name__ == "__main__":
     main()
