@@ -622,6 +622,10 @@ def main():
             ".story-thumb { display: block; width: 100%; max-height: 120px; "
             "object-fit: cover; border-radius: 8px; margin-bottom: 7px; }\n"
         )
+    if soup.body and not soup.find("script", src=lambda v: v and "rc-analytics.js" in v):
+        tag = soup.new_tag("script", src="parish/js/rc-analytics.js")
+        tag["defer"] = ""
+        soup.body.append(tag)
     INDEX.write_text(str(soup), encoding="utf-8")
     print("Updated Ready Catholic headlines while preserving the visual design.")
 
