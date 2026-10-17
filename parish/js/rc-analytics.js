@@ -1,6 +1,6 @@
 /* Ready Catholic privacy-friendly analytics beacon (no cookies). Inert until ENDPOINT is set. */
 (function () {
-  var ENDPOINT = ""; // e.g. "https://readycatholic-stats.YOURNAME.workers.dev/hit"
+  var ENDPOINT = "https://readycatholic-stats.jamescoogan.workers.dev/hit";
   if (!ENDPOINT) return;
   function send(o) {
     try {
